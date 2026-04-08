@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monocle | Catalogue Lunettes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div id="colTopbar" class="topbar">Livraison offerte en boutique partenaire et retours sous 30 jours</div>
+  <header class="site-header">
+    <a class="brand" href="./index.html" aria-label="Monocle Home">
+      <img src="./logo.png" alt="Monocle">
+    </a>
+    <nav>
+      <a id="colNavHome" href="./index.html">La Maison</a>
+      <a id="colNavCustom" href="./sur-mesure.html">Le sur-mesure</a>
+      <a class="active" href="./collection.html">Catalogue</a>
+      <a id="colNavCollections" href="./collections.html">Collections</a>
+      <a id="colNavAtelier" href="./index.html#atelier">Ateliers</a>
+    </nav>
+    <div class="header-actions">
+      <button id="colHeaderCta" class="header-cta">Prendre rendez-vous</button>
+      <button id="openCart" class="cart-btn" type="button" aria-label="Ouvrir le panier">
+        Panier
+        <span id="cartCount" class="cart-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <p id="colHeroBreadcrumb" class="breadcrumb">Accueil / Catalogue / Lunettes</p>
+    <p id="colHeroEyebrow" class="eyebrow">Collection</p>
+    <h1 id="colHeroTitle">Catalogue lunettes</h1>
+    <p id="colHeroBody">Toutes les lunettes Monocle en un seul espace, avec filtres intelligents par style et catégorie.</p>
+  </section>
+
+  <main class="catalog">
+    <aside class="filters">
+      <div class="filter-title-wrap">
+        <h2>Filtrer</h2>
+        <div class="filter-actions">
+          <button id="resetFilters" class="text-btn">Réinitialiser</button>
+          <button id="closeFilters" class="close-filters" aria-label="Fermer les filtres">×</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h3>Catégorie</h3>
+        <label><input type="checkbox" name="category" value="Solaire"> Solaire</label>
+        <label><input type="checkbox" name="category" value="Solaire Luxe"> Solaire Luxe</label>
+      </div>
+
+      <div class="filter-group">
+        <h3>Genre</h3>
+        <label><input type="checkbox" name="genre" value="Femme"> Femme</label>
+        <label><input type="checkbox" name="genre" value="Homme"> Homme</label>
+        <label><input type="checkbox" name="genre" value="Unisexe"> Unisexe</label>
+      </div>
+
+      <div class="filter-group">
+        <h3>Couleur</h3>
+        <label><input type="checkbox" name="couleur" value="Noir"> Noir</label>
+        <label><input type="checkbox" name="couleur" value="Ecaille"> Ecaille</label>
+        <label><input type="checkbox" name="couleur" value="Or"> Or</label>
+        <label><input type="checkbox" name="couleur" value="Vert"> Vert</label>
+      </div>
+
+      <div class="filter-group">
+        <h3>Forme</h3>
+        <label><input type="checkbox" name="forme" value="Pilote"> Pilote</label>
+        <label><input type="checkbox" name="forme" value="Ronde"> Ronde</label>
+        <label><input type="checkbox" name="forme" value="Carree"> Carree</label>
+        <label><input type="checkbox" name="forme" value="Papillon"> Papillon</label>
+      </div>
+
+      <div class="filter-group">
+        <h3>Matiere</h3>
+        <label><input type="checkbox" name="matiere" value="Acetate"> Acetate</label>
+        <label><input type="checkbox" name="matiere" value="Metal"> Metal</label>
+        <label><input type="checkbox" name="matiere" value="Combine"> Combine</label>
+      </div>
+
+      <div class="filter-group">
+        <h3>Extra</h3>
+        <label><input type="checkbox" name="extra" value="Polarisant"> Polarisant</label>
+        <label><input type="checkbox" name="extra" value="Oversize"> Oversize</label>
+      </div>
+
+      <div class="drawer-footer">
+        <button id="clearFiltersMobile" class="clear-filters-btn" type="button">Effacer tout</button>
+        <button id="applyFilters" class="apply-filters-btn" type="button">Voir les produits (0)</button>
+      </div>
+    </aside>
+
+    <section class="products-section">
+      <div class="toolbar">
+        <p><span id="count">0</span> modeles</p>
+        <button id="openFilters" class="mobile-filter-btn" type="button">Filtrer</button>
+        <div class="toolbar-controls">
+          <label class="sort-wrap">
+            Trier par
+            <select id="sortSelect">
+              <option value="featured">En vedette</option>
+              <option value="priceAsc">Prix croissant</option>
+              <option value="priceDesc">Prix decroissant</option>
+              <option value="az">de A a Z</option>
+              <option value="za">de Z a A</option>
+            </select>
+          </label>
+          <label class="search-wrap">
+            Rechercher
+            <input id="searchInput" type="search" list="searchSuggestions" placeholder="Ex: ray, pilote, ecaille...">
+            <datalist id="searchSuggestions"></datalist>
+          </label>
+        </div>
+      </div>
+      <p id="colToolbarSub" class="toolbar-sub">Sélection solaire Monocle, essayage en ligne disponible sur chaque modèle.</p>
+      <div id="activeFilters" class="active-filters" aria-live="polite"></div>
+      <div id="grid" class="products-grid"></div>
+      <div class="load-more-wrap">
+        <button id="loadMore" class="load-more-btn" type="button">Charger plus</button>
+      </div>
+    </section>
+  </main>
+  <div id="filtersOverlay" class="filters-overlay" aria-hidden="true"></div>
+  <div id="quickViewModal" class="quickview-modal" aria-hidden="true">
+    <div class="quickview-backdrop" data-quick-close="1"></div>
+    <section class="quickview-panel" role="dialog" aria-modal="true" aria-labelledby="qvTitle">
+      <button id="qvClose" class="quickview-close" aria-label="Fermer">×</button>
+      <div class="quickview-media">
+        <img id="qvImage" src="" alt="Produit">
+      </div>
+      <div class="quickview-content">
+        <p id="qvBadge" class="quickview-badge"></p>
+        <h2 id="qvTitle"></h2>
+        <p id="qvMeta" class="quickview-meta"></p>
+        <p id="qvPrice" class="quickview-price"></p>
+
+        <div class="quickview-group">
+          <p>Couleur</p>
+          <div id="qvColors" class="option-row"></div>
+        </div>
+
+        <div class="quickview-group">
+          <p>Taille</p>
+          <div id="qvSizes" class="option-row"></div>
+        </div>
+
+        <div class="quickview-qty">
+          <p>Quantité</p>
+          <div class="qty-control">
+            <button id="qvQtyMinus" type="button" aria-label="Diminuer">−</button>
+            <span id="qvQtyValue">1</span>
+            <button id="qvQtyPlus" type="button" aria-label="Augmenter">+</button>
+          </div>
+        </div>
+
+        <button id="qvAddToCart" class="qv-add" type="button">Ajouter au panier</button>
+        <p id="qvMessage" class="qv-message" aria-live="polite"></p>
+      </div>
+    </section>
+  </div>
+  <div id="cartDrawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-backdrop" data-cart-close="1"></div>
+    <aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+      <div class="cart-head">
+        <h2 id="cartTitle">Mon panier</h2>
+        <button id="closeCart" class="cart-close" aria-label="Fermer le panier">×</button>
+      </div>
+      <div id="cartItems" class="cart-items"></div>
+      <div class="cart-footer">
+        <p>Sous-total: <strong id="cartSubtotal">DH 0.00</strong></p>
+        <button id="checkoutBtn" class="checkout-btn" type="button">Passer la commande</button>
+      </div>
+    </aside>
+  </div>
+  <div id="checkoutModal" class="checkout-modal" aria-hidden="true">
+    <div class="checkout-backdrop" data-checkout-close="1"></div>
+    <section class="checkout-panel" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+      <div class="checkout-head">
+        <h2 id="checkoutTitle">Finaliser la commande</h2>
+        <button id="closeCheckout" class="checkout-close" aria-label="Fermer le checkout">×</button>
+      </div>
+
+      <ol class="checkout-steps">
+        <li id="stepLabel1" class="active">1. Client</li>
+        <li id="stepLabel2">2. Livraison</li>
+        <li id="stepLabel3">3. Paiement</li>
+        <li id="stepLabel4">4. Confirmation</li>
+      </ol>
+
+      <div class="checkout-body">
+        <section id="step1" class="checkout-step active">
+          <h3>Informations client</h3>
+          <label>Nom complet <input id="coName" type="text" autocomplete="name"></label>
+          <label>Email <input id="coEmail" type="email" autocomplete="email"></label>
+          <label>Téléphone <input id="coPhone" type="tel" autocomplete="tel"></label>
+        </section>
+
+        <section id="step2" class="checkout-step">
+          <h3>Adresse de livraison</h3>
+          <label>Adresse <input id="coAddress" type="text" autocomplete="street-address"></label>
+          <label>Ville <input id="coCity" type="text" autocomplete="address-level2"></label>
+          <label>Code postal <input id="coZip" type="text" autocomplete="postal-code"></label>
+          <label>Pays
+            <select id="coCountry">
+              <option value="">Choisir</option>
+              <option value="Morocco">Maroc</option>
+              <option value="France">France</option>
+              <option value="Switzerland">Suisse</option>
+            </select>
+          </label>
+          <fieldset class="ship-method">
+            <legend>Mode de livraison</legend>
+            <label><input type="radio" name="shippingMethod" value="standard" checked> Standard (DH 9.00)</label>
+            <label><input type="radio" name="shippingMethod" value="express"> Express (DH 19.00)</label>
+          </fieldset>
+        </section>
+
+        <section id="step3" class="checkout-step">
+          <h3>Paiement simulé</h3>
+          <label>Nom sur la carte <input id="coCardName" type="text" autocomplete="cc-name"></label>
+          <label>Numéro de carte <input id="coCardNumber" type="text" inputmode="numeric" placeholder="4242 4242 4242 4242" autocomplete="cc-number"></label>
+          <div class="payment-row">
+            <label>Expiration (MM/AA) <input id="coCardExpiry" type="text" placeholder="12/30" autocomplete="cc-exp"></label>
+            <label>CVC <input id="coCardCvc" type="text" inputmode="numeric" placeholder="123" autocomplete="cc-csc"></label>
+          </div>
+          <p class="sim-note">Paiement de démonstration: aucune transaction réelle n'est effectuée.</p>
+        </section>
+
+        <section id="step4" class="checkout-step">
+          <h3>Confirmation</h3>
+          <div id="confirmationSummary" class="confirmation-summary"></div>
+        </section>
+      </div>
+
+      <p id="checkoutError" class="checkout-error" aria-live="polite"></p>
+
+      <div class="checkout-footer">
+        <button id="checkoutPrev" class="secondary-btn" type="button">Retour</button>
+        <button id="checkoutNext" class="checkout-next" type="button">Continuer</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (async function () {
+      function setText(id, value) {
+        const node = document.getElementById(id);
+        if (!node || value === undefined || value === null || value === "") return;
+        node.textContent = String(value);
+      }
+
+      async function fetchContent(key) {
+        const res = await fetch("/api/content/" + encodeURIComponent(key), {
+          headers: { Accept: "application/json" }
+        });
+        if (!res.ok) return null;
+        return res.json();
+      }
+
+      try {
+        const [meta, hero, nav] = await Promise.all([
+          fetchContent("collection-meta"),
+          fetchContent("collection-hero"),
+          fetchContent("site-nav")
+        ]);
+
+        if (meta) {
+          setText("colTopbar", meta.title || (meta.data && meta.data.topbar));
+          setText("colToolbarSub", meta.body || (meta.data && meta.data.toolbar_sub));
+        }
+
+        if (hero) {
+          setText("colHeroBreadcrumb", hero.data && hero.data.breadcrumb);
+          setText("colHeroEyebrow", hero.data && hero.data.eyebrow);
+          setText("colHeroTitle", hero.title);
+          setText("colHeroBody", hero.body);
+        }
+
+        if (nav) {
+          setText("colNavHome", nav.data && nav.data.home_label);
+          setText("colNavCustom", nav.data && nav.data.custom_label);
+          setText("colNavCollections", nav.data && nav.data.collections_label);
+          setText("colNavAtelier", nav.data && nav.data.ateliers_label);
+          setText("colHeaderCta", nav.data && nav.data.cta_label);
+        }
+      } catch (_error) {
+        // fallback to static copy
+      }
+    })();
+  </script>
+  <script src="./script.js"></script>
+  <footer class="collection-footer">
+    <div class="footer-locations">
+      <article class="footer-location">
+        <img src="./monocle.png" alt="Magasin Monocle a Kenitra">
+        <p class="footer-city">A KENITRA ,</p>
+      </article>
+    </div>
+  </footer>
+</body>
+</html>

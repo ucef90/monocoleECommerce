@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monocle | Le Sur-Mesure</title>
+  <meta name="description" content="Le sur-mesure Monocle: lunettes artisanales, visagisme, confort premium et ajustage de précision à Kenitra.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --panel: #ffffff;
+      --text: #101114;
+      --muted: #5f6570;
+      --line: #e3e7ed;
+      --strong: #111214;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Source Sans 3", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .topbar {
+      background: var(--strong);
+      color: #f7f8fa;
+      text-align: center;
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 10px 12px;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 24px;
+      backdrop-filter: blur(8px);
+    }
+
+    .logo img {
+      width: auto;
+      max-width: 220px;
+      max-height: 54px;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.84rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    nav a.active,
+    nav a:hover { color: var(--text); }
+
+    .cta {
+      text-decoration: none;
+      border: 1px solid var(--strong);
+      background: var(--strong);
+      color: #f8f9fb;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--panel);
+      margin-bottom: 26px;
+    }
+
+    .hero img {
+      width: 100%;
+      height: clamp(280px, 45vw, 520px);
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-copy {
+      padding: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .kicker {
+      margin: 0 0 8px;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    h1, h2 {
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 500;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 4.6vw, 3.8rem);
+      line-height: 1.02;
+    }
+
+    .lead {
+      margin: 0;
+      color: #3f4653;
+      line-height: 1.74;
+      max-width: 80ch;
+      font-size: 1.02rem;
+    }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+
+    .offer-strip {
+      border: 1px solid #d8dee7;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #ffffff, #f5f7fb);
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .offer-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .offer-badge {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #131416;
+      background: #131416;
+      color: #f7f8fa;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .offer-timer {
+      font-size: 0.84rem;
+      color: #2f3846;
+      font-weight: 600;
+    }
+
+    .offer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .offer-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fcfdff;
+      padding: 12px;
+    }
+
+    .offer-card h3 {
+      margin: 0 0 6px;
+      font-size: 0.98rem;
+    }
+
+    .offer-card p {
+      margin: 0;
+      color: #566072;
+      line-height: 1.58;
+      font-size: 0.9rem;
+    }
+
+    .slot-count {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #1d2530;
+    }
+
+    .value-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .value-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .value-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .story {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 26px;
+    }
+
+    .story img {
+      width: 100%;
+      height: 100%;
+      min-height: 460px;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+    }
+
+    .story-box {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      padding: 20px;
+    }
+
+    .story-box h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 3vw, 2.7rem);
+      line-height: 1.06;
+    }
+
+    .story-box p {
+      margin: 0 0 12px;
+      color: #4a5260;
+      line-height: 1.74;
+    }
+
+    .steps,
+    .proofs,
+    .guarantees,
+    .testimonials,
+    .faq {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .steps h2,
+    .proofs h2,
+    .guarantees h2,
+    .testimonials h2,
+    .faq h2 {
+      margin: 0 0 12px;
+      font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+    }
+
+    .steps-grid,
+    .proof-grid,
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .step,
+    .proof,
+    .testimonial {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      background: #fcfdff;
+    }
+
+    .step span {
+      display: inline-block;
+      margin-bottom: 6px;
+      font-weight: 700;
+      color: #4f5764;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+    }
+
+    .step h3 { margin: 0 0 6px; font-size: 0.98rem; }
+    .step p { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+
+    .proof { text-align: center; }
+    .proof strong { display: block; font-size: 1.3rem; margin-bottom: 4px; color: #1f2630; }
+    .proof span { color: var(--muted); font-size: 0.86rem; line-height: 1.5; }
+
+    .guarantees ul {
+      margin: 0;
+      padding-left: 18px;
+      color: #44505f;
+      line-height: 1.75;
+    }
+
+    .testimonial-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .testimonial p { margin: 0 0 8px; color: #4b5564; line-height: 1.65; font-size: 0.92rem; }
+    .testimonial strong { font-size: 0.84rem; letter-spacing: 0.03em; color: #2d3642; text-transform: uppercase; }
+
+    .faq details {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fcfdff;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+
+    .faq summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: #2d3642;
+    }
+
+    .faq details p {
+      margin: 8px 0 0;
+      color: #525b68;
+      line-height: 1.65;
+    }
+
+    .final-cta {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(180deg, #ffffff, #f7f9fc);
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .final-cta h2 {
+      margin: 0 0 8px;
+      font-size: clamp(1.7rem, 3vw, 2.6rem);
+    }
+
+    .final-cta p {
+      margin: 0 0 14px;
+      color: #4c5462;
+      line-height: 1.7;
+    }
+
+    .final-actions,
+    .sticky-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 11px 16px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .btn.primary {
+      border: 1px solid var(--strong);
+      background: var(--strong);
+      color: #f8f9fb;
+    }
+
+    .btn.ghost {
+      border: 1px solid #d7dde5;
+      color: #37404d;
+      background: #fff;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 18px 24px 90px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.84rem;
+    }
+
+    .sticky-cta {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 60;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(6px);
+      padding: 10px 14px;
+    }
+
+    .sticky-cta.is-urgent {
+      box-shadow: 0 -8px 28px rgba(17, 18, 20, 0.12);
+      border-top-color: #cfd7e2;
+    }
+
+    .sticky-cta-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sticky-cta p {
+      margin: 0;
+      color: #3f4855;
+      font-size: 0.9rem;
+    }
+
+    .sticky-meta {
+      margin-top: 4px;
+      display: block;
+      color: #667082;
+      font-size: 0.76rem;
+      letter-spacing: 0.02em;
+    }
+
+    .exit-popup {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(10, 12, 16, 0.45);
+    }
+
+    .exit-popup.open {
+      display: flex;
+    }
+
+    .exit-card {
+      width: min(620px, 96vw);
+      border: 1px solid #d9e0ea;
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 24px 60px rgba(14, 16, 22, 0.22);
+      padding: 20px;
+      position: relative;
+    }
+
+    .exit-close {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 34px;
+      height: 34px;
+      border: 1px solid #d7dde5;
+      border-radius: 999px;
+      background: #fff;
+      font-size: 1rem;
+      color: #2e3744;
+      cursor: pointer;
+    }
+
+    .exit-kicker {
+      margin: 0 0 6px;
+      text-transform: uppercase;
+      font-size: 0.74rem;
+      letter-spacing: 0.11em;
+      color: #5e6878;
+      font-weight: 700;
+    }
+
+    .exit-card h3 {
+      margin: 0 0 8px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.8rem, 3.4vw, 2.4rem);
+      line-height: 1.08;
+      font-weight: 500;
+    }
+
+    .exit-card p {
+      margin: 0 0 12px;
+      color: #4e5969;
+      line-height: 1.7;
+    }
+
+    .exit-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .exit-pill {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fafcff;
+      padding: 10px 12px;
+      color: #303948;
+      font-size: 0.86rem;
+    }
+
+    @media (max-width: 980px) {
+      .header {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+      }
+
+      .story,
+      .value-grid,
+      .offer-grid,
+      .steps-grid,
+      .proof-grid,
+      .testimonial-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .story img {
+        min-height: 320px;
+      }
+
+      .sticky-cta {
+        padding: 8px 10px;
+      }
+
+      .sticky-cta p {
+        font-size: 0.82rem;
+      }
+
+      .exit-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="smTopbar" class="topbar">Le Sur-Mesure Monocle · Art, confort, précision</div>
+
+  <header class="header">
+    <a class="logo" href="./index.html" aria-label="Monocle Home">
+      <img src="./logo.png" alt="Monocle">
+    </a>
+    <nav>
+      <a id="smNavHome" href="./index.html">Accueil</a>
+      <a class="active" href="./sur-mesure.html">Le sur-mesure</a>
+      <a id="smNavCollections" href="./collections.html">Collection</a>
+      <a id="smNavAteliers" href="./index.html#atelier">Ateliers</a>
+    </nav>
+    <a id="smHeaderCta" class="cta" data-booking-cta="true" href="./collection.html">Prendre rendez-vous</a>
+  </header>
+
+  <main>
+    <section id="hero" class="hero" data-sticky-msg="Découvrez le sur-mesure Monocle avec un accompagnement premium." data-primary-label="Réserver ma consultation" data-primary-href="./collection.html">
+      <img id="smHeroImage" src="https://www.maisonbonnet.com/content/4-le-sur-mesure/grande-mesure-hero.jpg" alt="Le sur-mesure Monocle">
+      <div class="hero-copy">
+        <p id="smHeroKicker" class="kicker">Le sur-mesure</p>
+        <h1 id="smHeroTitle">Une monture pensée pour vous, pas pour tout le monde.</h1>
+        <p id="smHeroLead" class="lead">
+          Chez Monocle, le sur-mesure n'est pas une option de luxe, c'est notre méthode.
+          Nous combinons regard artistique, expertise optique et exigence artisanale pour
+          créer des lunettes qui respectent votre identité, votre confort et votre usage
+          quotidien. Chaque détail est ajusté pour sublimer le visage et améliorer
+          l'expérience visuelle.
+        </p>
+      </div>
+    </section>
+
+    <section id="offre-limitee" class="offer-strip" data-sticky-msg="Offre limitée en cours: sécurisez votre créneau aujourd'hui." data-primary-label="Profiter de l'offre" data-primary-href="./collection.html">
+      <div class="offer-head">
+        <span class="offer-badge">Offre limitée</span>
+        <span class="offer-timer">Fin de l'offre dans <strong id="offerTimer">--:--:--</strong></span>
+      </div>
+      <div class="offer-grid">
+        <article class="offer-card">
+          <h3 id="smOfferCard1Title">Pack consultation premium offert</h3>
+          <p id="smOfferCard1Body">Analyse morphologique + orientation style + pré-ajustage personnalisé, inclus pour les réservations confirmées aujourd'hui.</p>
+        </article>
+        <article class="offer-card">
+          <h3>Créneaux restants</h3>
+          <p>Sessions disponibles pour cette journée.</p>
+          <span id="slotCount" class="slot-count">--</span>
+        </article>
+        <article class="offer-card">
+          <h3 id="smOfferCard3Title">Engagement sérénité</h3>
+          <p id="smOfferCard3Body">Réglages prioritaires après livraison et suivi atelier inclus pour optimiser votre confort.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="valeurs" class="value-grid" data-sticky-msg="Un design sur-mesure centré sur le confort, la précision et votre style." data-primary-label="Je veux ma monture idéale" data-primary-href="./collection.html">
+      <article class="value-card">
+        <h3>Visagisme de précision</h3>
+        <p>Analyse de la morphologie, de la posture et des lignes du regard pour concevoir une monture naturellement harmonieuse.</p>
+      </article>
+      <article class="value-card">
+        <h3>Confort longue durée</h3>
+        <p>Pont, branches, appui et équilibre sont calibrés pour un port stable du matin au soir, sans pression inutile.</p>
+      </article>
+      <article class="value-card">
+        <h3>Valeur durable</h3>
+        <p>Une pièce signée, conçue pour durer, réajustable en atelier et pensée comme un investissement de style et de qualité.</p>
+      </article>
+    </section>
+
+    <section id="story" class="story" data-sticky-msg="Un accompagnement expert de la première idée jusqu'à l'ajustage final." data-primary-label="Réserver un accompagnement" data-primary-href="./collection.html">
+      <img id="smStoryImage" src="https://www.maisonbonnet.com/thumbs/le-sur-mesure/made-to-measure-768x1024.jpg" alt="Artisan lunetier au travail">
+      <article class="story-box">
+        <p id="smStoryKicker" class="kicker">Notre promesse</p>
+        <h2 id="smStoryTitle">Lunetterie d'artisan, exigence d'entreprise premium.</h2>
+        <p id="smStoryP1">Notre équipe vous accompagne de la première intention jusqu'à l'ajustage final. Nous prenons le temps d'écouter votre mode de vie, vos contraintes visuelles et vos préférences esthétiques.</p>
+        <p id="smStoryP2">Le résultat: une monture sur-mesure qui vous ressemble vraiment, avec une sensation de justesse immédiate au porté et une présence visuelle forte mais équilibrée.</p>
+        <p id="smStoryP3">Cette approche est au coeur de la valeur Monocle: plus qu'une paire de lunettes, une pièce personnelle, fonctionnelle et signature.</p>
+      </article>
+    </section>
+
+    <section id="parcours" class="steps" data-sticky-msg="Votre parcours sur-mesure est clair, cadré et sécurisé en 4 étapes." data-primary-label="Commencer mon projet" data-primary-href="./collection.html">
+      <h2>Le parcours sur-mesure en 4 étapes</h2>
+      <div class="steps-grid">
+        <article class="step">
+          <span>01 · Diagnostic</span>
+          <h3>Entretien & analyse visage</h3>
+          <p>Discussion, observation et mesures pour cadrer le projet avec précision.</p>
+        </article>
+        <article class="step">
+          <span>02 · Direction artistique</span>
+          <h3>Forme, matière, caractère</h3>
+          <p>Choix de l'architecture de monture et de la personnalité visuelle.</p>
+        </article>
+        <article class="step">
+          <span>03 · Fabrication</span>
+          <h3>Réalisation artisanale</h3>
+          <p>Mise en forme, finitions et contrôle qualité selon nos standards atelier.</p>
+        </article>
+        <article class="step">
+          <span>04 · Ajustage final</span>
+          <h3>Confort & précision optique</h3>
+          <p>Réglages minutieux pour un maintien parfait et une vision optimisée.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="preuves" class="proofs" data-sticky-msg="Des preuves concrètes pour choisir Monocle en toute confiance." data-primary-label="Voir les modèles" data-primary-href="./collection.html">
+      <h2>Preuves de valeur</h2>
+      <div class="proof-grid">
+        <article class="proof">
+          <strong>+90 min</strong>
+          <span>de rendez-vous conseil pour chaque projet sur-mesure</span>
+        </article>
+        <article class="proof">
+          <strong>4 étapes</strong>
+          <span>de contrôle qualité avant validation finale</span>
+        </article>
+        <article class="proof">
+          <strong>100% ajusté</strong>
+          <span>à votre morphologie, posture et confort visuel</span>
+        </article>
+        <article class="proof">
+          <strong>Service suivi</strong>
+          <span>réglages et accompagnement post-livraison en atelier</span>
+        </article>
+      </div>
+    </section>
+
+    <section id="garanties" class="guarantees" data-sticky-msg="Nos garanties protègent votre confort avant, pendant et après la livraison." data-primary-label="Activer mes garanties" data-primary-href="./collection.html">
+      <h2>Garanties Monocle</h2>
+      <ul>
+        <li><strong>Ajustage offert</strong> pendant la phase de prise en main pour une adaptation parfaite.</li>
+        <li><strong>Contrôle optique final</strong> avant remise pour garantir confort et netteté.</li>
+        <li><strong>Suivi atelier prioritaire</strong> pour entretien, réglages et optimisation dans le temps.</li>
+        <li><strong>Conseil personnalisé durable</strong> pour faire évoluer votre monture selon vos usages.</li>
+      </ul>
+    </section>
+
+    <section id="avis" class="testimonials" data-sticky-msg="Des clients satisfaits confirment la qualité de l'expérience Monocle." data-primary-label="Réserver comme eux" data-primary-href="./collection.html">
+      <h2>Avis clients</h2>
+      <div class="testimonial-grid">
+        <article class="testimonial">
+          <p>"J'ai enfin une monture qui tombe parfaitement. Le confort est immédiat."</p>
+          <strong>Yasmine · Kenitra</strong>
+        </article>
+        <article class="testimonial">
+          <p>"L'approche est très pro: écoute, précision, style. On sent la qualité atelier."</p>
+          <strong>Karim · Rabat</strong>
+        </article>
+        <article class="testimonial">
+          <p>"Le rendu est élégant, et les réglages ont été faits au millimètre."</p>
+          <strong>Nadia · Casablanca</strong>
+        </article>
+      </div>
+    </section>
+
+    <section id="faq" class="faq" data-sticky-msg="Une question? Réservez et obtenez une réponse personnalisée en boutique." data-primary-label="Prendre rendez-vous" data-primary-href="./collection.html">
+      <h2>FAQ sur le sur-mesure</h2>
+      <details>
+        <summary>Combien de temps dure un projet sur-mesure?</summary>
+        <p>Selon la complexité du modèle, comptez en moyenne quelques semaines, incluant conception, fabrication et ajustage final.</p>
+      </details>
+      <details>
+        <summary>Le sur-mesure est-il réservé à certains visages?</summary>
+        <p>Non. Le sur-mesure est justement conçu pour s'adapter à chaque morphologie, style et besoin visuel.</p>
+      </details>
+      <details>
+        <summary>Puis-je faire évoluer la monture dans le temps?</summary>
+        <p>Oui. Nous proposons un suivi en atelier pour les réglages, l'entretien et l'optimisation de votre confort.</p>
+      </details>
+      <details>
+        <summary>Comment réserver un rendez-vous?</summary>
+        <p>Via le bouton "Prendre rendez-vous" sur cette page ou depuis la page collection. Notre équipe vous confirme rapidement.</p>
+      </details>
+    </section>
+
+    <section id="final" class="final-cta" data-sticky-msg="Derniers créneaux du jour: confirmez votre rendez-vous maintenant." data-primary-label="Réserver maintenant" data-primary-href="./collection.html">
+      <h2 id="smFinalTitle">Prêt à créer votre monture signature?</h2>
+      <p id="smFinalBody">Réservez votre rendez-vous sur-mesure Monocle et découvrez une expérience où l'art, la qualité et le confort avancent ensemble.</p>
+      <div class="final-actions">
+        <a id="smFinalPrimaryCta" class="btn primary" data-booking-cta="true" href="./collection.html">Voir la collection</a>
+        <a id="smFinalSecondaryCta" class="btn ghost" href="./index.html#atelier">Nos ateliers-boutiques</a>
+      </div>
+    </section>
+  </main>
+
+  <footer id="smFooter">Monocle · Le sur-mesure · Kenitra, Morocco</footer>
+
+  <div class="sticky-cta" aria-label="Call to action">
+    <div class="sticky-cta-inner">
+      <p id="stickyText">
+        <span id="stickyMsg">Réservez votre consultation sur-mesure dès maintenant.</span>
+        <span class="sticky-meta">Créneaux restants aujourd'hui: <strong id="stickySlots">--</strong></span>
+      </p>
+      <div class="sticky-actions">
+        <a id="stickyPrimary" class="btn primary" data-booking-cta="true" href="./collection.html">Prendre rendez-vous</a>
+        <a class="btn ghost" href="./index.html#atelier">Voir les ateliers</a>
+      </div>
+    </div>
+  </div>
+  <div id="exitPopup" class="exit-popup" aria-hidden="true">
+    <div class="exit-card" role="dialog" aria-modal="true" aria-labelledby="exitTitle">
+      <button id="exitClose" class="exit-close" type="button" aria-label="Fermer">×</button>
+      <p class="exit-kicker">Offre limitée Monocle</p>
+      <h3 id="exitTitle">Avant de partir: créneaux premium encore disponibles aujourd'hui.</h3>
+      <p id="exitBodyText">Confirmez maintenant votre rendez-vous sur-mesure pour bloquer votre consultation prioritaire et l'accompagnement personnalisé en boutique.</p>
+      <div class="exit-row">
+        <div class="exit-pill">Temps restant aujourd'hui: <strong id="exitTimer">--:--:--</strong></div>
+        <div class="exit-pill">Créneaux restants: <strong id="exitSlots">--</strong></div>
+      </div>
+      <div class="final-actions">
+        <a id="exitReserve" class="btn primary" data-booking-cta="true" href="./collection.html">Bloquer mon créneau</a>
+        <button id="exitLater" class="btn ghost" type="button">Je reviens plus tard</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (async function () {
+      function setText(id, value) {
+        var node = document.getElementById(id);
+        if (!node || value === undefined || value === null || value === "") return;
+        node.textContent = String(value);
+      }
+
+      function setHref(id, value) {
+        var node = document.getElementById(id);
+        if (!node || !value) return;
+        node.setAttribute("href", String(value));
+      }
+
+      function setImage(id, value) {
+        var node = document.getElementById(id);
+        if (!(node instanceof HTMLImageElement) || !value) return;
+        node.src = String(value);
+      }
+
+      function setAttr(id, name, value) {
+        var node = document.getElementById(id);
+        if (!node || value === undefined || value === null || value === "") return;
+        node.setAttribute(name, String(value));
+      }
+
+      async function fetchContent(key) {
+        var res = await fetch("/api/content/" + encodeURIComponent(key), {
+          headers: { Accept: "application/json" }
+        });
+        if (!res.ok) return null;
+        return res.json();
+      }
+
+      try {
+        var payloads = await Promise.all([
+          fetchContent("surmesure-meta"),
+          fetchContent("surmesure-hero"),
+          fetchContent("surmesure-offer"),
+          fetchContent("surmesure-story"),
+          fetchContent("surmesure-final"),
+          fetchContent("site-nav")
+        ]);
+
+        var meta = payloads[0];
+        var hero = payloads[1];
+        var offer = payloads[2];
+        var story = payloads[3];
+        var finalCta = payloads[4];
+        var nav = payloads[5];
+
+        if (meta) {
+          setText("smTopbar", meta.title || (meta.data && meta.data.topbar));
+          setText("smFooter", meta.body || (meta.data && meta.data.footer));
+        }
+
+        if (hero) {
+          setText("smHeroKicker", hero.data && hero.data.kicker);
+          setText("smHeroTitle", hero.title);
+          setText("smHeroLead", hero.body);
+          setImage("smHeroImage", hero.data && hero.data.image_url);
+          setAttr("hero", "data-sticky-msg", hero.data && hero.data.sticky_msg);
+          if (hero.data && hero.data.sticky_msg) setAttr("hero", "data-cms-sticky", "1");
+          setAttr("hero", "data-primary-label", hero.data && hero.data.cta_label);
+          setAttr("hero", "data-primary-href", hero.data && hero.data.cta_href);
+        }
+
+        if (offer) {
+          setText("smOfferCard1Title", offer.title);
+          setText("smOfferCard1Body", offer.body);
+          setText("smOfferCard3Title", offer.data && offer.data.card3_title);
+          setText("smOfferCard3Body", offer.data && offer.data.card3_body);
+          setAttr("offre-limitee", "data-sticky-msg", offer.data && offer.data.sticky_msg);
+          if (offer.data && offer.data.sticky_msg) setAttr("offre-limitee", "data-cms-sticky", "1");
+          setAttr("offre-limitee", "data-primary-label", offer.data && offer.data.cta_label);
+          setAttr("offre-limitee", "data-primary-href", offer.data && offer.data.cta_href);
+        }
+
+        if (story) {
+          setText("smStoryKicker", story.data && story.data.kicker);
+          setText("smStoryTitle", story.title);
+          setText("smStoryP1", story.body);
+          setText("smStoryP2", story.data && story.data.p2);
+          setText("smStoryP3", story.data && story.data.p3);
+          setImage("smStoryImage", story.data && story.data.image_url);
+          setAttr("story", "data-sticky-msg", story.data && story.data.sticky_msg);
+          setAttr("story", "data-primary-label", story.data && story.data.cta_label);
+          setAttr("story", "data-primary-href", story.data && story.data.cta_href);
+        }
+
+        if (finalCta) {
+          setText("smFinalTitle", finalCta.title);
+          setText("smFinalBody", finalCta.body);
+          setText("smFinalPrimaryCta", finalCta.data && finalCta.data.primary_label);
+          setHref("smFinalPrimaryCta", finalCta.data && finalCta.data.primary_href);
+          setText("smFinalSecondaryCta", finalCta.data && finalCta.data.secondary_label);
+          setHref("smFinalSecondaryCta", finalCta.data && finalCta.data.secondary_href);
+          setAttr("final", "data-sticky-msg", finalCta.data && finalCta.data.sticky_msg);
+          setAttr("final", "data-primary-label", finalCta.data && finalCta.data.cta_label);
+          setAttr("final", "data-primary-href", finalCta.data && finalCta.data.cta_href);
+        }
+
+        if (nav) {
+          setText("smTopbar", nav.data && nav.data.topline_surmesure);
+          setText("smNavHome", nav.data && nav.data.home_label);
+          setText("smNavCollections", nav.data && nav.data.collections_label);
+          setText("smNavAteliers", nav.data && nav.data.ateliers_label);
+          setText("smHeaderCta", nav.data && nav.data.cta_label);
+          setText("smFooter", nav.data && nav.data.footer_text);
+        }
+      } catch (_error) {
+        // keep default static copy if CMS is unavailable
+      }
+    })();
+  </script>
+  <script>
+    (function () {
+      var slotCountEl = document.getElementById("slotCount");
+      var stickySlotsEl = document.getElementById("stickySlots");
+      var offerTimerEl = document.getElementById("offerTimer");
+      var exitTimerEl = document.getElementById("exitTimer");
+      var exitSlotsEl = document.getElementById("exitSlots");
+      var stickyRoot = document.querySelector(".sticky-cta");
+      var stickyTextEl = document.getElementById("stickyText");
+      var stickyMsgEl = document.getElementById("stickyMsg");
+      var stickyPrimaryEl = document.getElementById("stickyPrimary");
+      var sections = Array.prototype.slice.call(document.querySelectorAll("section[data-sticky-msg]"));
+      var bookingCtas = Array.prototype.slice.call(document.querySelectorAll('[data-booking-cta="true"]'));
+      var exitPopup = document.getElementById("exitPopup");
+      var exitClose = document.getElementById("exitClose");
+      var exitLater = document.getElementById("exitLater");
+      var exitReserve = document.getElementById("exitReserve");
+      var currentSlots = null;
+      var abVariant = localStorage.getItem("monocle_ab_sticky");
+      var lastStickySection = null;
+      var stickyMessages = {
+        premium: {
+          hero: "Découvrez le sur-mesure Monocle avec un accompagnement premium.",
+          offre: "Offre limitée en cours: sécurisez votre créneau aujourd'hui.",
+          defaultMsg: "Réservez votre consultation sur-mesure dès maintenant.",
+          lowStock: "Quelques créneaux uniquement: bénéficiez d'un accompagnement premium.",
+          exitTitle: "Avant de partir: créneaux premium encore disponibles aujourd'hui.",
+          exitBody: "Confirmez maintenant votre rendez-vous sur-mesure pour bloquer votre consultation prioritaire et l'accompagnement personnalisé en boutique.",
+          reserveLabel: "Réserver mon rendez-vous"
+        },
+        aggressive: {
+          hero: "Attention: les créneaux du jour partent vite, réservez maintenant.",
+          offre: "Dernières places de l'offre limitée: sécurisez votre session aujourd'hui.",
+          defaultMsg: "Derniers créneaux du jour: confirmez votre réservation maintenant.",
+          lowStock: "Stock critique de créneaux: finalisez votre rendez-vous avant fermeture.",
+          exitTitle: "Ne perdez pas votre créneau: l'offre expire ce soir.",
+          exitBody: "Vous pouvez encore réserver votre consultation premium aujourd'hui. Après clôture, les créneaux restants passent à la prochaine disponibilité.",
+          reserveLabel: "Bloquer mon créneau"
+        }
+      };
+
+      if (abVariant !== "premium" && abVariant !== "aggressive") {
+        abVariant = Math.random() < 0.5 ? "premium" : "aggressive";
+        localStorage.setItem("monocle_ab_sticky", abVariant);
+      }
+
+      function abCopy(key) {
+        return stickyMessages[abVariant][key];
+      }
+
+      async function apiGetSlots() {
+        var res = await fetch("/api/slots", { headers: { "Accept": "application/json" } });
+        if (!res.ok) throw new Error("slots api unavailable");
+        return res.json();
+      }
+
+      async function apiReserveSlot() {
+        var res = await fetch("/api/slots/reserve", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify({ qty: 1 }),
+          keepalive: true
+        });
+        if (!res.ok) throw new Error("reserve failed");
+        return res.json();
+      }
+
+      function renderSlots(value) {
+        if (slotCountEl) slotCountEl.textContent = String(value);
+        if (stickySlotsEl) stickySlotsEl.textContent = String(value);
+        if (exitSlotsEl) exitSlotsEl.textContent = String(value);
+        if (stickyRoot) {
+          if (value <= 3) {
+            stickyRoot.classList.add("is-urgent");
+            if (!lastStickySection || lastStickySection.id === "offre-limitee" || lastStickySection.id === "final") {
+              stickyMsgEl.textContent = abCopy("lowStock");
+            }
+          } else {
+            stickyRoot.classList.remove("is-urgent");
+            if (lastStickySection) setStickyFromSection(lastStickySection);
+          }
+        }
+      }
+
+      function startOfferTimer() {
+        function tick() {
+          var now = new Date();
+          var end = new Date(now);
+          end.setHours(23, 59, 59, 999);
+          var delta = Math.max(0, end.getTime() - now.getTime());
+          var h = String(Math.floor(delta / 3600000)).padStart(2, "0");
+          var m = String(Math.floor((delta % 3600000) / 60000)).padStart(2, "0");
+          var s = String(Math.floor((delta % 60000) / 1000)).padStart(2, "0");
+          var t = h + ":" + m + ":" + s;
+          if (offerTimerEl) offerTimerEl.textContent = t;
+          if (exitTimerEl) exitTimerEl.textContent = t;
+        }
+        tick();
+        setInterval(tick, 1000);
+      }
+
+      function personalizeSectionMessages() {
+        sections.forEach(function (section) {
+          if (section.getAttribute("data-cms-sticky") === "1") return;
+          if (section.id === "hero") section.setAttribute("data-sticky-msg", abCopy("hero"));
+          if (section.id === "offre-limitee") section.setAttribute("data-sticky-msg", abCopy("offre"));
+        });
+      }
+
+      function setStickyFromSection(section) {
+        if (!section || !stickyTextEl || !stickyMsgEl || !stickyPrimaryEl) return;
+        lastStickySection = section;
+        var msg = section.getAttribute("data-sticky-msg");
+        var label = section.getAttribute("data-primary-label");
+        var href = section.getAttribute("data-primary-href");
+        if (currentSlots !== null && currentSlots <= 3 && (section.id === "offre-limitee" || section.id === "final")) {
+          stickyMsgEl.textContent = abCopy("lowStock");
+        } else if (msg) {
+          stickyMsgEl.textContent = msg;
+        } else {
+          stickyMsgEl.textContent = abCopy("defaultMsg");
+        }
+        if (label) stickyPrimaryEl.textContent = label;
+        if (href) stickyPrimaryEl.setAttribute("href", href);
+      }
+
+      function bindAdaptiveSticky() {
+        if (!("IntersectionObserver" in window) || sections.length === 0) return;
+        var active = sections[0];
+        setStickyFromSection(active);
+
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+              active = entry.target;
+            }
+          });
+          setStickyFromSection(active);
+        }, {
+          root: null,
+          threshold: [0.35, 0.55, 0.75],
+          rootMargin: "-10% 0px -45% 0px"
+        });
+
+        sections.forEach(function (section) { observer.observe(section); });
+      }
+
+      async function refreshSlots() {
+        try {
+          var payload = await apiGetSlots();
+          currentSlots = payload.remaining;
+          renderSlots(currentSlots);
+        } catch (error) {
+          console.error("[Monocle] API slots indisponible", error);
+          if (currentSlots === null) {
+            currentSlots = 5;
+            renderSlots(currentSlots);
+          }
+        }
+      }
+
+      async function reserveSlotBackground() {
+        try {
+          var payload = await apiReserveSlot();
+          currentSlots = payload.remaining;
+          renderSlots(currentSlots);
+        } catch (error) {
+          if (currentSlots && currentSlots > 1) {
+            currentSlots -= 1;
+            renderSlots(currentSlots);
+          }
+        }
+      }
+
+      function openExitPopup() {
+        if (!exitPopup) return;
+        if (sessionStorage.getItem("monocle_exit_seen") === "1") return;
+        exitPopup.classList.add("open");
+        exitPopup.setAttribute("aria-hidden", "false");
+        sessionStorage.setItem("monocle_exit_seen", "1");
+      }
+
+      function closeExitPopup() {
+        if (!exitPopup) return;
+        exitPopup.classList.remove("open");
+        exitPopup.setAttribute("aria-hidden", "true");
+      }
+
+      function bindExitIntent() {
+        if (!exitPopup) return;
+        var isTouch = window.matchMedia("(pointer: coarse)").matches;
+        if (!isTouch) {
+          document.addEventListener("mouseout", function (event) {
+            if (event.clientY <= 10 && !event.relatedTarget) openExitPopup();
+          });
+        } else {
+          setTimeout(function () {
+            if (window.scrollY > window.innerHeight * 0.35) openExitPopup();
+          }, 18000);
+        }
+
+        exitClose.addEventListener("click", closeExitPopup);
+        exitLater.addEventListener("click", closeExitPopup);
+        exitPopup.addEventListener("click", function (event) {
+          if (event.target === exitPopup) closeExitPopup();
+        });
+      }
+
+      function personalizeExitCopy() {
+        var title = document.getElementById("exitTitle");
+        var paragraph = document.getElementById("exitBodyText");
+        if (title) title.textContent = abCopy("exitTitle");
+        if (paragraph) paragraph.textContent = abCopy("exitBody");
+        if (exitReserve) exitReserve.textContent = abCopy("reserveLabel");
+      }
+
+      personalizeSectionMessages();
+      personalizeExitCopy();
+      refreshSlots();
+      startOfferTimer();
+      bindAdaptiveSticky();
+      bindExitIntent();
+
+      bookingCtas.forEach(function (cta) {
+        cta.addEventListener("click", function () {
+          reserveSlotBackground();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

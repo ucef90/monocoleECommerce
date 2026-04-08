@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: monocle
+      POSTGRES_USER: monocle
+      POSTGRES_PASSWORD: monocle
+    ports:
+      - '5432:5432'
+    volumes:
+      - monocle_pg_data:/var/lib/postgresql/data
+      - ./backend/migrations-postgres:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - '8787:8787'
+    environment:
+      PORT: 8787
+      DB_CLIENT: postgres
+      POSTGRES_URL: postgres://monocle:monocle@postgres:5432/monocle
+      STATIC_DIR: /app
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin123
+      ADMIN_SESSION_SECRET: change-me-in-compose
+      ADMIN_SESSION_HOURS: 12
+      DAILY_SLOT_TOTAL: 12
+      DAILY_SLOT_MIN: 4
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8787/api/health | grep -q '\"ok\":true'"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+volumes:
+  monocle_pg_data:

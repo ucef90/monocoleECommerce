@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monocle Admin | CMS</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --line: #dbe2ec;
+      --text: #121418;
+      --muted: #5a6577;
+      --accent: #1a1c1f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .top h1 {
+      margin: 0;
+      font-size: 1.02rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid var(--accent);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: .76rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      background: #fff;
+      color: #2f3948;
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn.danger {
+      border-color: #b42318;
+      color: #b42318;
+      background: #fff;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .tab-btn {
+      border: 1px solid #cfd8e4;
+      background: #fff;
+      color: #2f3948;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: .76rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      display: none;
+    }
+
+    .panel.active { display: block; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+
+    .card strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 1.15rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .form {
+      display: grid;
+      gap: 8px;
+    }
+
+    .form label {
+      font-size: .82rem;
+      color: #2d3644;
+      font-weight: 600;
+    }
+
+    .form input,
+    .form textarea,
+    .form select {
+      width: 100%;
+      margin-top: 4px;
+      border: 1px solid #ccd5e1;
+      border-radius: 8px;
+      padding: 8px;
+      font-size: .88rem;
+      font-family: inherit;
+      background: #fff;
+    }
+
+    .form textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 9px;
+      border-bottom: 1px solid #edf1f6;
+      text-align: left;
+      font-size: .84rem;
+      vertical-align: top;
+    }
+
+    th {
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: #4b5667;
+      background: #f9fbfe;
+    }
+
+    .tiny-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .tiny {
+      border: 1px solid #cfd8e4;
+      border-radius: 8px;
+      padding: 4px 7px;
+      font-size: .72rem;
+      cursor: pointer;
+      background: #fff;
+    }
+
+    .tiny.delete {
+      border-color: #b42318;
+      color: #b42318;
+    }
+
+    tr.product-row.dragging {
+      opacity: 0.55;
+      background: #f2f6fc;
+    }
+
+    .drag-handle {
+      border: 1px solid #cfd8e4;
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: .86rem;
+      line-height: 1;
+      cursor: grab;
+      background: #fff;
+      color: #4d5768;
+      user-select: none;
+    }
+
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .media-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px;
+      background: #fff;
+    }
+
+    .media-preview {
+      width: 100%;
+      height: 120px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid #e6ebf2;
+      background: #f5f7fb;
+      display: block;
+    }
+
+    .media-link {
+      display: block;
+      margin-top: 6px;
+      font-size: .75rem;
+      color: #2c5aa0;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .msg {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .86rem;
+      min-height: 1.2em;
+    }
+
+    @media (max-width: 980px) {
+      .stats,
+      .grid-2,
+      .grid-3,
+      .media-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <h1>Monocle Admin - Gestion complète du site</h1>
+    <div class="actions">
+      <a class="btn" href="/api/admin/newsletter/export.csv">Exporter CSV Newsletter</a>
+      <button id="logout" class="btn primary" type="button">Déconnexion</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="newsletter" type="button">Newsletter</button>
+      <button class="tab-btn" data-tab="products" type="button">Produits</button>
+      <button class="tab-btn" data-tab="content" type="button">Contenu</button>
+      <button class="tab-btn" data-tab="media" type="button">Médias</button>
+    </nav>
+
+    <section id="tab-newsletter" class="panel active">
+      <div class="stats">
+        <article class="card"><p>Total abonnés</p><strong id="totalSubs">-</strong></article>
+        <article class="card"><p>Source principale</p><strong>website</strong></article>
+        <article class="card"><p>Code promo actif</p><strong>BIENVENUE10</strong></article>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Source</th>
+            <th>Code</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="newsletterRows"></tbody>
+      </table>
+    </section>
+
+    <section id="tab-products" class="panel">
+      <div class="grid-2">
+        <article class="card">
+          <h3>Ajouter / Modifier produit</h3>
+          <form id="productForm" class="form" novalidate>
+            <input id="productId" type="hidden">
+            <label>Nom
+              <input id="productTitle" type="text" required>
+            </label>
+            <div class="grid-2">
+              <label>Slug
+                <input id="productSlug" type="text" placeholder="ex: modele-kenitra">
+              </label>
+              <label>Catégorie
+                <select id="productCategorySelect"></select>
+                <input id="productCategoryNew" type="text" placeholder="Nouvelle catégorie" style="display:none;margin-top:6px;">
+              </label>
+            </div>
+            <div class="grid-2">
+              <label>Genre
+                <select id="productGenreSelect"></select>
+                <input id="productGenreNew" type="text" placeholder="Nouveau genre" style="display:none;margin-top:6px;">
+              </label>
+              <label>Couleur
+                <select id="productCouleurSelect"></select>
+                <input id="productCouleurNew" type="text" placeholder="Nouvelle couleur" style="display:none;margin-top:6px;">
+              </label>
+            </div>
+            <div class="grid-2">
+              <label>Forme
+                <select id="productFormeSelect"></select>
+                <input id="productFormeNew" type="text" placeholder="Nouvelle forme" style="display:none;margin-top:6px;">
+              </label>
+              <label>Matière
+                <select id="productMatiereSelect"></select>
+                <input id="productMatiereNew" type="text" placeholder="Nouvelle matière" style="display:none;margin-top:6px;">
+              </label>
+            </div>
+            <label>Extras (filtre)
+              <input id="productExtraInput" type="text" placeholder="Ex: Polarisant, Oversize">
+            </label>
+            <div class="grid-3">
+              <label>Position
+                <input id="productSortOrder" type="number" min="0" step="1" value="0">
+              </label>
+              <label>Prix
+                <input id="productPrice" type="number" step="0.01" min="0" value="0">
+              </label>
+              <label>Monnaie
+                <input id="productCurrency" type="text" value="DH">
+              </label>
+              <label>Stock
+                <input id="productStock" type="number" min="0" value="0">
+              </label>
+            </div>
+            <label>Image principale (URL)
+              <input id="productImage" type="text" placeholder="ex: /uploads/photo.jpg">
+            </label>
+            <label>Galerie (JSON array)
+              <textarea id="productGallery" placeholder='["/uploads/a.jpg", "/uploads/b.jpg"]'>[]</textarea>
+            </label>
+            <label>Description
+              <textarea id="productDescription"></textarea>
+            </label>
+            <label>
+              <input id="productActive" type="checkbox" checked> Actif
+            </label>
+            <div class="form-actions">
+              <button class="btn primary" type="submit">Enregistrer</button>
+              <button id="productReset" class="btn" type="button">Nouveau</button>
+            </div>
+          </form>
+        </article>
+
+        <article class="card">
+          <h3>Liste produits</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Position</th>
+                <th>Prix</th>
+                <th>Stock</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productsRows"></tbody>
+          </table>
+        </article>
+      </div>
+    </section>
+
+    <section id="tab-content" class="panel">
+      <div class="grid-2">
+        <article class="card">
+          <h3>Modifier contenu du site</h3>
+          <form id="contentForm" class="form" novalidate>
+            <label>Clé contenu
+              <input id="contentKey" type="text" placeholder="ex: home-hero" required>
+            </label>
+            <label>Clés prêtes (copier/coller)
+              <select id="contentPreset">
+                <option value="">Choisir une clé...</option>
+                <option value="site-nav">site-nav (menus globaux)</option>
+                <option value="home-hero">home-hero</option>
+                <option value="home-quote">home-quote</option>
+                <option value="home-stores">home-stores</option>
+                <option value="collection-meta">collection-meta</option>
+                <option value="collection-hero">collection-hero</option>
+                <option value="collections-meta">collections-meta</option>
+                <option value="collections-hero">collections-hero</option>
+                <option value="surmesure-meta">surmesure-meta</option>
+                <option value="surmesure-hero">surmesure-hero</option>
+                <option value="surmesure-offer">surmesure-offer</option>
+                <option value="surmesure-story">surmesure-story</option>
+                <option value="surmesure-final">surmesure-final</option>
+              </select>
+            </label>
+            <label>Titre
+              <input id="contentTitle" type="text">
+            </label>
+            <label>Texte principal
+              <textarea id="contentBody"></textarea>
+            </label>
+            <label>Données JSON (optionnel)
+              <textarea id="contentData" placeholder='{"cta":"Voir collection"}'>{}</textarea>
+            </label>
+            <div class="form-actions">
+              <button class="btn primary" type="submit">Enregistrer</button>
+              <button id="contentReset" class="btn" type="button">Nouveau</button>
+            </div>
+          </form>
+        </article>
+
+        <article class="card">
+          <h3>Clés existantes</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Clé</th>
+                <th>Titre</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="contentRows"></tbody>
+          </table>
+        </article>
+      </div>
+    </section>
+
+    <section id="tab-media" class="panel">
+      <article class="card">
+        <h3>Uploader une image/media</h3>
+        <form id="mediaForm" class="form" novalidate>
+          <div class="grid-2">
+            <label>Fichier
+              <input id="mediaFile" type="file" required>
+            </label>
+            <label>Nom fichier (optionnel)
+              <input id="mediaFilename" type="text" placeholder="ex: lunette-hero.jpg">
+            </label>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" type="submit">Uploader</button>
+          </div>
+        </form>
+      </article>
+
+      <article class="card" style="margin-top:10px;">
+        <h3>Médias disponibles</h3>
+        <div id="mediaGrid" class="media-grid"></div>
+      </article>
+    </section>
+
+    <p id="msg" class="msg" aria-live="polite"></p>
+  </main>
+
+  <script>
+    (async function () {
+      const msg = document.getElementById('msg');
+      const logout = document.getElementById('logout');
+
+      const tabs = Array.from(document.querySelectorAll('.tab-btn'));
+      const panels = {
+        newsletter: document.getElementById('tab-newsletter'),
+        products: document.getElementById('tab-products'),
+        content: document.getElementById('tab-content'),
+        media: document.getElementById('tab-media')
+      };
+
+      const newsletterRows = document.getElementById('newsletterRows');
+      const totalSubs = document.getElementById('totalSubs');
+
+      const productsRows = document.getElementById('productsRows');
+      const productForm = document.getElementById('productForm');
+      const productId = document.getElementById('productId');
+      const productTitle = document.getElementById('productTitle');
+      const productSlug = document.getElementById('productSlug');
+      const productCategorySelect = document.getElementById('productCategorySelect');
+      const productCategoryNew = document.getElementById('productCategoryNew');
+      const productGenreSelect = document.getElementById('productGenreSelect');
+      const productGenreNew = document.getElementById('productGenreNew');
+      const productCouleurSelect = document.getElementById('productCouleurSelect');
+      const productCouleurNew = document.getElementById('productCouleurNew');
+      const productFormeSelect = document.getElementById('productFormeSelect');
+      const productFormeNew = document.getElementById('productFormeNew');
+      const productMatiereSelect = document.getElementById('productMatiereSelect');
+      const productMatiereNew = document.getElementById('productMatiereNew');
+      const productExtraInput = document.getElementById('productExtraInput');
+      const productSortOrder = document.getElementById('productSortOrder');
+      const productPrice = document.getElementById('productPrice');
+      const productCurrency = document.getElementById('productCurrency');
+      const productStock = document.getElementById('productStock');
+      const productImage = document.getElementById('productImage');
+      const productGallery = document.getElementById('productGallery');
+      const productDescription = document.getElementById('productDescription');
+      const productActive = document.getElementById('productActive');
+      const productReset = document.getElementById('productReset');
+      let productCache = [];
+      let taxonomies = {
+        category: [],
+        genre: [],
+        couleur: [],
+        forme: [],
+        matiere: []
+      };
+
+      const contentRows = document.getElementById('contentRows');
+      const contentForm = document.getElementById('contentForm');
+      const contentKey = document.getElementById('contentKey');
+      const contentPreset = document.getElementById('contentPreset');
+      const contentTitle = document.getElementById('contentTitle');
+      const contentBody = document.getElementById('contentBody');
+      const contentData = document.getElementById('contentData');
+      const contentReset = document.getElementById('contentReset');
+
+      const mediaForm = document.getElementById('mediaForm');
+      const mediaFile = document.getElementById('mediaFile');
+      const mediaFilename = document.getElementById('mediaFilename');
+      const mediaGrid = document.getElementById('mediaGrid');
+
+      function setMsg(text, error) {
+        msg.style.color = error ? '#b42318' : '#23643c';
+        msg.textContent = text;
+      }
+
+      async function ensureAuth() {
+        const res = await fetch('/api/admin/session', { credentials: 'include' });
+        if (!res.ok) {
+          window.location.href = '/admin/login';
+          return false;
+        }
+        return true;
+      }
+
+      function switchTab(name) {
+        tabs.forEach(function (btn) {
+          btn.classList.toggle('active', btn.dataset.tab === name);
+        });
+        Object.keys(panels).forEach(function (key) {
+          panels[key].classList.toggle('active', key === name);
+        });
+      }
+
+      tabs.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          switchTab(btn.dataset.tab);
+        });
+      });
+
+      function renderNewsletter(items) {
+        if (!items.length) {
+          newsletterRows.innerHTML = '<tr><td colspan="5">Aucun email enregistré.</td></tr>';
+          return;
+        }
+        newsletterRows.innerHTML = items.map(function (row) {
+          return '<tr>' +
+            '<td>' + row.id + '</td>' +
+            '<td>' + row.email + '</td>' +
+            '<td>' + row.source + '</td>' +
+            '<td>' + row.discount_code + '</td>' +
+            '<td>' + new Date(row.created_at).toLocaleString('fr-FR') + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      function uniqueSorted(values) {
+        return Array.from(new Set(values
+          .map(function (v) { return String(v || '').trim(); })
+          .filter(Boolean)))
+          .sort(function (a, b) { return a.localeCompare(b, 'fr'); });
+      }
+
+      function buildTaxonomies(items) {
+        return {
+          category: uniqueSorted(items.map(function (row) { return row.category; })),
+          genre: uniqueSorted(items.map(function (row) { return row.genre; })),
+          couleur: uniqueSorted(items.map(function (row) { return row.couleur; })),
+          forme: uniqueSorted(items.map(function (row) { return row.forme; })),
+          matiere: uniqueSorted(items.map(function (row) { return row.matiere; }))
+        };
+      }
+
+      function fillSelect(select, values) {
+        if (!select) return;
+        const current = select.value;
+        const options = ['<option value="">-- Choisir --</option>']
+          .concat(values.map(function (value) {
+            return '<option value="' + value.replaceAll('"', '&quot;') + '">' + value + '</option>';
+          }))
+          .concat(['<option value="__new__">+ Ajouter nouveau</option>']);
+        select.innerHTML = options.join('');
+        if (values.includes(current)) {
+          select.value = current;
+        }
+      }
+
+      function syncDynamicInput(select, input) {
+        if (!select || !input) return;
+        const isNew = select.value === '__new__';
+        input.style.display = isNew ? 'block' : 'none';
+        if (!isNew) input.value = '';
+      }
+
+      function resolveSelectValue(select, input) {
+        if (!select) return '';
+        if (select.value === '__new__') return String(input && input.value || '').trim();
+        return String(select.value || '').trim();
+      }
+
+      function bindTaxonomyControl(select, input) {
+        if (!select) return;
+        select.addEventListener('change', function () {
+          syncDynamicInput(select, input);
+        });
+      }
+
+      bindTaxonomyControl(productCategorySelect, productCategoryNew);
+      bindTaxonomyControl(productGenreSelect, productGenreNew);
+      bindTaxonomyControl(productCouleurSelect, productCouleurNew);
+      bindTaxonomyControl(productFormeSelect, productFormeNew);
+      bindTaxonomyControl(productMatiereSelect, productMatiereNew);
+
+      function hydrateProductTaxonomies(items) {
+        taxonomies = buildTaxonomies(items);
+        fillSelect(productCategorySelect, taxonomies.category);
+        fillSelect(productGenreSelect, taxonomies.genre);
+        fillSelect(productCouleurSelect, taxonomies.couleur);
+        fillSelect(productFormeSelect, taxonomies.forme);
+        fillSelect(productMatiereSelect, taxonomies.matiere);
+      }
+
+      function setSelectOrNew(select, input, value, knownValues) {
+        const v = String(value || '').trim();
+        if (!v) {
+          select.value = '';
+          syncDynamicInput(select, input);
+          return;
+        }
+        if (knownValues.includes(v)) {
+          select.value = v;
+          syncDynamicInput(select, input);
+          return;
+        }
+        select.value = '__new__';
+        syncDynamicInput(select, input);
+        if (input) input.value = v;
+      }
+
+      function resetProductForm() {
+        productId.value = '';
+        productForm.reset();
+        productCurrency.value = 'DH';
+        productPrice.value = '0';
+        productStock.value = '0';
+        productGallery.value = '[]';
+        productExtraInput.value = '';
+        productSortOrder.value = '0';
+        setSelectOrNew(productCategorySelect, productCategoryNew, '', taxonomies.category);
+        setSelectOrNew(productGenreSelect, productGenreNew, '', taxonomies.genre);
+        setSelectOrNew(productCouleurSelect, productCouleurNew, '', taxonomies.couleur);
+        setSelectOrNew(productFormeSelect, productFormeNew, '', taxonomies.forme);
+        setSelectOrNew(productMatiereSelect, productMatiereNew, '', taxonomies.matiere);
+        productActive.checked = true;
+      }
+
+      function fillProductForm(row) {
+        productId.value = String(row.id);
+        productTitle.value = row.title || '';
+        productSlug.value = row.slug || '';
+        setSelectOrNew(productCategorySelect, productCategoryNew, row.category || '', taxonomies.category);
+        setSelectOrNew(productGenreSelect, productGenreNew, row.genre || '', taxonomies.genre);
+        setSelectOrNew(productCouleurSelect, productCouleurNew, row.couleur || '', taxonomies.couleur);
+        setSelectOrNew(productFormeSelect, productFormeNew, row.forme || '', taxonomies.forme);
+        setSelectOrNew(productMatiereSelect, productMatiereNew, row.matiere || '', taxonomies.matiere);
+        productExtraInput.value = Array.isArray(row.extra) ? row.extra.join(', ') : '';
+        productSortOrder.value = String(row.sort_order || 0);
+        productPrice.value = String(row.price || 0);
+        productCurrency.value = row.currency || 'DH';
+        productStock.value = String(row.stock || 0);
+        productImage.value = row.image_url || '';
+        productGallery.value = JSON.stringify(Array.isArray(row.gallery) ? row.gallery : []);
+        productDescription.value = row.description || '';
+        productActive.checked = !!row.active;
+      }
+
+      function renderProducts(items) {
+        if (!items.length) {
+          productsRows.innerHTML = '<tr><td colspan="6">Aucun produit.</td></tr>';
+          return;
+        }
+
+        productsRows.innerHTML = items.map(function (row) {
+          const filters = [row.genre, row.couleur, row.forme, row.matiere].filter(Boolean).join(' · ');
+          return '<tr class="product-row" draggable="true" data-product-id="' + row.id + '">' +
+            '<td>' + row.id + '</td>' +
+            '<td><strong>' + row.title + '</strong><br><small>' + row.slug + '</small>' +
+            (row.category ? '<br><small>Catégorie: ' + row.category + '</small>' : '') +
+            (filters ? '<br><small>Filtres: ' + filters + '</small>' : '') +
+            '</td>' +
+            '<td>' + (row.sort_order || 0) + '</td>' +
+            '<td>' + row.currency + ' ' + Number(row.price).toFixed(2) + '</td>' +
+            '<td>' + row.stock + '</td>' +
+            '<td><div class="tiny-actions">' +
+              '<span class="drag-handle" title="Maintenir et glisser" data-drag-handle="1">⋮⋮</span>' +
+              '<button class="tiny" data-act="edit-product" data-id="' + row.id + '">Modifier</button>' +
+              '<button class="tiny delete" data-act="delete-product" data-id="' + row.id + '">Supprimer</button>' +
+            '</div></td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      function resetContentForm() {
+        contentForm.reset();
+        contentData.value = '{}';
+      }
+
+      function fillContentForm(row) {
+        contentKey.value = row.key || '';
+        contentTitle.value = row.title || '';
+        contentBody.value = row.body || '';
+        contentData.value = JSON.stringify(row.data || {}, null, 2);
+      }
+
+      function renderContent(items) {
+        if (!items.length) {
+          contentRows.innerHTML = '<tr><td colspan="3">Aucune clé contenu.</td></tr>';
+          return;
+        }
+
+        contentRows.innerHTML = items.map(function (row) {
+          return '<tr>' +
+            '<td>' + row.key + '</td>' +
+            '<td>' + (row.title || '') + '</td>' +
+            '<td><button class="tiny" data-act="edit-content" data-key="' + encodeURIComponent(row.key) + '">Modifier</button></td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      function renderMedia(items) {
+        if (!items.length) {
+          mediaGrid.innerHTML = '<p>Aucun média uploadé.</p>';
+          return;
+        }
+
+        mediaGrid.innerHTML = items.map(function (row) {
+          const isImage = row.mime_type && row.mime_type.startsWith('image/');
+          return '<article class="media-card">' +
+            (isImage
+              ? '<img class="media-preview" src="' + row.url + '" alt="' + row.filename + '">'
+              : '<div class="media-preview" style="display:grid;place-items:center;font-size:.75rem;color:#5a6577;">' + row.mime_type + '</div>') +
+            '<a class="media-link" href="' + row.url + '" target="_blank" rel="noreferrer">' + row.url + '</a>' +
+            '<div class="tiny-actions" style="margin-top:6px;">' +
+              '<button class="tiny delete" data-act="delete-media" data-id="' + row.id + '">Supprimer</button>' +
+            '</div>' +
+          '</article>';
+        }).join('');
+      }
+
+      async function api(path, options) {
+        const res = await fetch(path, Object.assign({ credentials: 'include' }, options || {}));
+        let payload = null;
+        try { payload = await res.json(); } catch (_error) { payload = {}; }
+        if (!res.ok) {
+          throw new Error(payload.error || 'request_failed');
+        }
+        return payload;
+      }
+
+      async function loadNewsletter() {
+        const [stats, list] = await Promise.all([
+          api('/api/admin/newsletter/stats'),
+          api('/api/admin/newsletter/list?limit=500&offset=0')
+        ]);
+        totalSubs.textContent = String(stats.subscribers || 0);
+        renderNewsletter(list.rows || []);
+      }
+
+      async function loadProducts() {
+        const list = await api('/api/admin/products');
+        productCache = list.rows || [];
+        hydrateProductTaxonomies(productCache);
+        renderProducts(productCache);
+      }
+
+      async function persistProductOrderFromDom() {
+        const rows = Array.from(productsRows.querySelectorAll('tr[data-product-id]'));
+        if (!rows.length) return;
+
+        const currentById = new Map(productCache.map(function (item) {
+          return [Number(item.id), Number(item.sort_order || 0)];
+        }));
+
+        const updates = rows
+          .map(function (row, index) {
+            return {
+              id: Number(row.getAttribute('data-product-id') || '0'),
+              sort_order: index + 1
+            };
+          })
+          .filter(function (item) {
+            return item.id > 0 && currentById.get(item.id) !== item.sort_order;
+          });
+
+        if (!updates.length) return;
+
+        for (const update of updates) {
+          await api('/api/admin/products/' + update.id, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sort_order: update.sort_order })
+          });
+        }
+
+        await loadProducts();
+        setMsg('Ordre des produits mis à jour.', false);
+      }
+
+      async function loadContent() {
+        const list = await api('/api/admin/content');
+        renderContent(list.rows || []);
+      }
+
+      async function loadMedia() {
+        const list = await api('/api/admin/media');
+        renderMedia(list.rows || []);
+      }
+
+      async function loadAll() {
+        await Promise.all([
+          loadNewsletter(),
+          loadProducts(),
+          loadContent(),
+          loadMedia()
+        ]);
+      }
+
+      productsRows.addEventListener('click', async function (event) {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        const act = target.getAttribute('data-act');
+        const id = Number(target.getAttribute('data-id') || '0');
+        if (!act || !id) return;
+
+        if (act === 'edit-product') {
+          const row = productCache.find(function (item) { return Number(item.id) === id; });
+          if (row) fillProductForm(row);
+          setMsg('Produit chargé dans le formulaire.', false);
+          return;
+        }
+
+        if (act === 'delete-product') {
+          if (!confirm('Supprimer ce produit ?')) return;
+          await api('/api/admin/products/' + id, { method: 'DELETE' });
+          await loadProducts();
+          setMsg('Produit supprimé.', false);
+        }
+      });
+
+      let dragHandleRowId = null;
+      let draggedRow = null;
+      let hasOrderChanged = false;
+
+      productsRows.addEventListener('mousedown', function (event) {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        const handle = target.closest('[data-drag-handle="1"]');
+        if (!handle) {
+          dragHandleRowId = null;
+          return;
+        }
+        const row = handle.closest('tr[data-product-id]');
+        dragHandleRowId = row ? Number(row.getAttribute('data-product-id') || '0') : null;
+      });
+
+      productsRows.addEventListener('dragstart', function (event) {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        const row = target.closest('tr[data-product-id]');
+        if (!row) return;
+        const rowId = Number(row.getAttribute('data-product-id') || '0');
+        if (!rowId || rowId !== dragHandleRowId) {
+          event.preventDefault();
+          return;
+        }
+        draggedRow = row;
+        hasOrderChanged = false;
+        row.classList.add('dragging');
+        if (event.dataTransfer) {
+          event.dataTransfer.effectAllowed = 'move';
+          event.dataTransfer.setData('text/plain', String(rowId));
+        }
+      });
+
+      productsRows.addEventListener('dragover', function (event) {
+        if (!draggedRow) return;
+        event.preventDefault();
+        const target = event.target instanceof HTMLElement
+          ? event.target.closest('tr[data-product-id]')
+          : null;
+        if (!target || target === draggedRow) return;
+
+        const rect = target.getBoundingClientRect();
+        const before = event.clientY < rect.top + rect.height / 2;
+        const reference = before ? target : target.nextElementSibling;
+        if (reference !== draggedRow) {
+          productsRows.insertBefore(draggedRow, reference);
+          hasOrderChanged = true;
+        }
+      });
+
+      productsRows.addEventListener('dragend', async function () {
+        if (draggedRow) {
+          draggedRow.classList.remove('dragging');
+        }
+        draggedRow = null;
+        dragHandleRowId = null;
+        if (!hasOrderChanged) return;
+        hasOrderChanged = false;
+        try {
+          await persistProductOrderFromDom();
+        } catch (error) {
+          setMsg('Impossible de sauvegarder le nouvel ordre.', true);
+        }
+      });
+
+      productForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        let gallery = [];
+        try {
+          gallery = JSON.parse(productGallery.value || '[]');
+          if (!Array.isArray(gallery)) throw new Error();
+        } catch (_error) {
+          setMsg('Galerie JSON invalide.', true);
+          return;
+        }
+
+        const payload = {
+          title: productTitle.value.trim(),
+          slug: productSlug.value.trim(),
+          category: resolveSelectValue(productCategorySelect, productCategoryNew),
+          genre: resolveSelectValue(productGenreSelect, productGenreNew),
+          couleur: resolveSelectValue(productCouleurSelect, productCouleurNew),
+          forme: resolveSelectValue(productFormeSelect, productFormeNew),
+          matiere: resolveSelectValue(productMatiereSelect, productMatiereNew),
+          extra: uniqueSorted(String(productExtraInput.value || '')
+            .split(',')
+            .map(function (v) { return v.trim(); })
+            .filter(Boolean)),
+          sort_order: Math.max(0, Number(productSortOrder.value || 0) || 0),
+          price: Number(productPrice.value || 0),
+          currency: productCurrency.value.trim() || 'DH',
+          stock: Number(productStock.value || 0),
+          image_url: productImage.value.trim(),
+          gallery: gallery,
+          description: productDescription.value,
+          active: productActive.checked
+        };
+
+        if (
+          (productCategorySelect.value === '__new__' && !payload.category) ||
+          (productGenreSelect.value === '__new__' && !payload.genre) ||
+          (productCouleurSelect.value === '__new__' && !payload.couleur) ||
+          (productFormeSelect.value === '__new__' && !payload.forme) ||
+          (productMatiereSelect.value === '__new__' && !payload.matiere)
+        ) {
+          setMsg('Complète le champ "nouveau" pour chaque filtre sélectionné en ajout.', true);
+          return;
+        }
+
+        if (!payload.title) {
+          setMsg('Le nom du produit est obligatoire.', true);
+          return;
+        }
+
+        const id = Number(productId.value || '0');
+        if (id) {
+          await api('/api/admin/products/' + id, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          setMsg('Produit modifié.', false);
+        } else {
+          await api('/api/admin/products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          setMsg('Produit ajouté.', false);
+        }
+
+        await loadProducts();
+        resetProductForm();
+      });
+
+      productReset.addEventListener('click', function () {
+        resetProductForm();
+      });
+
+      contentRows.addEventListener('click', async function (event) {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        const act = target.getAttribute('data-act');
+        if (act !== 'edit-content') return;
+        const key = target.getAttribute('data-key');
+        if (!key) return;
+        const row = await api('/api/admin/content/' + key);
+        fillContentForm(row);
+        setMsg('Contenu chargé.', false);
+      });
+
+      contentForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const key = contentKey.value.trim();
+        if (!key) {
+          setMsg('La clé contenu est obligatoire.', true);
+          return;
+        }
+
+        let dataObj = {};
+        try {
+          dataObj = JSON.parse(contentData.value || '{}');
+          if (typeof dataObj !== 'object' || dataObj === null || Array.isArray(dataObj)) {
+            throw new Error();
+          }
+        } catch (_error) {
+          setMsg('JSON data invalide.', true);
+          return;
+        }
+
+        await api('/api/admin/content/' + encodeURIComponent(key), {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: contentTitle.value,
+            body: contentBody.value,
+            data: dataObj
+          })
+        });
+
+        await loadContent();
+        setMsg('Contenu enregistré.', false);
+      });
+
+      contentReset.addEventListener('click', function () {
+        resetContentForm();
+      });
+
+      if (contentPreset) {
+        contentPreset.addEventListener('change', async function () {
+          const key = String(contentPreset.value || '').trim();
+          if (!key) return;
+          contentKey.value = key;
+          try {
+            const row = await api('/api/admin/content/' + encodeURIComponent(key));
+            fillContentForm(row);
+            setMsg('Contenu chargé depuis la clé sélectionnée.', false);
+          } catch (_error) {
+            setMsg('Nouvelle clé sélectionnée. Remplis puis enregistre.', false);
+          }
+        });
+      }
+
+      mediaGrid.addEventListener('click', async function (event) {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        const act = target.getAttribute('data-act');
+        if (act !== 'delete-media') return;
+        const id = Number(target.getAttribute('data-id') || '0');
+        if (!id) return;
+
+        if (!confirm('Supprimer ce média ?')) return;
+        await api('/api/admin/media/' + id, { method: 'DELETE' });
+        await loadMedia();
+        setMsg('Média supprimé.', false);
+      });
+
+      mediaForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const file = mediaFile.files && mediaFile.files[0];
+        if (!file) {
+          setMsg('Sélectionne un fichier.', true);
+          return;
+        }
+
+        const base64 = await new Promise(function (resolve, reject) {
+          const reader = new FileReader();
+          reader.onload = function () {
+            const result = String(reader.result || '');
+            const comma = result.indexOf(',');
+            if (comma === -1) return reject(new Error('invalid_file'));
+            resolve(result.slice(comma + 1));
+          };
+          reader.onerror = function () { reject(new Error('read_failed')); };
+          reader.readAsDataURL(file);
+        });
+
+        const payload = {
+          filename: mediaFilename.value.trim() || file.name,
+          mime_type: file.type || 'application/octet-stream',
+          data_base64: base64
+        };
+
+        const created = await api('/api/admin/media/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        mediaForm.reset();
+        await loadMedia();
+        setMsg('Média uploadé: ' + created.url, false);
+      });
+
+      logout.addEventListener('click', async function () {
+        await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' });
+        window.location.href = '/admin/login';
+      });
+
+      try {
+        const ok = await ensureAuth();
+        if (!ok) return;
+        resetProductForm();
+        resetContentForm();
+        await loadAll();
+        setMsg('Interface CMS prête.', false);
+      } catch (error) {
+        setMsg('Erreur chargement admin: ' + String(error.message || error), true);
+      }
+    })();
+  </script>
+</body>
+</html>

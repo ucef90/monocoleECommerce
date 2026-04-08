@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monocle | Collections</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --panel: #ffffff;
+      --text: #101114;
+      --muted: #5d6673;
+      --line: #dfe5ec;
+      --strong: #111214;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Source Sans 3", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .topbar {
+      background: var(--strong);
+      color: #f7f8fa;
+      text-align: center;
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 10px 12px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 18px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 24px;
+      backdrop-filter: blur(8px);
+    }
+
+    .brand img {
+      max-width: 220px;
+      max-height: 52px;
+      height: auto;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    nav a.active,
+    nav a:hover { color: var(--text); }
+
+    .cta {
+      border: 1px solid var(--strong);
+      background: var(--strong);
+      color: #f8f9fb;
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 26px 24px 40px;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--panel);
+      margin-bottom: 24px;
+    }
+
+    .hero img {
+      width: 100%;
+      height: clamp(250px, 42vw, 500px);
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-copy {
+      border-top: 1px solid var(--line);
+      padding: 18px 20px;
+    }
+
+    .eyebrow {
+      margin: 0 0 6px;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    h1, h2 {
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 500;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 4.2vw, 3.6rem);
+      line-height: 1.02;
+    }
+
+    .hero-copy p {
+      margin: 0;
+      color: #424c5b;
+      line-height: 1.7;
+      max-width: 85ch;
+    }
+
+    .hero-actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 10px 15px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .btn.primary {
+      border: 1px solid #121316;
+      background: #121316;
+      color: #f8f9fb;
+    }
+
+    .btn.ghost {
+      border: 1px solid #cfd6e0;
+      background: #fff;
+      color: #2f3846;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      overflow: hidden;
+    }
+
+    .card-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(8%);
+    }
+
+    .meta {
+      padding: 10px 11px 12px;
+    }
+
+    .meta h3 {
+      margin: 0 0 4px;
+      font-size: 0.98rem;
+      letter-spacing: 0.01em;
+    }
+
+    .meta p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      text-align: center;
+      padding: 18px 14px;
+      color: var(--muted);
+      font-size: 0.83rem;
+    }
+
+    @media (max-width: 1050px) {
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 760px) {
+      .site-header {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+      }
+
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 460px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="colsTopbar" class="topbar">Collections Monocle · Nouveautés & pièces signature</div>
+  <header class="site-header">
+    <a class="brand" href="./index.html" aria-label="Monocle Home">
+      <img src="./logo.png" alt="Monocle">
+    </a>
+    <nav>
+      <a id="colsNavHome" href="./index.html">La Maison</a>
+      <a id="colsNavCustom" href="./sur-mesure.html">Le sur-mesure</a>
+      <a id="colsNavSolar" href="./collection.html">Solaire</a>
+      <a class="active" href="./collections.html">Collections</a>
+    </nav>
+    <a id="colsHeaderCta" class="cta" href="./collection.html">Voir Solaire</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <img src="./modele_pk9_1_jylsc_pour_maison_bonnet.jpg" alt="Collection Monocle">
+      <div class="hero-copy">
+        <p id="colsHeroEyebrow" class="eyebrow">Nouvelle page collections</p>
+        <h1 id="colsHeroTitle">Collections artistiques, montures de caractère.</h1>
+        <p id="colsHeroBody">
+          Cette page regroupe davantage de visuels pour présenter l'univers Monocle:
+          des lignes fortes, des silhouettes élégantes et des montures conçues pour
+          un porté premium.
+        </p>
+        <div class="hero-actions">
+          <a id="colsHeroPrimary" class="btn primary" href="./collection.html">Accéder à la page solaire</a>
+          <a id="colsHeroSecondary" class="btn ghost" href="./sur-mesure.html">Découvrir le sur-mesure</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <p id="colsGridEyebrow" class="eyebrow">Sélection visuelle</p>
+      <h2 id="colsGridTitle">Galerie Collections</h2>
+      <div id="collectionsGrid" class="grid">
+        <article class="card">
+          <img src="./mb-catch.jpg" alt="Monture Catch">
+          <div class="meta"><h3>Catch</h3><p>Collection signature</p></div>
+        </article>
+        <article class="card">
+          <img src="./mb-aria.jpg" alt="Monture Aria">
+          <div class="meta"><h3>Aria</h3><p>Équilibre et finesse</p></div>
+        </article>
+        <article class="card">
+          <img src="./mb-lorenzo.jpg" alt="Monture Lorenzo">
+          <div class="meta"><h3>Lorenzo</h3><p>Style structuré</p></div>
+        </article>
+        <article class="card">
+          <img src="./mb-wall.jpg" alt="Monture Wall">
+          <div class="meta"><h3>Wall</h3><p>Ligne contemporaine</p></div>
+        </article>
+        <article class="card">
+          <img src="./mb-seven.jpg" alt="Monture Seven">
+          <div class="meta"><h3>Seven</h3><p>Design iconique</p></div>
+        </article>
+        <article class="card">
+          <img src="./mb-longuemare.jpg" alt="Monture Longuemare">
+          <div class="meta"><h3>Longuemare</h3><p>Confort premium</p></div>
+        </article>
+        <article class="card">
+          <img src="./mb-stuart.jpg" alt="Monture Stuart">
+          <div class="meta"><h3>Stuart</h3><p>Volume maîtrisé</p></div>
+        </article>
+        <article class="card">
+          <img src="./mb-raph.jpg" alt="Monture Raph">
+          <div class="meta"><h3>Raph</h3><p>Allure affirmée</p></div>
+        </article>
+        <article class="card">
+          <img src="./h_01-legendre-1-1-768x512.jpg" alt="Monture Legendre">
+          <div class="meta"><h3>Legendre</h3><p>Classique revisité</p></div>
+        </article>
+        <article class="card">
+          <img src="./f_01-sully-1-768x512.jpg" alt="Monture Sully">
+          <div class="meta"><h3>Sully</h3><p>Chic intemporel</p></div>
+        </article>
+        <article class="card">
+          <img src="./h_01-ray-2-1-768x512.jpg" alt="Monture Ray">
+          <div class="meta"><h3>Ray</h3><p>Signature optique</p></div>
+        </article>
+        <article class="card">
+          <img src="./h_01-auguste-2-768x512.jpg" alt="Monture Auguste">
+          <div class="meta"><h3>Auguste</h3><p>Caractère et précision</p></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (async function () {
+      const grid = document.getElementById("collectionsGrid");
+      if (!grid) return;
+
+      function buildHref(row) {
+        const params = new URLSearchParams();
+        if (row.category) params.set("category", row.category);
+        if (row.genre) params.set("genre", row.genre);
+        if (row.couleur) params.set("couleur", row.couleur);
+        if (row.forme) params.set("forme", row.forme);
+        if (row.matiere) params.set("matiere", row.matiere);
+        const query = params.toString();
+        return "./collection.html" + (query ? "?" + query : "");
+      }
+
+      function fallbackCard(row) {
+        const title = String(row.title || "Modele Monocle");
+        const img = row.image_url || (Array.isArray(row.gallery) && row.gallery[0]) || "./modele_pk9_1_jylsc_pour_maison_bonnet.jpg";
+        const category = row.category || "Collection Monocle";
+        const price = Number(row.price || 0).toFixed(2);
+        const href = buildHref(row);
+        return [
+          '<a class="card card-link" href="' + href + '">',
+          '<img src="' + img + '" alt="' + title + '">',
+          '<div class="meta"><h3>' + title + '</h3><p>' + category + ' · ' + price + ' ' + (row.currency || "DH") + '</p></div>',
+          '</a>'
+        ].join("");
+      }
+
+      function setText(id, value) {
+        const node = document.getElementById(id);
+        if (!node || value === undefined || value === null || value === "") return;
+        node.textContent = String(value);
+      }
+
+      function setHref(id, value) {
+        const node = document.getElementById(id);
+        if (!node || !value) return;
+        node.setAttribute("href", String(value));
+      }
+
+      async function fetchContent(key) {
+        const res = await fetch("/api/content/" + encodeURIComponent(key), {
+          headers: { Accept: "application/json" }
+        });
+        if (!res.ok) return null;
+        return res.json();
+      }
+
+      try {
+        const [productsRes, meta, hero, nav] = await Promise.all([
+          fetch("/api/products", { headers: { Accept: "application/json" } }),
+          fetchContent("collections-meta"),
+          fetchContent("collections-hero"),
+          fetchContent("site-nav")
+        ]);
+
+        if (productsRes.ok) {
+          const payload = await productsRes.json();
+          const rows = (Array.isArray(payload.rows) ? payload.rows : []).filter(function (row) {
+            return row && row.active !== false;
+          });
+          if (rows.length) {
+            grid.innerHTML = rows.map(fallbackCard).join("");
+          }
+        }
+
+        if (meta) {
+          setText("colsTopbar", meta.title || (meta.data && meta.data.topbar));
+          setText("colsGridEyebrow", meta.data && meta.data.grid_eyebrow);
+          setText("colsGridTitle", meta.body || (meta.data && meta.data.grid_title));
+        }
+
+        if (hero) {
+          setText("colsHeroEyebrow", hero.data && hero.data.eyebrow);
+          setText("colsHeroTitle", hero.title);
+          setText("colsHeroBody", hero.body);
+          setText("colsHeroPrimary", hero.data && hero.data.cta_primary_label);
+          setHref("colsHeroPrimary", hero.data && hero.data.cta_primary_url);
+          setText("colsHeroSecondary", hero.data && hero.data.cta_secondary_label);
+          setHref("colsHeroSecondary", hero.data && hero.data.cta_secondary_url);
+        }
+
+        if (nav) {
+          setText("colsNavHome", nav.data && nav.data.home_label);
+          setText("colsNavCustom", nav.data && nav.data.custom_label);
+          setText("colsNavSolar", nav.data && nav.data.solar_label);
+          setText("colsHeaderCta", nav.data && nav.data.collections_cta_label);
+        }
+      } catch (_error) {
+        // keep static copy if API unavailable
+      }
+
+      Array.from(grid.querySelectorAll(".card")).forEach(function (card) {
+        if (card.tagName === "A") return;
+        card.style.cursor = "pointer";
+        card.addEventListener("click", function () {
+          window.location.href = "./collection.html?category=Solaire";
+        });
+      });
+    })();
+  </script>
+
+  <footer>Monocle · Collections · Kenitra, Morocco</footer>
+</body>
+</html>

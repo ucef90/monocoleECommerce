@@ -1,0 +1,10 @@
+backend/data/*.sqlite
+backend/data/*.sqlite-shm
+backend/data/*.sqlite-wal
+.env
+.env.*
+.DS_Store
+node_modules/
+**/node_modules/
+uploads/*
+!uploads/.gitkeep

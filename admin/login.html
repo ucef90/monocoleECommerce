@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monocle Admin | Login</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #f4f7fb; color: #121418; }
+    .wrap { min-height: 100vh; display: grid; place-items: center; padding: 18px; }
+    .card { width: min(430px, 100%); background: #fff; border: 1px solid #dbe2ec; border-radius: 14px; padding: 20px; }
+    h1 { margin: 0 0 8px; font-size: 1.4rem; }
+    p { margin: 0 0 14px; color: #4f5a6b; }
+    label { display: block; font-size: 0.88rem; margin-bottom: 10px; color: #2a3340; }
+    input { width: 100%; border: 1px solid #ccd5e1; border-radius: 10px; padding: 10px; margin-top: 4px; box-sizing: border-box; }
+    button { width: 100%; border: 1px solid #111214; background: #111214; color: #fff; border-radius: 999px; padding: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; cursor: pointer; }
+    .msg { min-height: 1.2em; margin-top: 10px; font-size: 0.88rem; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Espace Admin Monocle</h1>
+      <p>Connectez-vous pour accéder au dashboard newsletter.</p>
+      <form id="loginForm" novalidate>
+        <label>Nom d'utilisateur
+          <input id="username" type="text" autocomplete="username" required>
+        </label>
+        <label>Mot de passe
+          <input id="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button type="submit">Se connecter</button>
+      </form>
+      <p id="message" class="msg" aria-live="polite"></p>
+    </section>
+  </main>
+  <script>
+    (async function () {
+      try {
+        const session = await fetch('/api/admin/session', { credentials: 'include' });
+        if (session.ok) {
+          window.location.href = '/admin';
+          return;
+        }
+      } catch (_error) {}
+
+      const form = document.getElementById('loginForm');
+      const user = document.getElementById('username');
+      const pass = document.getElementById('password');
+      const msg = document.getElementById('message');
+
+      form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        msg.textContent = '';
+
+        const username = user.value.trim();
+        const password = pass.value;
+        if (!username || !password) {
+          msg.style.color = '#b42318';
+          msg.textContent = 'Veuillez remplir les deux champs.';
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ username, password })
+          });
+          const payload = await res.json();
+          if (!res.ok) {
+            msg.style.color = '#b42318';
+            msg.textContent = payload.error === 'invalid_credentials'
+              ? 'Identifiants incorrects.'
+              : 'Connexion impossible.';
+            return;
+          }
+          msg.style.color = '#23643c';
+          msg.textContent = 'Connexion réussie...';
+          setTimeout(function () { window.location.href = '/admin'; }, 250);
+        } catch (_error) {
+          msg.style.color = '#b42318';
+          msg.textContent = 'Serveur indisponible.';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

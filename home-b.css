@@ -197,6 +197,44 @@ h1 {
   object-fit: cover;
 }
 
+.contact-strip {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.contact-card {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 12px 28px rgba(16, 17, 20, 0.06);
+}
+
+.mini-note {
+  margin: 0 0 8px;
+  color: #68707d;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.contact-card strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1rem;
+  color: #17191d;
+}
+
+.contact-card span {
+  display: block;
+  color: #59616e;
+  line-height: 1.65;
+  font-size: 0.9rem;
+}
+
 .quote-block {
   margin-top: 44px;
   padding: 46px 0 38px;
@@ -432,6 +470,14 @@ footer p {
   letter-spacing: 0.03em;
 }
 
+.contact-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10px;
+}
+
 .qa-switch {
   position: fixed;
   right: 12px;
@@ -593,6 +639,10 @@ footer p {
     grid-template-columns: 1fr;
     max-width: 70%;
     min-width: 180px;
+  }
+
+  .contact-strip {
+    grid-template-columns: 1fr;
   }
 
   .hero {

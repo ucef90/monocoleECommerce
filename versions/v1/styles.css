@@ -161,50 +161,6 @@ nav a:hover {
   color: #5f6672;
 }
 
-.catalog-trust {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  padding: 0 40px 24px;
-}
-
-.catalog-trust-card {
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: #fff;
-  padding: 16px;
-}
-
-.catalog-trust-label {
-  margin: 0 0 8px;
-  color: #666f7d;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.72rem;
-  font-weight: 700;
-}
-
-.catalog-trust-card strong {
-  display: block;
-  margin-bottom: 6px;
-  color: #1b2028;
-  line-height: 1.5;
-}
-
-.catalog-trust-card span,
-.catalog-trust-link {
-  color: #556071;
-  line-height: 1.6;
-  font-size: 0.9rem;
-}
-
-.catalog-trust-link {
-  display: inline-block;
-  margin-top: 6px;
-  text-decoration: none;
-  font-weight: 700;
-}
-
 .catalog {
   display: grid;
   grid-template-columns: 280px 1fr;
@@ -1096,11 +1052,6 @@ body.checkout-open {
 
   .hero {
     padding: 36px 16px;
-  }
-
-  .catalog-trust {
-    grid-template-columns: 1fr;
-    padding: 0 16px 18px;
   }
 
   .catalog {

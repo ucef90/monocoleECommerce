@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Guide d'utilisation - Compte Admin Monocle</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.5;
+      color: #111;
+      margin: 32px;
+    }
+    h1, h2, h3 {
+      color: #111;
+    }
+    h1 {
+      font-size: 24pt;
+      margin-bottom: 8px;
+    }
+    h2 {
+      font-size: 16pt;
+      margin-top: 28px;
+      margin-bottom: 8px;
+    }
+    h3 {
+      font-size: 12pt;
+      margin-top: 18px;
+      margin-bottom: 6px;
+    }
+    p {
+      margin: 8px 0;
+    }
+    ul, ol {
+      margin: 8px 0 8px 24px;
+    }
+    li {
+      margin: 4px 0;
+    }
+    .muted {
+      color: #555;
+    }
+    .box {
+      border: 1px solid #ccc;
+      padding: 12px;
+      margin: 12px 0;
+      background: #f7f7f7;
+    }
+    .code {
+      font-family: "Courier New", monospace;
+      background: #f1f1f1;
+      padding: 2px 6px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: #efefef;
+    }
+  </style>
+</head>
+<body>
+  <h1>Guide d'utilisation du Compte Admin Monocle</h1>
+  <p class="muted">Version: avril 2026</p>
+
+  <h2>1. Objectif du compte admin</h2>
+  <p>
+    Le compte admin Monocle permet de gérer le contenu du site sans modifier le code.
+    Il sert à piloter les textes, les produits, les médias et la newsletter depuis une interface simple.
+  </p>
+
+  <div class="box">
+    <p><strong>Accès admin local</strong>: <span class="code">http://localhost:8787/admin/login</span></p>
+    <p><strong>Accès admin via ngrok</strong>: <span class="code">https://sponge-moonlike-mule.ngrok-free.dev/admin/login</span></p>
+    <p><strong>Identifiant par défaut</strong>: <span class="code">admin</span></p>
+    <p><strong>Mot de passe par défaut</strong>: <span class="code">admin123</span></p>
+  </div>
+
+  <h2>2. Les onglets disponibles</h2>
+  <table>
+    <tr>
+      <th>Onglet</th>
+      <th>Fonction</th>
+    </tr>
+    <tr>
+      <td>Newsletter</td>
+      <td>Consulter les emails inscrits et exporter la liste en CSV.</td>
+    </tr>
+    <tr>
+      <td>Produits</td>
+      <td>Ajouter, modifier, classer et gérer le stock des produits.</td>
+    </tr>
+    <tr>
+      <td>Contenu</td>
+      <td>Modifier les textes, boutons, images, SEO et blocs des pages.</td>
+    </tr>
+    <tr>
+      <td>Médias</td>
+      <td>Uploader des images et récupérer leurs URL pour les réutiliser sur le site.</td>
+    </tr>
+  </table>
+
+  <h2>3. Utiliser l'onglet Contenu</h2>
+  <p>
+    L'onglet <strong>Contenu</strong> est le centre de contrôle éditorial du site.
+    Il permet de modifier les sections des pages via des <strong>clés de contenu</strong>.
+  </p>
+
+  <h3>3.1. Comment fonctionne une clé de contenu</h3>
+  <p>
+    Chaque zone du site correspond à une clé. Par exemple:
+  </p>
+  <ul>
+    <li><span class="code">home-hero</span>: hero de la page d'accueil</li>
+    <li><span class="code">site-nav</span>: navigation globale</li>
+    <li><span class="code">home-popup</span>: popup newsletter</li>
+    <li><span class="code">collection-trust</span>: bloc infos pratiques du catalogue</li>
+    <li><span class="code">site-settings</span>: téléphone, adresse, horaires, carte Google Maps</li>
+  </ul>
+
+  <h3>3.2. Les champs du formulaire</h3>
+  <ul>
+    <li><strong>Clé contenu</strong>: identifiant technique du bloc</li>
+    <li><strong>Clés prêtes</strong>: liste prédéfinie pour choisir rapidement un bloc du site</li>
+    <li><strong>Titre</strong>: généralement le titre principal affiché</li>
+    <li><strong>Texte principal</strong>: paragraphe principal</li>
+    <li><strong>Données JSON</strong>: champs complémentaires comme boutons, URLs, images, libellés</li>
+  </ul>
+
+  <h3>3.3. Les boutons</h3>
+  <ul>
+    <li><strong>Enregistrer</strong>: sauvegarde le contenu dans la base</li>
+    <li><strong>Charger modèle</strong>: remplit automatiquement le formulaire avec une structure recommandée</li>
+    <li><strong>Nouveau</strong>: vide le formulaire</li>
+    <li><strong>Modifier</strong> dans la liste à droite: charge une clé existante dans le formulaire</li>
+  </ul>
+
+  <h3>3.4. Méthode conseillée</h3>
+  <ol>
+    <li>Choisir une clé dans la liste <strong>Clés prêtes</strong>.</li>
+    <li>Cliquer sur <strong>Charger modèle</strong>.</li>
+    <li>Modifier le titre, le texte et éventuellement le JSON.</li>
+    <li>Cliquer sur <strong>Enregistrer</strong>.</li>
+    <li>Rafraîchir la page publique concernée pour vérifier le résultat.</li>
+  </ol>
+
+  <h2>4. Les clés les plus utiles</h2>
+  <table>
+    <tr>
+      <th>Clé</th>
+      <th>Utilisation</th>
+    </tr>
+    <tr>
+      <td><span class="code">site-settings</span></td>
+      <td>Téléphone, adresse, horaires, zone desservie, lien Google Maps, image de boutique.</td>
+    </tr>
+    <tr>
+      <td><span class="code">site-nav</span></td>
+      <td>Libellés du menu global, topline, texte footer.</td>
+    </tr>
+    <tr>
+      <td><span class="code">home-meta</span></td>
+      <td>Titre navigateur et description SEO de la home.</td>
+    </tr>
+    <tr>
+      <td><span class="code">home-hero</span></td>
+      <td>Titre, texte, CTA, image principale de la home.</td>
+    </tr>
+    <tr>
+      <td><span class="code">home-contact</span></td>
+      <td>Les 3 cartes Téléphone / Adresse / Horaires sur la home.</td>
+    </tr>
+    <tr>
+      <td><span class="code">home-atelier</span></td>
+      <td>Bloc atelier de la home.</td>
+    </tr>
+    <tr>
+      <td><span class="code">home-process</span></td>
+      <td>Les 3 étapes de l'expérience Monocle.</td>
+    </tr>
+    <tr>
+      <td><span class="code">home-stores</span></td>
+      <td>Bloc boutiques en bas de la page d'accueil.</td>
+    </tr>
+    <tr>
+      <td><span class="code">home-popup</span></td>
+      <td>Popup newsletter.</td>
+    </tr>
+    <tr>
+      <td><span class="code">collection-meta</span></td>
+      <td>SEO et sous-texte de la page catalogue.</td>
+    </tr>
+    <tr>
+      <td><span class="code">collection-hero</span></td>
+      <td>Hero de la page catalogue.</td>
+    </tr>
+    <tr>
+      <td><span class="code">collection-trust</span></td>
+      <td>Les 3 cartes infos pratiques du catalogue.</td>
+    </tr>
+    <tr>
+      <td><span class="code">collection-footer</span></td>
+      <td>Bloc footer éditorial du catalogue.</td>
+    </tr>
+    <tr>
+      <td><span class="code">collections-meta</span></td>
+      <td>SEO de la page collections.</td>
+    </tr>
+    <tr>
+      <td><span class="code">collections-hero</span></td>
+      <td>Hero de la page collections.</td>
+    </tr>
+    <tr>
+      <td><span class="code">collections-footer</span></td>
+      <td>Footer de la page collections.</td>
+    </tr>
+    <tr>
+      <td><span class="code">surmesure-meta</span></td>
+      <td>Topbar + footer page sur-mesure.</td>
+    </tr>
+    <tr>
+      <td><span class="code">surmesure-hero</span></td>
+      <td>Hero page sur-mesure.</td>
+    </tr>
+    <tr>
+      <td><span class="code">surmesure-offer</span></td>
+      <td>Bloc offre / argumentaire sur-mesure.</td>
+    </tr>
+    <tr>
+      <td><span class="code">surmesure-story</span></td>
+      <td>Bloc storytelling sur-mesure.</td>
+    </tr>
+    <tr>
+      <td><span class="code">surmesure-final</span></td>
+      <td>CTA final page sur-mesure.</td>
+    </tr>
+    <tr>
+      <td><span class="code">surmesure-exit</span></td>
+      <td>Popup de sortie / messages commerciaux du sur-mesure.</td>
+    </tr>
+  </table>
+
+  <h2>5. Exemple de JSON</h2>
+  <h3>5.1. Exemple pour le hero de la home</h3>
+  <div class="box">
+    <pre>{
+  "eyebrow": "Lunetterie sur mesure",
+  "image_url": "./modele_pk9_1_jylsc_pour_maison_bonnet.jpg",
+  "cta_primary_label": "Prendre rendez-vous",
+  "cta_primary_url": "./collection.html",
+  "cta_secondary_label": "Appeler maintenant",
+  "cta_secondary_url": "tel:+212661290703"
+}</pre>
+  </div>
+
+  <h3>5.2. Exemple pour les paramètres globaux</h3>
+  <div class="box">
+    <pre>{
+  "business_name": "Monocle Optique",
+  "phone_display": "06 61 29 07 03",
+  "phone_href": "tel:+212661290703",
+  "address_line": "résidence lotus, mag n°2 Rue Baghdad",
+  "address_city": "Kénitra",
+  "area_served": "Salé & Kénitra",
+  "address_note": "Monocle Optique vous accueille a Kénitra et accompagne aussi la clientele de Salé.",
+  "opening_hours_short": "Lun-ven 10:00-20:30 · Sam 10:00-19:00",
+  "opening_hours_full": "samedi 10:00-19:00 · dimanche fermé · lundi-vendredi 10:00-20:30",
+  "opening_note": "Dimanche fermé pour garder un service en boutique plus qualitatif.",
+  "maps_url": "https://www.google.com/maps/search/?api=1&query=résidence+lotus+mag+2+Rue+Baghdad+Kénitra",
+  "store_image_url": "./monocle.png"
+}</pre>
+  </div>
+
+  <h2>6. Utiliser l'onglet Produits</h2>
+  <p>
+    L'onglet <strong>Produits</strong> permet de gérer le catalogue.
+  </p>
+  <ul>
+    <li>Ajouter un nouveau produit</li>
+    <li>Modifier le nom, le slug, la catégorie, les filtres, le prix, la devise, le stock</li>
+    <li>Ajouter une image principale et une galerie</li>
+    <li>Activer ou désactiver un produit</li>
+    <li>Changer l'ordre d'affichage des produits</li>
+  </ul>
+
+  <h3>Conseil</h3>
+  <p>
+    Le champ <strong>Stock</strong> est important car il influence maintenant le panier, l'affichage de disponibilité
+    et la validation de commande sur le site.
+  </p>
+
+  <h2>7. Utiliser l'onglet Médias</h2>
+  <p>
+    L'onglet <strong>Médias</strong> sert à envoyer des images et à récupérer leur URL.
+  </p>
+  <ol>
+    <li>Cliquer sur <strong>Choisir un fichier</strong>.</li>
+    <li>Optionnel: modifier le nom du fichier.</li>
+    <li>Cliquer sur <strong>Uploader</strong>.</li>
+    <li>Copier l'URL du média dans la liste.</li>
+    <li>Réutiliser cette URL dans un contenu JSON, par exemple dans <span class="code">image_url</span>.</li>
+  </ol>
+
+  <h2>8. Utiliser l'onglet Newsletter</h2>
+  <ul>
+    <li>Voir la liste des abonnés</li>
+    <li>Consulter la source de l'inscription</li>
+    <li>Exporter la base au format CSV</li>
+  </ul>
+
+  <h2>9. Bonnes pratiques</h2>
+  <ul>
+    <li>Commencer par une clé existante ou une clé prête.</li>
+    <li>Toujours utiliser <strong>Charger modèle</strong> si la structure JSON n'est pas connue.</li>
+    <li>Vérifier que le JSON est valide avant d'enregistrer.</li>
+    <li>Recharger la page publique après modification.</li>
+    <li>Uploader les images dans l'onglet Médias avant de les utiliser dans le contenu.</li>
+  </ul>
+
+  <h2>10. Erreurs fréquentes à éviter</h2>
+  <ul>
+    <li>Mettre un JSON invalide: accolade fermante manquante, virgule en trop, guillemets oubliés.</li>
+    <li>Utiliser une mauvaise clé de contenu.</li>
+    <li>Insérer une URL d'image inexistante.</li>
+    <li>Modifier un produit sans stock alors qu'il doit être vendable.</li>
+  </ul>
+
+  <h2>11. Méthode simple recommandée</h2>
+  <ol>
+    <li>Mettre à jour <span class="code">site-settings</span> pour les coordonnées globales.</li>
+    <li>Mettre à jour <span class="code">site-nav</span> pour les menus et libellés.</li>
+    <li>Mettre à jour <span class="code">home-hero</span> et <span class="code">home-contact</span> pour la page d'accueil.</li>
+    <li>Mettre à jour <span class="code">collection-hero</span> et <span class="code">collection-trust</span> pour le catalogue.</li>
+    <li>Mettre à jour <span class="code">home-popup</span> pour le popup newsletter.</li>
+  </ol>
+
+  <h2>12. Résumé</h2>
+  <p>
+    Le compte admin Monocle permet de gérer:
+  </p>
+  <ul>
+    <li>le contenu éditorial des pages</li>
+    <li>les boutons et CTA</li>
+    <li>les images via l'onglet Médias</li>
+    <li>les produits et leur stock</li>
+    <li>les contacts newsletter</li>
+  </ul>
+
+  <p>
+    La règle la plus importante est simple:
+    <strong>choisir une clé, charger le modèle, modifier, enregistrer, vérifier sur le site.</strong>
+  </p>
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Collections Monocle Optique | Montures de caractere a Salé & Kénitra</title>
-  <meta name="description" content="Découvrez les collections Monocle Optique: montures de caractere, lignes élégantes et selection visuelle pour vos lunettes a Salé et Kénitra.">
+  <meta id="collectionsMetaDescription" name="description" content="Découvrez les collections Monocle Optique: montures de caractere, lignes élégantes et selection visuelle pour vos lunettes a Salé et Kénitra.">
   <meta name="robots" content="index,follow">
   <meta name="theme-color" content="#111214">
   <link rel="icon" type="image/png" href="./logo.png">
@@ -267,7 +267,7 @@
 
   <main>
     <section class="hero">
-      <img src="./modele_pk9_1_jylsc_pour_maison_bonnet.jpg" alt="Collection Monocle" fetchpriority="high">
+      <img id="colsHeroImage" src="./modele_pk9_1_jylsc_pour_maison_bonnet.jpg" alt="Collection Monocle" fetchpriority="high">
       <div class="hero-copy">
         <p id="colsHeroEyebrow" class="eyebrow">Collections Monocle Optique</p>
         <h1 id="colsHeroTitle">Collections artistiques et montures de caractere.</h1>
@@ -381,6 +381,18 @@
         node.setAttribute("href", String(value));
       }
 
+      function setImage(id, value) {
+        const node = document.getElementById(id);
+        if (!(node instanceof HTMLImageElement) || !value) return;
+        node.src = String(value);
+      }
+
+      function setMetaDescription(value) {
+        const node = document.getElementById("collectionsMetaDescription");
+        if (!node || !value) return;
+        node.setAttribute("content", String(value));
+      }
+
       async function fetchContent(key) {
         const res = await fetch("/api/content/" + encodeURIComponent(key), {
           headers: { Accept: "application/json" }
@@ -390,10 +402,12 @@
       }
 
       try {
-        const [productsRes, meta, hero, nav] = await Promise.all([
+        const [productsRes, settings, meta, hero, footer, nav] = await Promise.all([
           fetch("/api/products", { headers: { Accept: "application/json" } }),
+          fetchContent("site-settings"),
           fetchContent("collections-meta"),
           fetchContent("collections-hero"),
+          fetchContent("collections-footer"),
           fetchContent("site-nav")
         ]);
 
@@ -407,10 +421,17 @@
           }
         }
 
+        if (settings) {
+          setText("colsTopbar", settings.title);
+        }
+
         if (meta) {
           setText("colsTopbar", meta.title || (meta.data && meta.data.topbar));
           setText("colsGridEyebrow", meta.data && meta.data.grid_eyebrow);
           setText("colsGridTitle", meta.body || (meta.data && meta.data.grid_title));
+          if (meta.data && meta.data.page_title) document.title = String(meta.data.page_title);
+          setMetaDescription(meta.data && meta.data.meta_description);
+          setText("colsFooter", meta.data && meta.data.footer_text);
         }
 
         if (hero) {
@@ -421,6 +442,11 @@
           setHref("colsHeroPrimary", hero.data && hero.data.cta_primary_url);
           setText("colsHeroSecondary", hero.data && hero.data.cta_secondary_label);
           setHref("colsHeroSecondary", hero.data && hero.data.cta_secondary_url);
+          setImage("colsHeroImage", hero.data && hero.data.image_url);
+        }
+
+        if (footer) {
+          setText("colsFooter", footer.title || footer.body);
         }
 
         if (nav) {
@@ -443,6 +469,6 @@
     })();
   </script>
 
-  <footer>Monocle Optique · Collections · Salé & Kénitra</footer>
+  <footer id="colsFooter">Monocle Optique · Collections · Salé & Kénitra</footer>
 </body>
 </html>

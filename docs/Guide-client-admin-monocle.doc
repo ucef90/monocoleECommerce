@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Guide client - Utilisation du compte admin Monocle</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.55;
+      color: #111;
+      margin: 32px;
+    }
+    h1, h2, h3 {
+      color: #111;
+    }
+    h1 {
+      font-size: 24pt;
+      margin-bottom: 8px;
+    }
+    h2 {
+      font-size: 16pt;
+      margin-top: 28px;
+      margin-bottom: 8px;
+    }
+    h3 {
+      font-size: 12pt;
+      margin-top: 18px;
+      margin-bottom: 6px;
+    }
+    p {
+      margin: 8px 0;
+    }
+    ul, ol {
+      margin: 8px 0 8px 24px;
+    }
+    li {
+      margin: 4px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+    }
+    th, td {
+      border: 1px solid #cfcfcf;
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #efefef;
+    }
+    .box {
+      border: 1px solid #d6d6d6;
+      background: #f8f8f8;
+      padding: 12px;
+      margin: 12px 0;
+    }
+    .note {
+      border-left: 4px solid #111;
+      background: #f7f7f7;
+      padding: 10px 12px;
+      margin: 12px 0;
+    }
+    .code {
+      font-family: "Courier New", monospace;
+      background: #f1f1f1;
+      padding: 2px 6px;
+    }
+    .small {
+      color: #555;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+  <h1>Guide client - Comment utiliser le compte admin Monocle</h1>
+  <p class="small">Document prévu pour un usage simple et autonome par le client.</p>
+
+  <h2>1. À quoi sert le compte admin ?</h2>
+  <p>
+    Le compte admin permet de modifier le site sans intervenir dans le code.
+    Il sert principalement à :
+  </p>
+  <ul>
+    <li>changer les textes du site</li>
+    <li>mettre à jour les coordonnées, horaires et boutons</li>
+    <li>modifier les images</li>
+    <li>ajouter ou modifier des produits</li>
+    <li>consulter la newsletter</li>
+  </ul>
+
+  <h2>2. Connexion au compte admin</h2>
+  <div class="box">
+    <p><strong>Lien admin local :</strong> <span class="code">http://localhost:8787/admin/login</span></p>
+    <p><strong>Lien admin public :</strong> utiliser le lien ngrok si le site est exposé en ligne</p>
+    <p><strong>Identifiant :</strong> <span class="code">admin</span></p>
+    <p><strong>Mot de passe :</strong> <span class="code">admin123</span></p>
+  </div>
+
+  <h2>3. Les 4 onglets de l’admin</h2>
+  <table>
+    <tr>
+      <th>Onglet</th>
+      <th>Utilité</th>
+    </tr>
+    <tr>
+      <td>Newsletter</td>
+      <td>Voir les emails enregistrés et exporter la liste.</td>
+    </tr>
+    <tr>
+      <td>Produits</td>
+      <td>Ajouter, modifier, supprimer et organiser les produits.</td>
+    </tr>
+    <tr>
+      <td>Contenu</td>
+      <td>Modifier les textes, les titres, certaines images et les boutons du site.</td>
+    </tr>
+    <tr>
+      <td>Médias</td>
+      <td>Ajouter des images et récupérer leur lien pour les utiliser sur le site.</td>
+    </tr>
+  </table>
+
+  <h2>4. Modifier le contenu du site</h2>
+  <p>
+    L’onglet <strong>Contenu</strong> permet de modifier les grandes sections du site.
+    Chaque section fonctionne avec une <strong>clé</strong>.
+  </p>
+
+  <h3>4.1. Comment faire une modification</h3>
+  <ol>
+    <li>Aller dans l’onglet <strong>Contenu</strong>.</li>
+    <li>Choisir une clé dans <strong>Clés prêtes</strong>.</li>
+    <li>Cliquer sur <strong>Charger modèle</strong>.</li>
+    <li>Modifier le <strong>Titre</strong>, le <strong>Texte principal</strong> et éventuellement les <strong>Données JSON</strong>.</li>
+    <li>Cliquer sur <strong>Enregistrer</strong>.</li>
+    <li>Actualiser la page du site pour vérifier le résultat.</li>
+  </ol>
+
+  <h3>4.2. Les champs à comprendre</h3>
+  <ul>
+    <li><strong>Clé contenu</strong> : nom technique de la section.</li>
+    <li><strong>Titre</strong> : titre principal affiché sur la page.</li>
+    <li><strong>Texte principal</strong> : paragraphe principal.</li>
+    <li><strong>Données JSON</strong> : sert aux éléments complémentaires comme les boutons, les liens, les libellés et parfois les images.</li>
+  </ul>
+
+  <div class="note">
+    Conseil : si vous ne savez pas quoi mettre dans le JSON, choisissez la clé puis cliquez sur
+    <strong>Charger modèle</strong>. Le système remplit automatiquement une structure correcte.
+  </div>
+
+  <h2>5. Les clés les plus importantes</h2>
+  <table>
+    <tr>
+      <th>Clé</th>
+      <th>Ce qu’elle permet de modifier</th>
+    </tr>
+    <tr>
+      <td><span class="code">site-settings</span></td>
+      <td>Téléphone, adresse, horaires, lien Google Maps, zone desservie, image de boutique.</td>
+    </tr>
+    <tr>
+      <td><span class="code">site-nav</span></td>
+      <td>Le texte du menu et certains libellés globaux.</td>
+    </tr>
+    <tr>
+      <td><span class="code">home-hero</span></td>
+      <td>Le grand bloc principal de la page d’accueil.</td>
+    </tr>
+    <tr>
+      <td><span class="code">home-contact</span></td>
+      <td>Les 3 cartes : téléphone, adresse, horaires sur la home.</td>
+    </tr>
+    <tr>
+      <td><span class="code">home-atelier</span></td>
+      <td>Le bloc atelier de la page d’accueil.</td>
+    </tr>
+    <tr>
+      <td><span class="code">home-process</span></td>
+      <td>Les 3 étapes de l’expérience Monocle.</td>
+    </tr>
+    <tr>
+      <td><span class="code">home-stores</span></td>
+      <td>La section boutiques en bas de la home.</td>
+    </tr>
+    <tr>
+      <td><span class="code">home-popup</span></td>
+      <td>Le popup newsletter.</td>
+    </tr>
+    <tr>
+      <td><span class="code">collection-hero</span></td>
+      <td>Le grand bloc d’introduction de la page catalogue.</td>
+    </tr>
+    <tr>
+      <td><span class="code">collection-trust</span></td>
+      <td>Les 3 cartes d’informations pratiques de la page catalogue.</td>
+    </tr>
+    <tr>
+      <td><span class="code">collection-footer</span></td>
+      <td>Le bas de page du catalogue.</td>
+    </tr>
+    <tr>
+      <td><span class="code">collections-hero</span></td>
+      <td>Le bloc principal de la page collections.</td>
+    </tr>
+  </table>
+
+  <h2>6. Exemples concrets de modification</h2>
+
+  <h3>6.1. Changer le téléphone affiché sur le site</h3>
+  <ol>
+    <li>Aller dans <strong>Contenu</strong>.</li>
+    <li>Choisir la clé <span class="code">site-settings</span>.</li>
+    <li>Cliquer sur <strong>Charger modèle</strong>.</li>
+    <li>Dans le JSON, modifier :
+      <ul>
+        <li><span class="code">phone_display</span></li>
+        <li><span class="code">phone_href</span></li>
+      </ul>
+    </li>
+    <li>Cliquer sur <strong>Enregistrer</strong>.</li>
+  </ol>
+
+  <h3>6.2. Changer l’image et le texte du hero d’accueil</h3>
+  <ol>
+    <li>Aller dans <strong>Contenu</strong>.</li>
+    <li>Choisir <span class="code">home-hero</span>.</li>
+    <li>Modifier le <strong>Titre</strong>.</li>
+    <li>Modifier le <strong>Texte principal</strong>.</li>
+    <li>Dans le JSON, modifier <span class="code">image_url</span> si nécessaire.</li>
+    <li>Cliquer sur <strong>Enregistrer</strong>.</li>
+  </ol>
+
+  <h3>6.3. Changer les 3 cartes contact de la home</h3>
+  <ol>
+    <li>Choisir la clé <span class="code">home-contact</span>.</li>
+    <li>Cliquer sur <strong>Charger modèle</strong>.</li>
+    <li>Modifier les champs dans le JSON :
+      <ul>
+        <li><span class="code">phone_label</span>, <span class="code">phone_title</span>, <span class="code">phone_body</span></li>
+        <li><span class="code">address_label</span>, <span class="code">address_title</span>, <span class="code">address_body</span></li>
+        <li><span class="code">hours_label</span>, <span class="code">hours_title</span>, <span class="code">hours_body</span></li>
+      </ul>
+    </li>
+    <li>Enregistrer.</li>
+  </ol>
+
+  <h3>6.4. Changer le popup newsletter</h3>
+  <ol>
+    <li>Choisir la clé <span class="code">home-popup</span>.</li>
+    <li>Modifier le titre et le texte.</li>
+    <li>Dans le JSON, modifier le bouton et le placeholder si besoin.</li>
+    <li>Enregistrer.</li>
+  </ol>
+
+  <h2>7. Ajouter une image dans le site</h2>
+  <p>
+    Pour utiliser une nouvelle image dans une section, il faut d’abord l’envoyer dans l’onglet <strong>Médias</strong>.
+  </p>
+
+  <h3>Étapes</h3>
+  <ol>
+    <li>Aller dans <strong>Médias</strong>.</li>
+    <li>Choisir le fichier image.</li>
+    <li>Cliquer sur <strong>Uploader</strong>.</li>
+    <li>Copier le lien généré.</li>
+    <li>Coller ce lien dans le JSON du contenu concerné, par exemple dans <span class="code">image_url</span>.</li>
+  </ol>
+
+  <h2>8. Ajouter un produit</h2>
+  <p>
+    L’onglet <strong>Produits</strong> permet d’ajouter un nouveau produit au catalogue.
+  </p>
+
+  <h3>8.1. Étapes pour ajouter un produit</h3>
+  <ol>
+    <li>Aller dans l’onglet <strong>Produits</strong>.</li>
+    <li>Dans la colonne de gauche, remplir le formulaire.</li>
+    <li>Compléter au minimum :
+      <ul>
+        <li><strong>Nom</strong></li>
+        <li><strong>Prix</strong></li>
+        <li><strong>Stock</strong></li>
+        <li><strong>Image principale</strong></li>
+        <li><strong>Catégorie</strong></li>
+      </ul>
+    </li>
+    <li>Cliquer sur <strong>Enregistrer</strong>.</li>
+  </ol>
+
+  <h3>8.2. Les champs les plus importants</h3>
+  <table>
+    <tr>
+      <th>Champ</th>
+      <th>Utilité</th>
+    </tr>
+    <tr>
+      <td>Nom</td>
+      <td>Nom visible du produit.</td>
+    </tr>
+    <tr>
+      <td>Slug</td>
+      <td>Identifiant technique. Peut être laissé vide si le système le génère ou si vous gardez une convention simple.</td>
+    </tr>
+    <tr>
+      <td>Catégorie</td>
+      <td>Permet de classer le produit dans le catalogue.</td>
+    </tr>
+    <tr>
+      <td>Genre / Couleur / Forme / Matière</td>
+      <td>Filtres utilisés sur la page catalogue.</td>
+    </tr>
+    <tr>
+      <td>Extras</td>
+      <td>Tags supplémentaires comme Polarisant, Oversize, etc.</td>
+    </tr>
+    <tr>
+      <td>Prix</td>
+      <td>Prix affiché sur le site.</td>
+    </tr>
+    <tr>
+      <td>Monnaie</td>
+      <td>Devise, généralement DH.</td>
+    </tr>
+    <tr>
+      <td>Stock</td>
+      <td>Quantité disponible. Très important pour l’affichage et les commandes.</td>
+    </tr>
+    <tr>
+      <td>Image principale</td>
+      <td>Image de couverture du produit.</td>
+    </tr>
+    <tr>
+      <td>Galerie</td>
+      <td>Liste d’images du produit au format JSON.</td>
+    </tr>
+    <tr>
+      <td>Description</td>
+      <td>Texte descriptif du produit.</td>
+    </tr>
+    <tr>
+      <td>Actif</td>
+      <td>Si coché, le produit est visible sur le site.</td>
+    </tr>
+  </table>
+
+  <h3>8.3. Exemple simple de galerie</h3>
+  <div class="box">
+    <pre>[
+  "/uploads/lunette-1.jpg",
+  "/uploads/lunette-1-detail.jpg"
+]</pre>
+  </div>
+
+  <h3>8.4. Modifier un produit existant</h3>
+  <ol>
+    <li>Dans la liste des produits à droite, cliquer sur <strong>Modifier</strong>.</li>
+    <li>Le produit se charge dans le formulaire.</li>
+    <li>Modifier les champs souhaités.</li>
+    <li>Cliquer sur <strong>Enregistrer</strong>.</li>
+  </ol>
+
+  <h3>8.5. Supprimer un produit</h3>
+  <ol>
+    <li>Dans la liste, cliquer sur <strong>Supprimer</strong>.</li>
+    <li>Confirmer la suppression.</li>
+  </ol>
+
+  <h3>8.6. Modifier l’ordre d’affichage</h3>
+  <p>
+    Les produits peuvent être réorganisés dans l’admin pour changer leur ordre d’apparition sur le site.
+  </p>
+
+  <h2>9. Newsletter</h2>
+  <p>
+    L’onglet <strong>Newsletter</strong> permet :
+  </p>
+  <ul>
+    <li>de voir les abonnés</li>
+    <li>de consulter leur source d’inscription</li>
+    <li>d’exporter la liste en CSV</li>
+  </ul>
+
+  <h2>10. Conseils importants</h2>
+  <ul>
+    <li>Toujours vérifier le résultat après une modification.</li>
+    <li>Utiliser <strong>Charger modèle</strong> pour éviter les erreurs de structure.</li>
+    <li>Uploader les images dans <strong>Médias</strong> avant de les utiliser.</li>
+    <li>Mettre un stock correct pour chaque produit.</li>
+    <li>Ne pas supprimer une clé existante sans vérifier son usage sur le site.</li>
+  </ul>
+
+  <h2>11. Erreurs fréquentes</h2>
+  <ul>
+    <li>Écrire un JSON invalide.</li>
+    <li>Oublier de cliquer sur <strong>Enregistrer</strong>.</li>
+    <li>Utiliser une URL d’image qui n’existe pas.</li>
+    <li>Mettre un stock à 0 par erreur sur un produit qui doit rester disponible.</li>
+  </ul>
+
+  <h2>12. Résumé simple</h2>
+  <div class="box">
+    <p><strong>Pour modifier le site :</strong> aller dans <strong>Contenu</strong>, choisir une clé, charger le modèle, modifier, enregistrer.</p>
+    <p><strong>Pour ajouter une image :</strong> aller dans <strong>Médias</strong>, uploader, copier le lien, l’utiliser dans le contenu.</p>
+    <p><strong>Pour ajouter un produit :</strong> aller dans <strong>Produits</strong>, remplir le formulaire, enregistrer.</p>
+  </div>
+
+  <p>
+    Ce guide permet au client de gérer le site au quotidien de façon autonome, sans intervention technique.
+  </p>
+</body>
+</html>

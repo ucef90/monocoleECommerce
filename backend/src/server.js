@@ -7,6 +7,7 @@ const { createDb } = require('./db/database');
 const { buildSlotsService } = require('./services/slots.service');
 const { buildNewsletterService } = require('./services/newsletter.service');
 const { buildCmsService } = require('./services/cms.service');
+const { buildOrdersService } = require('./services/orders.service');
 const { buildAuthService } = require('./services/auth.service');
 const { createApiRouter } = require('./routes/api');
 
@@ -51,8 +52,9 @@ async function createServer() {
   const slotsService = buildSlotsService(db, env);
   const newsletterService = buildNewsletterService(db);
   const cmsService = buildCmsService(db, env);
+  const ordersService = buildOrdersService(db);
   const authService = buildAuthService(env);
-  const apiRouter = createApiRouter({ slotsService, newsletterService, cmsService, authService, env });
+  const apiRouter = createApiRouter({ slotsService, newsletterService, cmsService, ordersService, authService, env });
 
   return http.createServer(async (req, res) => {
     const host = req.headers.host || `localhost:${env.port}`;

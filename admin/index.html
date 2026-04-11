@@ -448,21 +448,34 @@
             <label>Clés prêtes (copier/coller)
               <select id="contentPreset">
                 <option value="">Choisir une clé...</option>
+                <option value="site-settings">site-settings (coordonnées / business)</option>
                 <option value="site-nav">site-nav (menus globaux)</option>
+                <option value="home-meta">home-meta (SEO home)</option>
                 <option value="home-hero">home-hero</option>
+                <option value="home-contact">home-contact</option>
                 <option value="home-quote">home-quote</option>
+                <option value="home-atelier">home-atelier</option>
+                <option value="home-process">home-process</option>
                 <option value="home-stores">home-stores</option>
+                <option value="home-popup">home-popup</option>
                 <option value="collection-meta">collection-meta</option>
                 <option value="collection-hero">collection-hero</option>
+                <option value="collection-trust">collection-trust</option>
+                <option value="collection-footer">collection-footer</option>
                 <option value="collections-meta">collections-meta</option>
                 <option value="collections-hero">collections-hero</option>
+                <option value="collections-footer">collections-footer</option>
                 <option value="surmesure-meta">surmesure-meta</option>
                 <option value="surmesure-hero">surmesure-hero</option>
                 <option value="surmesure-offer">surmesure-offer</option>
                 <option value="surmesure-story">surmesure-story</option>
                 <option value="surmesure-final">surmesure-final</option>
+                <option value="surmesure-exit">surmesure-exit</option>
               </select>
             </label>
+            <div id="contentPresetHelp" style="padding:10px 12px;border:1px dashed #cfd8e4;border-radius:10px;background:#f9fbfe;color:#516072;font-size:.8rem;line-height:1.6;">
+              Sélectionne une clé pour préremplir le formulaire avec une structure recommandée.
+            </div>
             <label>Titre
               <input id="contentTitle" type="text">
             </label>
@@ -474,6 +487,7 @@
             </label>
             <div class="form-actions">
               <button class="btn primary" type="submit">Enregistrer</button>
+              <button id="contentApplyTemplate" class="btn" type="button">Charger modèle</button>
               <button id="contentReset" class="btn" type="button">Nouveau</button>
             </div>
           </form>
@@ -576,15 +590,284 @@
       const contentForm = document.getElementById('contentForm');
       const contentKey = document.getElementById('contentKey');
       const contentPreset = document.getElementById('contentPreset');
+      const contentPresetHelp = document.getElementById('contentPresetHelp');
       const contentTitle = document.getElementById('contentTitle');
       const contentBody = document.getElementById('contentBody');
       const contentData = document.getElementById('contentData');
+      const contentApplyTemplate = document.getElementById('contentApplyTemplate');
       const contentReset = document.getElementById('contentReset');
 
       const mediaForm = document.getElementById('mediaForm');
       const mediaFile = document.getElementById('mediaFile');
       const mediaFilename = document.getElementById('mediaFilename');
       const mediaGrid = document.getElementById('mediaGrid');
+
+      const CONTENT_PRESETS = {
+        'site-settings': {
+          help: 'Coordonnées globales du business réutilisables sur la home, le catalogue et les footers.',
+          title: 'Monocle Optique · Salé & Kénitra · 06 61 29 07 03',
+          body: 'Paramètres business globaux',
+          data: {
+            business_name: 'Monocle Optique',
+            phone_display: '06 61 29 07 03',
+            phone_href: 'tel:+212661290703',
+            address_line: 'résidence lotus, mag n°2 Rue Baghdad',
+            address_city: 'Kénitra',
+            area_served: 'Salé & Kénitra',
+            address_note: 'Monocle Optique vous accueille a Kénitra et accompagne aussi la clientele de Salé.',
+            opening_hours_short: 'Lun-ven 10:00-20:30 · Sam 10:00-19:00',
+            opening_hours_full: 'samedi 10:00-19:00 · dimanche fermé · lundi-vendredi 10:00-20:30',
+            opening_note: 'Dimanche fermé pour garder un service en boutique plus qualitatif le reste de la semaine.',
+            maps_url: 'https://www.google.com/maps/search/?api=1&query=r%C3%A9sidence+lotus%2C+mag+2+Rue+Baghdad%2C+K%C3%A9nitra',
+            store_image_url: './monocle.png'
+          }
+        },
+        'site-nav': {
+          help: 'Navigation globale et libellés transverses.',
+          title: 'Navigation globale',
+          body: '',
+          data: {
+            topline: 'Monocle Optique · Salé & Kénitra · 06 61 29 07 03',
+            topline_surmesure: 'Le Sur-Mesure Monocle · Salé & Kénitra · 06 61 29 07 03',
+            home_label: 'La Maison',
+            custom_label: 'Le sur-mesure',
+            collections_label: 'Collections',
+            solar_label: 'Solaire',
+            ateliers_label: 'Atelier',
+            cta_label: 'Prendre rendez-vous',
+            collections_cta_label: 'Appeler',
+            footer_text: 'MONOCLE OPTIQUE · Salé & Kénitra'
+          }
+        },
+        'home-meta': {
+          help: 'SEO home: titre navigateur et meta description.',
+          title: 'Monocle Optique | Opticien a Salé & Kénitra | Lunettes de vue et solaires',
+          body: 'Monocle Optique vous accueille a Salé et Kénitra pour vos lunettes de vue, solaires, ajustages et conseils en boutique.',
+          data: {}
+        },
+        'home-hero': {
+          help: 'Hero principal de la home.',
+          title: 'Votre opticien a Salé et Kénitra pour des lunettes de vue et solaires bien choisies.',
+          body: 'Monocle Optique vous accompagne en boutique pour trouver la bonne monture, ajuster votre confort visuel et choisir un style adapte.',
+          data: {
+            eyebrow: 'Lunetterie sur mesure',
+            image_url: './modele_pk9_1_jylsc_pour_maison_bonnet.jpg',
+            cta_primary_label: 'Prendre rendez-vous',
+            cta_primary_url: './collection.html',
+            cta_secondary_label: 'Appeler maintenant',
+            cta_secondary_url: 'tel:+212661290703'
+          }
+        },
+        'home-contact': {
+          help: 'Bandeau infos pratiques sous le hero.',
+          title: 'Informations pratiques Monocle',
+          body: '',
+          data: {
+            phone_label: 'Telephone',
+            phone_title: '06 61 29 07 03',
+            phone_body: 'Conseil rapide, disponibilites et prise de rendez-vous.',
+            address_label: 'Adresse Kénitra',
+            address_title: 'résidence lotus, mag n°2 Rue Baghdad',
+            address_body: 'Monocle Optique vous accueille a Kénitra et accompagne aussi la clientele de Salé.',
+            hours_label: 'Horaires',
+            hours_title: 'Lun-ven 10:00-20:30 · Sam 10:00-19:00',
+            hours_body: 'Dimanche ferme pour garder un service en boutique plus qualitatif.'
+          }
+        },
+        'home-quote': {
+          help: 'Phrase éditoriale de la home.',
+          title: 'Citation home',
+          body: 'Quelques idees de montures, mais la votre reste a creer.',
+          data: {}
+        },
+        'home-atelier': {
+          help: 'Bloc atelier / marque sur la home.',
+          title: 'Un lieu de rendez-vous, de creation et d\'ajustement.',
+          body: 'Dans notre boutique, nous prenons le temps de vous connaitre: morphologie, posture, usages optiques et solaire.',
+          data: {
+            eyebrow: 'Nos ateliers-boutiques',
+            image_url: './artisans-hero.jpg',
+            cta_label: 'Voir la collection solaire',
+            cta_url: './collection.html'
+          }
+        },
+        'home-process': {
+          help: 'Les 3 étapes de l’expérience Monocle.',
+          title: 'L\'experience Monocle',
+          body: '',
+          data: {
+            step1_title: 'Entretien visage',
+            step1_body: 'Analyse de vos lignes, de votre confort et de vos besoins visuels.',
+            step2_title: 'Dessin & choix matieres',
+            step2_body: 'Selection des formes, couleurs, epaisseurs et details de finition.',
+            step3_title: 'Fabrication & ajustage',
+            step3_body: 'Monture finalisee et reglee en boutique pour un port parfait.'
+          }
+        },
+        'home-stores': {
+          help: 'Bloc boutiques / footer éditorial de la home.',
+          title: 'Monocle Optique a Salé et Kénitra',
+          body: 'Retrouvez Monocle Optique a Salé et Kénitra pour vos lunettes de vue et solaires, l\'essayage en boutique, l\'ajustage professionnel et un accompagnement personnalisé.',
+          data: {
+            kicker: 'Nos boutiques',
+            city_label: 'Kénitra · Salé',
+            note: 'Monocle Optique · Vue, solaire, ajustage et conseil'
+          }
+        },
+        'home-popup': {
+          help: 'Popup newsletter de bienvenue.',
+          title: 'Gagnez 10% de réduction sur votre première commande.',
+          body: 'Inscrivez-vous à notre newsletter pour recevoir nos nouveautés, conseils style et offres privées.',
+          data: {
+            kicker: 'Bienvenue chez Monocle',
+            note: 'En vous inscrivant, vous acceptez de recevoir nos emails. Vous pouvez vous désinscrire à tout moment.',
+            button_label: 'Je m\'inscris',
+            placeholder: 'Votre adresse email'
+          }
+        },
+        'collection-meta': {
+          help: 'SEO et sous-texte de la page catalogue.',
+          title: 'Catalogue Monocle Optique · Salé & Kénitra · 06 61 29 07 03',
+          body: 'Sélection solaire Monocle, essayage en ligne disponible sur chaque modèle.',
+          data: {
+            page_title: 'Catalogue Monocle Optique | Lunettes de vue et solaires a Salé & Kénitra',
+            meta_description: 'Explorez le catalogue Monocle Optique: lunettes de vue et solaires, filtres par style et accompagnement a Salé et Kénitra.'
+          }
+        },
+        'collection-hero': {
+          help: 'Hero de la page catalogue.',
+          title: 'Catalogue lunettes de vue et solaires',
+          body: 'Retrouvez les montures Monocle Optique avec filtres par forme, couleur et matiere.',
+          data: {
+            breadcrumb: 'Accueil / Catalogue / Lunettes',
+            eyebrow: 'Collection'
+          }
+        },
+        'collection-trust': {
+          help: 'Les 3 cartes infos pratiques du catalogue.',
+          title: 'Infos catalogue',
+          body: '',
+          data: {
+            card1_label: 'Telephone',
+            card1_title: '06 61 29 07 03',
+            card1_body: 'Appeler maintenant',
+            card1_href: 'tel:+212661290703',
+            card2_label: 'Adresse',
+            card2_title: 'résidence lotus, mag n°2 Rue Baghdad, Kénitra',
+            card2_body: 'Service Monocle Optique pour Kénitra et Salé.',
+            card3_label: 'Horaires',
+            card3_title: 'Lundi a vendredi 10:00-20:30',
+            card3_body: 'Samedi 10:00-19:00 · Dimanche fermé.'
+          }
+        },
+        'collection-footer': {
+          help: 'Footer éditorial de la page catalogue.',
+          title: 'Kénitra · Salé',
+          body: 'Monocle Optique · résidence lotus, mag n°2 Rue Baghdad, Kénitra',
+          data: {
+            note_2: '06 61 29 07 03 · samedi 10:00-19:00 · dimanche fermé',
+            image_url: './monocle.png'
+          }
+        },
+        'collections-meta': {
+          help: 'SEO et textes de galerie pour la page collections.',
+          title: 'Collections Monocle Optique · Salé & Kénitra · 06 61 29 07 03',
+          body: 'Galerie Collections',
+          data: {
+            topbar: 'Collections Monocle Optique · Salé & Kénitra · 06 61 29 07 03',
+            page_title: 'Collections Monocle Optique | Montures de caractere a Salé & Kénitra',
+            meta_description: 'Découvrez les collections Monocle Optique: montures de caractere, lignes élégantes et selection visuelle pour vos lunettes a Salé et Kénitra.',
+            grid_eyebrow: 'Sélection visuelle',
+            footer_text: 'Monocle Optique · Collections · Salé & Kénitra'
+          }
+        },
+        'collections-hero': {
+          help: 'Hero de la page collections.',
+          title: 'Collections artistiques et montures de caractere.',
+          body: 'Explorez une selection de montures fortes, elegantes et confortables.',
+          data: {
+            eyebrow: 'Collections Monocle Optique',
+            image_url: './modele_pk9_1_jylsc_pour_maison_bonnet.jpg',
+            cta_primary_label: 'Voir le catalogue',
+            cta_primary_url: './collection.html',
+            cta_secondary_label: 'Découvrir le sur-mesure',
+            cta_secondary_url: './sur-mesure.html'
+          }
+        },
+        'collections-footer': {
+          help: 'Footer simple de la page collections.',
+          title: 'Monocle Optique · Collections · Salé & Kénitra',
+          body: '',
+          data: {}
+        },
+        'surmesure-meta': {
+          help: 'Topbar + footer sur-mesure.',
+          title: 'Le Sur-Mesure Monocle Optique · Salé & Kénitra · 06 61 29 07 03',
+          body: 'Monocle Optique · Le sur-mesure · Salé & Kénitra',
+          data: {}
+        },
+        'surmesure-hero': {
+          help: 'Hero sur-mesure.',
+          title: 'Une monture pensée pour vous, pas pour tout le monde.',
+          body: 'Chez Monocle Optique, le sur-mesure permet de mieux choisir, mieux ajuster et mieux incarner votre style.',
+          data: {
+            kicker: 'Le sur-mesure',
+            image_url: './artisans-hero.jpg',
+            cta_label: 'Réserver ma consultation',
+            cta_href: './collection.html',
+            sticky_msg: 'Découvrez le sur-mesure Monocle avec un accompagnement premium.'
+          }
+        },
+        'surmesure-offer': {
+          help: 'Bloc offre / argumentaire sur-mesure.',
+          title: 'Une approche hautement personnalisée.',
+          body: 'Chaque rendez-vous permet d\'affiner la forme, la matière et le confort selon votre usage.',
+          data: {
+            card3_title: 'Ajustage précis',
+            card3_body: 'Réglages fins en boutique pour un port stable et confortable.',
+            cta_label: 'Réserver ma consultation',
+            cta_href: './collection.html',
+            sticky_msg: 'Offre limitée en cours: sécurisez votre créneau aujourd\'hui.'
+          }
+        },
+        'surmesure-story': {
+          help: 'Bloc storytelling sur-mesure.',
+          title: 'Le sur-mesure commence par une rencontre.',
+          body: 'Nous prenons le temps d\'observer votre visage, vos habitudes et vos attentes.',
+          data: {
+            kicker: 'La démarche',
+            p2: 'Ensuite viennent les choix de lignes, de couleurs et d\'équilibre.',
+            p3: 'Enfin, l\'ajustage donne à la monture sa justesse finale.',
+            image_url: './monocle.png',
+            cta_label: 'Prendre rendez-vous',
+            cta_href: './collection.html'
+          }
+        },
+        'surmesure-final': {
+          help: 'CTA final sur-mesure.',
+          title: 'Prêt à créer votre monture signature?',
+          body: 'Réservez votre rendez-vous sur-mesure Monocle et découvrez une expérience où l\'art, la qualité et le confort avancent ensemble.',
+          data: {
+            primary_label: 'Voir la collection',
+            primary_href: './collection.html',
+            secondary_label: 'Nos ateliers-boutiques',
+            secondary_href: './index.html#atelier',
+            cta_label: 'Réserver maintenant',
+            cta_href: './collection.html',
+            sticky_msg: 'Derniers créneaux du jour: confirmez votre rendez-vous maintenant.'
+          }
+        },
+        'surmesure-exit': {
+          help: 'Popup de sortie et sticky du sur-mesure.',
+          title: 'Avant de partir: créneaux premium encore disponibles aujourd\'hui.',
+          body: 'Confirmez maintenant votre rendez-vous sur-mesure pour bloquer votre consultation prioritaire.',
+          data: {
+            kicker: 'Offre limitée Monocle',
+            reserve_label: 'Bloquer mon créneau',
+            later_label: 'Je reviens plus tard'
+          }
+        }
+      };
 
       function setMsg(text, error) {
         msg.style.color = error ? '#b42318' : '#23643c';
@@ -780,6 +1063,9 @@
       function resetContentForm() {
         contentForm.reset();
         contentData.value = '{}';
+        if (contentPresetHelp) {
+          contentPresetHelp.textContent = 'Sélectionne une clé pour préremplir le formulaire avec une structure recommandée.';
+        }
       }
 
       function fillContentForm(row) {
@@ -787,6 +1073,18 @@
         contentTitle.value = row.title || '';
         contentBody.value = row.body || '';
         contentData.value = JSON.stringify(row.data || {}, null, 2);
+      }
+
+      function applyPresetTemplate(key, force) {
+        const preset = CONTENT_PRESETS[key];
+        if (!preset) return;
+        contentKey.value = key;
+        if (contentPresetHelp) contentPresetHelp.textContent = preset.help;
+        const shouldFill = force || (!contentTitle.value.trim() && !contentBody.value.trim() && (contentData.value || '').trim() === '{}');
+        if (!shouldFill) return;
+        contentTitle.value = preset.title || '';
+        contentBody.value = preset.body || '';
+        contentData.value = JSON.stringify(preset.data || {}, null, 2);
       }
 
       function renderContent(items) {
@@ -1118,14 +1416,27 @@
         contentPreset.addEventListener('change', async function () {
           const key = String(contentPreset.value || '').trim();
           if (!key) return;
-          contentKey.value = key;
+          applyPresetTemplate(key, false);
           try {
             const row = await api('/api/admin/content/' + encodeURIComponent(key));
             fillContentForm(row);
             setMsg('Contenu chargé depuis la clé sélectionnée.', false);
           } catch (_error) {
-            setMsg('Nouvelle clé sélectionnée. Remplis puis enregistre.', false);
+            applyPresetTemplate(key, true);
+            setMsg('Nouvelle clé sélectionnée. Modèle chargé, tu peux compléter puis enregistrer.', false);
           }
+        });
+      }
+
+      if (contentApplyTemplate) {
+        contentApplyTemplate.addEventListener('click', function () {
+          const key = String(contentPreset.value || contentKey.value || '').trim();
+          if (!key) {
+            setMsg('Choisis une clé contenu avant de charger un modèle.', true);
+            return;
+          }
+          applyPresetTemplate(key, true);
+          setMsg('Modèle de contenu chargé dans le formulaire.', false);
         });
       }
 

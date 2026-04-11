@@ -23,7 +23,7 @@ function toCsv(rows) {
   return lines.join('\n');
 }
 
-function createApiRouter({ slotsService, newsletterService, cmsService, authService, env }) {
+function createApiRouter({ slotsService, newsletterService, cmsService, ordersService, authService, env }) {
   function parseIdFromPath(pathname, prefix) {
     if (!pathname.startsWith(prefix)) return null;
     const value = pathname.slice(prefix.length);
@@ -99,6 +99,19 @@ function createApiRouter({ slotsService, newsletterService, cmsService, authServ
       if (req.method === 'GET' && url.pathname === '/api/products') {
         const products = await cmsService.listProducts();
         return json(res, 200, { rows: products });
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/orders') {
+        try {
+          const body = await parseJsonBody(req);
+          const result = await ordersService.createOrder(body);
+          if (!result.ok) return json(res, result.code, { error: result.error, ...(result.data ? { details: result.data } : {}) });
+          return json(res, result.code, result.data);
+        } catch (error) {
+          if (error.message === 'payload_too_large') return json(res, 413, { error: 'payload_too_large' });
+          if (error.message === 'invalid_json') return json(res, 400, { error: 'invalid_json' });
+          return json(res, 500, { error: 'order_create_failed' });
+        }
       }
 
       if (req.method === 'GET' && url.pathname === '/api/content') {
@@ -198,6 +211,13 @@ function createApiRouter({ slotsService, newsletterService, cmsService, authServ
         const session = requireAdmin(req, res);
         if (!session) return;
         const rows = await cmsService.listProducts();
+        return json(res, 200, { rows });
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/admin/orders') {
+        const session = requireAdmin(req, res);
+        if (!session) return;
+        const rows = await ordersService.listOrders();
         return json(res, 200, { rows });
       }
 

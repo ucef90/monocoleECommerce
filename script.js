@@ -8,6 +8,7 @@ const fallbackProducts = [
     matiere: "Acetate",
     extra: ["Oversize"],
     colors: 3,
+    stock: 5,
     price: 190,
     nouveaute: true,
     image: "./modele_pk9_1_jylsc_pour_maison_bonnet.jpg"
@@ -21,6 +22,7 @@ const fallbackProducts = [
     matiere: "Metal",
     extra: ["Polarisant"],
     colors: 2,
+    stock: 4,
     price: 190,
     nouveaute: true,
     image: "./h_01-ray-2-1-768x512.jpg"
@@ -34,6 +36,7 @@ const fallbackProducts = [
     matiere: "Combine",
     extra: ["Polarisant"],
     colors: 3,
+    stock: 6,
     price: 170,
     nouveaute: true,
     image: "./h_01-auguste-2-768x512.jpg"
@@ -47,6 +50,7 @@ const fallbackProducts = [
     matiere: "Acetate",
     extra: [],
     colors: 4,
+    stock: 2,
     price: 150,
     nouveaute: true,
     image: "./h_01-longuemare-4-768x512.jpg"
@@ -60,6 +64,7 @@ const fallbackProducts = [
     matiere: "Metal",
     extra: ["Polarisant"],
     colors: 2,
+    stock: 3,
     price: 210,
     nouveaute: false,
     image: "./f_01-sully-1-768x512.jpg"
@@ -73,6 +78,7 @@ const fallbackProducts = [
     matiere: "Combine",
     extra: ["Oversize"],
     colors: 4,
+    stock: 7,
     price: 175,
     nouveaute: false,
     image: "./f_01-clifford-1-768x512.jpg"
@@ -86,6 +92,7 @@ const fallbackProducts = [
     matiere: "Metal",
     extra: [],
     colors: 4,
+    stock: 0,
     price: 130,
     nouveaute: true,
     image: "./f_01-seven-1-1-768x512.jpg"
@@ -99,6 +106,7 @@ const fallbackProducts = [
     matiere: "Metal",
     extra: ["Polarisant"],
     colors: 3,
+    stock: 8,
     price: 150,
     nouveaute: false,
     image: "./01-cordier-1-768x512.jpg"
@@ -112,6 +120,7 @@ const fallbackProducts = [
     matiere: "Acetate",
     extra: [],
     colors: 2,
+    stock: 1,
     price: 145,
     nouveaute: true,
     image: "./f_01-tom-15-768x512.jpg"
@@ -125,6 +134,7 @@ const fallbackProducts = [
     matiere: "Combine",
     extra: ["Polarisant"],
     colors: 3,
+    stock: 5,
     price: 220,
     nouveaute: true,
     image: "./h_01-legendre-1-1-768x512.jpg"
@@ -138,6 +148,7 @@ const fallbackProducts = [
     matiere: "Acetate",
     extra: ["Oversize"],
     colors: 4,
+    stock: 3,
     price: 185,
     nouveaute: false,
     image: "./f_01-sully-1-768x512.jpg"
@@ -151,6 +162,7 @@ const fallbackProducts = [
     matiere: "Metal",
     extra: ["Polarisant"],
     colors: 2,
+    stock: 6,
     price: 210,
     nouveaute: false,
     image: "./h_01-ray-2-1-768x512.jpg"
@@ -164,6 +176,7 @@ const fallbackProducts = [
     matiere: "Metal",
     extra: [],
     colors: 3,
+    stock: 4,
     price: 175,
     nouveaute: true,
     image: "./h_01-auguste-2-768x512.jpg"
@@ -177,6 +190,7 @@ const fallbackProducts = [
     matiere: "Acetate",
     extra: [],
     colors: 3,
+    stock: 2,
     price: 168,
     nouveaute: false,
     image: "./f_01-clifford-1-768x512.jpg"
@@ -190,6 +204,7 @@ const fallbackProducts = [
     matiere: "Combine",
     extra: ["Oversize"],
     colors: 4,
+    stock: 5,
     price: 198,
     nouveaute: true,
     image: "./01-cordier-1-768x512.jpg"
@@ -203,6 +218,7 @@ const fallbackProducts = [
     matiere: "Metal",
     extra: ["Polarisant"],
     colors: 2,
+    stock: 1,
     price: 230,
     nouveaute: true,
     image: "./richard_modele-terry-optimised.jpg"
@@ -216,6 +232,7 @@ const fallbackProducts = [
     matiere: "Combine",
     extra: ["Oversize"],
     colors: 3,
+    stock: 4,
     price: 179,
     nouveaute: false,
     image: "./f_01-seven-1-1-768x512.jpg"
@@ -229,6 +246,7 @@ const fallbackProducts = [
     matiere: "Acetate",
     extra: ["Polarisant"],
     colors: 2,
+    stock: 0,
     price: 188,
     nouveaute: true,
     image: "./f_01-tom-15-768x512.jpg"
@@ -256,6 +274,7 @@ const qvImage = document.getElementById("qvImage");
 const qvBadge = document.getElementById("qvBadge");
 const qvTitle = document.getElementById("qvTitle");
 const qvMeta = document.getElementById("qvMeta");
+const qvStock = document.getElementById("qvStock");
 const qvPrice = document.getElementById("qvPrice");
 const qvColors = document.getElementById("qvColors");
 const qvSizes = document.getElementById("qvSizes");
@@ -374,6 +393,7 @@ function mapCmsProduct(row, index) {
     matiere,
     extra: extraList.length ? extraList : [isPolar ? "Polarisant" : "", isOversize ? "Oversize" : ""].filter(Boolean),
     colors,
+    stock: Math.max(0, Number(pickFirst(row.stock, 0)) || 0),
     price: Number(pickFirst(row.price, 0)) || 0,
     nouveaute: !!row.active,
     image
@@ -408,6 +428,49 @@ function getProductById(id) {
   return products.find((item) => item.id === id) || null;
 }
 
+function getProductStock(product) {
+  return Math.max(0, Number(product && product.stock) || 0);
+}
+
+function getRemainingStock(productId, ignoreKey) {
+  const product = getProductById(productId);
+  if (!product) return 0;
+  const reservedInCart = cart.reduce((sum, item) => {
+    if (item.productId !== productId) return sum;
+    if (ignoreKey && item.key === ignoreKey) return sum;
+    return sum + (Number(item.qty) || 0);
+  }, 0);
+  return Math.max(0, getProductStock(product) - reservedInCart);
+}
+
+function availabilityLabel(product, remaining) {
+  const value = remaining === undefined ? getProductStock(product) : remaining;
+  if (value <= 0) return "Rupture de stock";
+  if (value <= 3) return `Plus que ${value} en stock`;
+  return `${value} disponibles`;
+}
+
+function reconcileCartWithInventory() {
+  let changed = false;
+  cart = cart
+    .map((item) => {
+      const product = getProductById(item.productId);
+      if (!product || getProductStock(product) <= 0) {
+        changed = true;
+        return null;
+      }
+      const allowedQty = Math.min(item.qty, getRemainingStock(item.productId, item.key) + item.qty);
+      if (allowedQty !== item.qty) {
+        changed = true;
+        return { ...item, qty: allowedQty };
+      }
+      return item;
+    })
+    .filter(Boolean);
+
+  if (changed) saveCart();
+}
+
 function getVariantColors(product) {
   const base = colorVariants[product.couleur] || [product.couleur, `${product.couleur} Clair`, `${product.couleur} Fonce`];
   return base.slice(0, Math.max(2, Math.min(product.colors, base.length)));
@@ -426,9 +489,17 @@ function renderQuickOptions(container, options, activeValue, dataKey) {
     .join("");
 }
 
+function syncQuickViewQtyControls() {
+  const remaining = getRemainingStock(quickViewState.productId);
+  if (qvQtyMinus) qvQtyMinus.disabled = remaining <= 0 || quickViewState.qty <= 1;
+  if (qvQtyPlus) qvQtyPlus.disabled = remaining <= 0 || quickViewState.qty >= remaining;
+  if (qvAddToCart) qvAddToCart.disabled = remaining <= 0;
+}
+
 function openQuickView(productId) {
   const product = getProductById(productId);
   if (!product || !quickViewModal) return;
+  const remaining = getRemainingStock(product.id);
 
   const colors = getVariantColors(product);
   const sizes = getVariantSizes(product);
@@ -442,12 +513,18 @@ function openQuickView(productId) {
   qvImage.alt = product.name;
   qvTitle.textContent = product.name;
   qvMeta.textContent = `${product.genre} | ${product.forme} | ${product.matiere}`;
+  if (qvStock) {
+    qvStock.textContent = availabilityLabel(product, remaining);
+    qvStock.className = `quickview-stock ${remaining <= 0 ? "is-out" : remaining <= 3 ? "is-low" : "is-in"}`;
+  }
   qvPrice.textContent = `DH ${product.price.toFixed(2)}`;
   qvBadge.textContent = product.nouveaute ? "Nouveaute" : "Edition permanente";
-  qvQtyValue.textContent = String(quickViewState.qty);
-  qvMessage.textContent = "";
+  quickViewState.qty = remaining > 0 ? 1 : 0;
+  qvQtyValue.textContent = String(Math.max(quickViewState.qty, 0));
+  qvMessage.textContent = remaining > 0 ? "" : "Ce modele n'est plus disponible pour le moment.";
   renderQuickOptions(qvColors, colors, quickViewState.color, "color");
   renderQuickOptions(qvSizes, sizes, quickViewState.size, "size");
+  syncQuickViewQtyControls();
 
   document.body.classList.add("quickview-open");
   quickViewModal.setAttribute("aria-hidden", "false");
@@ -538,6 +615,7 @@ function renderCart() {
       <div>
         <h4>${item.name}</h4>
         <p>${item.color} | Taille ${item.size}</p>
+        <p class="cart-stock">${availabilityLabel(getProductById(item.productId), getRemainingStock(item.productId, item.key) + item.qty)}</p>
         <p class="price">DH ${(item.price * item.qty).toFixed(2)}</p>
         <div class="cart-controls">
           <button type="button" data-cart-action="minus" data-cart-index="${index}">−</button>
@@ -553,6 +631,12 @@ function renderCart() {
 function addCurrentQuickViewToCart() {
   const product = getProductById(quickViewState.productId);
   if (!product) return;
+  const remaining = getRemainingStock(product.id);
+  if (remaining <= 0) {
+    qvMessage.textContent = "Stock indisponible pour ce modele.";
+    qvAddToCart.disabled = true;
+    return;
+  }
 
   const entry = {
     key: getCartItemKey({
@@ -570,14 +654,17 @@ function addCurrentQuickViewToCart() {
   };
 
   const existing = cart.find((item) => item.key === entry.key);
+  const requestedQty = Math.max(1, entry.qty);
   if (existing) {
-    existing.qty = Math.min(99, existing.qty + entry.qty);
+    const allowed = getRemainingStock(product.id, existing.key) + existing.qty;
+    existing.qty = Math.min(allowed, existing.qty + requestedQty);
   } else {
-    cart.push(entry);
+    cart.push({ ...entry, qty: Math.min(remaining, requestedQty) });
   }
 
   saveCart();
   renderCart();
+  syncQuickViewQtyControls();
 }
 
 function clearInvalidMarks() {
@@ -699,6 +786,58 @@ function buildConfirmationSummary() {
     `<p><strong>Livraison:</strong> DH ${shipping.toFixed(2)}</p>`,
     `<p><strong>Total:</strong> DH ${total.toFixed(2)}</p>`
   ].join("");
+}
+
+function orderPayload() {
+  return {
+    customer: {
+      name: checkoutForm.name.value.trim(),
+      email: checkoutForm.email.value.trim(),
+      phone: checkoutForm.phone.value.trim()
+    },
+    shipping: {
+      address: checkoutForm.address.value.trim(),
+      city: checkoutForm.city.value.trim(),
+      zip: checkoutForm.zip.value.trim(),
+      country: checkoutForm.country.value,
+      method: (document.querySelector('input[name="shippingMethod"]:checked') || {}).value || "standard",
+      cost: shippingCost()
+    },
+    items: cart.map((item) => ({
+      product_id: item.productId,
+      qty: item.qty,
+      color: item.color,
+      size: item.size
+    }))
+  };
+}
+
+async function submitOrder() {
+  const res = await fetch("/api/orders", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify(orderPayload())
+  });
+
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const details = payload && payload.details;
+    if (payload.error === "insufficient_stock" && details) {
+      return {
+        ok: false,
+        message: `${details.title || "Un produit"} n'a plus assez de stock. Disponible: ${details.available}.`
+      };
+    }
+    return {
+      ok: false,
+      message: "Impossible d'enregistrer la commande pour le moment."
+    };
+  }
+
+  return { ok: true, data: payload };
 }
 
 function renderCheckoutStep() {
@@ -867,12 +1006,15 @@ function cardTemplate(product) {
   if (product.nouveaute) badges.push('<span class="badge">Nouveaute</span>');
   if (product.extra.includes("Polarisant")) badges.push('<span class="badge">Polarisant</span>');
   badges.push(`<span class="badge">${product.couleur}</span>`);
+  const stock = getProductStock(product);
+  const availabilityClass = stock <= 0 ? "is-out" : stock <= 3 ? "is-low" : "is-in";
+  const quickLabel = stock <= 0 ? "Indisponible" : "Vue rapide";
 
   return `
     <article class="product-card">
       <div class="product-media">
         <img class="product-image" src="${product.image}" alt="${product.name}">
-        <button class="quick-view" type="button" data-quick-product="${product.id}">Vue rapide</button>
+        <button class="quick-view" type="button" data-quick-product="${product.id}" ${stock <= 0 ? "disabled" : ""}>${quickLabel}</button>
       </div>
       <div class="product-body">
         <div class="badges">${badges.join("")}</div>
@@ -880,6 +1022,7 @@ function cardTemplate(product) {
         <p class="product-meta">${product.genre} | ${product.forme} | ${product.matiere}</p>
         <p class="product-colors">${product.colors} couleurs</p>
         <p class="product-price">Des ${product.price.toFixed(2)} DH</p>
+        <p class="product-availability ${availabilityClass}">${availabilityLabel(product, stock)}</p>
         <a class="product-link" href="#">Essayer en ligne</a>
       </div>
     </article>
@@ -982,12 +1125,15 @@ if (qvQtyMinus) {
   qvQtyMinus.addEventListener("click", () => {
     quickViewState.qty = Math.max(1, quickViewState.qty - 1);
     qvQtyValue.textContent = String(quickViewState.qty);
+    syncQuickViewQtyControls();
   });
 }
 if (qvQtyPlus) {
   qvQtyPlus.addEventListener("click", () => {
-    quickViewState.qty = Math.min(9, quickViewState.qty + 1);
+    const remaining = getRemainingStock(quickViewState.productId);
+    quickViewState.qty = Math.min(Math.max(1, remaining), quickViewState.qty + 1);
     qvQtyValue.textContent = String(quickViewState.qty);
+    syncQuickViewQtyControls();
   });
 }
 if (qvAddToCart) {
@@ -995,6 +1141,7 @@ if (qvAddToCart) {
     const product = getProductById(quickViewState.productId);
     if (!product) return;
     addCurrentQuickViewToCart();
+    if (qvAddToCart.disabled) return;
     qvMessage.textContent = `${product.name} ajoute au panier (${quickViewState.size}, ${quickViewState.color})`;
     openCart();
   });
@@ -1018,7 +1165,7 @@ if (cartDrawer) {
     if (!item) return;
 
     if (action === "minus") item.qty = Math.max(1, item.qty - 1);
-    if (action === "plus") item.qty = Math.min(99, item.qty + 1);
+    if (action === "plus") item.qty = Math.min(getRemainingStock(item.productId, item.key) + item.qty, item.qty + 1);
     if (action === "remove") cart.splice(index, 1);
     saveCart();
     renderCart();
@@ -1048,7 +1195,7 @@ if (checkoutPrevButton) {
 }
 
 if (checkoutNextButton) {
-  checkoutNextButton.addEventListener("click", () => {
+  checkoutNextButton.addEventListener("click", async () => {
     if (checkoutStep < 4) {
       const ok = validateCheckoutStep(checkoutStep);
       if (!ok) return;
@@ -1058,16 +1205,48 @@ if (checkoutNextButton) {
       return;
     }
 
+    reconcileCartWithInventory();
+    renderCart();
+    if (!cart.length) {
+      checkoutErrorNode.textContent = "Votre panier ne contient plus d'articles disponibles.";
+      return;
+    }
+
+    checkoutNextButton.disabled = true;
+    checkoutPrevButton.disabled = true;
+    checkoutErrorNode.style.color = "#556071";
+    checkoutErrorNode.textContent = "Enregistrement de la commande...";
+
+    const result = await submitOrder();
+
+    checkoutNextButton.disabled = false;
+    checkoutPrevButton.disabled = false;
+
+    if (!result.ok) {
+      checkoutErrorNode.style.color = "#b42318";
+      checkoutErrorNode.textContent = result.message;
+      await loadProductsFromApi();
+      reconcileCartWithInventory();
+      renderCart();
+      render();
+      return;
+    }
+
+    const order = result.data.order;
     cart = [];
     saveCart();
     renderCart();
+    await loadProductsFromApi();
+    render();
+    confirmationSummaryNode.innerHTML = [
+      `<p><strong>Reference:</strong> ${order.reference}</p>`,
+      `<p><strong>Client:</strong> ${order.customer_name} (${order.customer_email})</p>`,
+      `<p><strong>Livraison:</strong> ${order.shipping_address}, ${order.shipping_city}, ${order.shipping_zip}, ${order.shipping_country}</p>`,
+      `<p><strong>Total:</strong> DH ${Number(order.total).toFixed(2)}</p>`,
+      `<p><strong>Statut:</strong> Commande recue, confirmation manuelle a suivre.</p>`
+    ].join("");
     checkoutErrorNode.style.color = "#23643c";
-    checkoutErrorNode.textContent = "Commande validée avec succès (simulation).";
-    setTimeout(() => {
-      checkoutErrorNode.style.color = "#b42318";
-      closeCheckout();
-      closeCart();
-    }, 1200);
+    checkoutErrorNode.textContent = `Commande enregistree avec succes. Reference ${order.reference}.`;
   });
 }
 
@@ -1117,6 +1296,8 @@ async function initCatalog() {
   loadCart();
   renderCart();
   await loadProductsFromApi();
+  reconcileCartWithInventory();
+  renderCart();
   readInitialFiltersFromUrl();
   updateSearchSuggestions();
   render();

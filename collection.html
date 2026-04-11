@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Catalogue Monocle Optique | Lunettes de vue et solaires a Salé & Kénitra</title>
-  <meta name="description" content="Explorez le catalogue Monocle Optique: lunettes de vue et solaires, filtres par style, essayage en boutique et accompagnement a Salé et Kénitra.">
+  <meta id="collectionMetaDescription" name="description" content="Explorez le catalogue Monocle Optique: lunettes de vue et solaires, filtres par style, essayage en boutique et accompagnement a Salé et Kénitra.">
   <meta name="robots" content="index,follow">
   <meta name="theme-color" content="#111214">
   <link rel="icon" type="image/png" href="./logo.png">
@@ -44,19 +44,19 @@
 
   <section class="catalog-trust" aria-label="Informations pratiques">
     <article class="catalog-trust-card">
-      <p class="catalog-trust-label">Telephone</p>
-      <strong>06 61 29 07 03</strong>
-      <a class="catalog-trust-link" href="tel:+212661290703">Appeler maintenant</a>
+      <p id="colTrust1Label" class="catalog-trust-label">Telephone</p>
+      <strong id="colTrust1Title">06 61 29 07 03</strong>
+      <a id="colTrust1Link" class="catalog-trust-link" href="tel:+212661290703">Appeler maintenant</a>
     </article>
     <article class="catalog-trust-card">
-      <p class="catalog-trust-label">Adresse</p>
-      <strong>résidence lotus, mag n°2 Rue Baghdad, Kénitra</strong>
-      <span>Service Monocle Optique pour Kénitra et Salé.</span>
+      <p id="colTrust2Label" class="catalog-trust-label">Adresse</p>
+      <strong id="colTrust2Title">résidence lotus, mag n°2 Rue Baghdad, Kénitra</strong>
+      <span id="colTrust2Body">Service Monocle Optique pour Kénitra et Salé.</span>
     </article>
     <article class="catalog-trust-card">
-      <p class="catalog-trust-label">Horaires</p>
-      <strong>Lundi a vendredi 10:00-20:30</strong>
-      <span>Samedi 10:00-19:00 · Dimanche fermé.</span>
+      <p id="colTrust3Label" class="catalog-trust-label">Horaires</p>
+      <strong id="colTrust3Title">Lundi a vendredi 10:00-20:30</strong>
+      <span id="colTrust3Body">Samedi 10:00-19:00 · Dimanche fermé.</span>
     </article>
   </section>
 
@@ -160,6 +160,7 @@
         <p id="qvBadge" class="quickview-badge"></p>
         <h2 id="qvTitle"></h2>
         <p id="qvMeta" class="quickview-meta"></p>
+        <p id="qvStock" class="quickview-stock"></p>
         <p id="qvPrice" class="quickview-price"></p>
 
         <div class="quickview-group">
@@ -257,6 +258,7 @@
         <section id="step4" class="checkout-step">
           <h3>Confirmation</h3>
           <div id="confirmationSummary" class="confirmation-summary"></div>
+          <p class="confirm-note">Votre commande est enregistrée et le stock est réservé dès validation. Le paiement en ligne reste en préparation.</p>
         </section>
       </div>
 
@@ -277,6 +279,24 @@
         node.textContent = String(value);
       }
 
+      function setHref(id, value) {
+        const node = document.getElementById(id);
+        if (!node || !value) return;
+        node.setAttribute("href", String(value));
+      }
+
+      function setImage(id, value) {
+        const node = document.getElementById(id);
+        if (!(node instanceof HTMLImageElement) || !value) return;
+        node.src = String(value);
+      }
+
+      function setMetaDescription(value) {
+        const node = document.getElementById("collectionMetaDescription");
+        if (!node || !value) return;
+        node.setAttribute("content", String(value));
+      }
+
       async function fetchContent(key) {
         const res = await fetch("/api/content/" + encodeURIComponent(key), {
           headers: { Accept: "application/json" }
@@ -286,15 +306,34 @@
       }
 
       try {
-        const [meta, hero, nav] = await Promise.all([
+        const [settings, meta, hero, trust, footer, nav] = await Promise.all([
+          fetchContent("site-settings"),
           fetchContent("collection-meta"),
           fetchContent("collection-hero"),
+          fetchContent("collection-trust"),
+          fetchContent("collection-footer"),
           fetchContent("site-nav")
         ]);
+
+        if (settings) {
+          setText("colTopbar", settings.title);
+          setText("colTrust1Title", settings.data && settings.data.phone_display);
+          setHref("colTrust1Link", settings.data && settings.data.phone_href);
+          setText("colTrust2Title", settings.data && settings.data.address_line && settings.data.address_city ? `${settings.data.address_line}, ${settings.data.address_city}` : "");
+          setText("colTrust2Body", settings.data && settings.data.address_note);
+          setText("colTrust3Title", settings.data && settings.data.opening_hours_short);
+          setText("colTrust3Body", settings.data && settings.data.opening_note);
+          setText("colFooterCity", settings.data && settings.data.area_served);
+          setText("colFooterNote1", settings.data && settings.data.address_line && settings.data.address_city ? `${settings.data.business_name || "Monocle Optique"} · ${settings.data.address_line}, ${settings.data.address_city}` : "");
+          setText("colFooterNote2", settings.data && settings.data.phone_display && settings.data.opening_hours_full ? `${settings.data.phone_display} · ${settings.data.opening_hours_full}` : "");
+          setImage("colFooterImage", settings.data && settings.data.store_image_url);
+        }
 
         if (meta) {
           setText("colTopbar", meta.title || (meta.data && meta.data.topbar));
           setText("colToolbarSub", meta.body || (meta.data && meta.data.toolbar_sub));
+          if (meta.data && meta.data.page_title) document.title = String(meta.data.page_title);
+          setMetaDescription(meta.data && meta.data.meta_description);
         }
 
         if (hero) {
@@ -302,6 +341,26 @@
           setText("colHeroEyebrow", hero.data && hero.data.eyebrow);
           setText("colHeroTitle", hero.title);
           setText("colHeroBody", hero.body);
+        }
+
+        if (trust) {
+          setText("colTrust1Label", trust.data && trust.data.card1_label);
+          setText("colTrust1Title", trust.data && trust.data.card1_title);
+          setText("colTrust1Link", trust.data && trust.data.card1_body);
+          setHref("colTrust1Link", trust.data && trust.data.card1_href);
+          setText("colTrust2Label", trust.data && trust.data.card2_label);
+          setText("colTrust2Title", trust.data && trust.data.card2_title);
+          setText("colTrust2Body", trust.data && trust.data.card2_body);
+          setText("colTrust3Label", trust.data && trust.data.card3_label);
+          setText("colTrust3Title", trust.data && trust.data.card3_title);
+          setText("colTrust3Body", trust.data && trust.data.card3_body);
+        }
+
+        if (footer) {
+          setText("colFooterCity", footer.title);
+          setText("colFooterNote1", footer.body);
+          setText("colFooterNote2", footer.data && footer.data.note_2);
+          setImage("colFooterImage", footer.data && footer.data.image_url);
         }
 
         if (nav) {
@@ -320,10 +379,10 @@
   <footer class="collection-footer">
     <div class="footer-locations">
       <article class="footer-location">
-        <img src="./monocle.png" alt="Magasin Monocle a Kenitra" loading="lazy" decoding="async">
-        <p class="footer-city">Kénitra · Salé</p>
-        <p class="footer-note">Monocle Optique · résidence lotus, mag n°2 Rue Baghdad, Kénitra</p>
-        <p class="footer-note">06 61 29 07 03 · samedi 10:00-19:00 · dimanche fermé</p>
+        <img id="colFooterImage" src="./monocle.png" alt="Magasin Monocle a Kenitra" loading="lazy" decoding="async">
+        <p id="colFooterCity" class="footer-city">Kénitra · Salé</p>
+        <p id="colFooterNote1" class="footer-note">Monocle Optique · résidence lotus, mag n°2 Rue Baghdad, Kénitra</p>
+        <p id="colFooterNote2" class="footer-note">06 61 29 07 03 · samedi 10:00-19:00 · dimanche fermé</p>
       </article>
     </div>
   </footer>

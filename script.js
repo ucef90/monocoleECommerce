@@ -1104,6 +1104,15 @@ mobileQuery.addEventListener("change", () => {
   if (!mobileQuery.matches) closeFiltersDrawer();
 });
 
+// Close menu on outside click
+document.addEventListener('click', (e) => {
+  const header = document.querySelector('.site-header') || document.querySelector('.header');
+  const nav = document.querySelector('nav');
+  if (header && nav && header.classList.contains('nav-open') && !header.contains(e.target)) {
+    header.classList.remove('nav-open');
+  }
+});
+
 async function initCatalog() {
   loadCart();
   renderCart();

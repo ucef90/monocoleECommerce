@@ -217,6 +217,23 @@
 
   <script>
     (async function () {
+      function normalizeText(value) {
+        return String(value || "").trim().toLowerCase();
+      }
+
+      function isPlaceholderHomeHero(hero) {
+        if (!hero) return true;
+
+        const title = normalizeText(hero.title);
+        const body = normalizeText(hero.body);
+
+        return (
+          !title ||
+          title === "nouveau hero" ||
+          body === "texte hero depuis cms"
+        );
+      }
+
       function setText(id, value) {
         const node = document.getElementById(id);
         if (!node || value === undefined || value === null || value === "") return;
@@ -251,7 +268,7 @@
           fetchContent("site-nav")
         ]);
 
-        if (hero) {
+        if (hero && !isPlaceholderHomeHero(hero)) {
           setText("homeHeroEyebrow", hero.data && hero.data.eyebrow);
           setText("homeHeroTitle", hero.title);
           setText("homeHeroBody", hero.body);

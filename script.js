@@ -302,12 +302,39 @@ const qvQtyMinus = document.getElementById("qvQtyMinus");
 const qvQtyPlus = document.getElementById("qvQtyPlus");
 const qvQtyValue = document.getElementById("qvQtyValue");
 const qvAddToCart = document.getElementById("qvAddToCart");
+const qvTryOn = document.getElementById("qvTryOn");
 const qvMessage = document.getElementById("qvMessage");
 const qvLightbox = document.getElementById("qvLightbox");
 const qvLightboxImage = document.getElementById("qvLightboxImage");
 const qvLightboxPrev = document.getElementById("qvLightboxPrev");
 const qvLightboxNext = document.getElementById("qvLightboxNext");
 const qvLightboxClose = document.getElementById("qvLightboxClose");
+const tryOnModal = document.getElementById("tryOnModal");
+const tryOnCloseButton = document.getElementById("tryOnClose");
+const tryOnTitle = document.getElementById("tryOnTitle");
+const tryOnSubtitle = document.getElementById("tryOnSubtitle");
+const tryOnStage = document.getElementById("tryOnStage");
+const tryOnEmpty = document.getElementById("tryOnEmpty");
+const tryOnPhoto = document.getElementById("tryOnPhoto");
+const tryOnCamera = document.getElementById("tryOnCamera");
+const tryOnFrame = document.getElementById("tryOnFrame");
+const tryOnUpload = document.getElementById("tryOnUpload");
+const tryOnStartCamera = document.getElementById("tryOnStartCamera");
+const tryOnCapture = document.getElementById("tryOnCapture");
+const tryOnStopCamera = document.getElementById("tryOnStopCamera");
+const tryOnScale = document.getElementById("tryOnScale");
+const tryOnY = document.getElementById("tryOnY");
+const tryOnX = document.getElementById("tryOnX");
+const tryOnRotate = document.getElementById("tryOnRotate");
+const tryOnOpacity = document.getElementById("tryOnOpacity");
+const tryOnScaleValue = document.getElementById("tryOnScaleValue");
+const tryOnYValue = document.getElementById("tryOnYValue");
+const tryOnXValue = document.getElementById("tryOnXValue");
+const tryOnRotateValue = document.getElementById("tryOnRotateValue");
+const tryOnOpacityValue = document.getElementById("tryOnOpacityValue");
+const tryOnReset = document.getElementById("tryOnReset");
+const tryOnDownload = document.getElementById("tryOnDownload");
+const tryOnStatus = document.getElementById("tryOnStatus");
 const openCartButton = document.getElementById("openCart");
 const closeCartButton = document.getElementById("closeCart");
 const cartDrawer = document.getElementById("cartDrawer");
@@ -353,6 +380,18 @@ const quickViewState = {
   images: [],
   imageIndex: 0
 };
+const tryOnState = {
+  productId: null,
+  photoSrc: "",
+  frameSrc: "",
+  usingCamera: false,
+  stream: null,
+  scale: 1,
+  x: 0,
+  y: 0,
+  rotate: 0,
+  opacity: 0.92
+};
 
 const colorVariants = {
   Noir: ["Noir", "Graphite", "Fume"],
@@ -366,6 +405,12 @@ const sizesByForme = {
   Ronde: ["S", "M"],
   Carree: ["M", "L"],
   Papillon: ["S", "M", "L"]
+};
+const tryOnDefaultsByForme = {
+  Pilote: { scale: 1.06, y: -4, x: 0, rotate: 0, opacity: 0.92 },
+  Ronde: { scale: 0.96, y: -2, x: 0, rotate: 0, opacity: 0.92 },
+  Carree: { scale: 1.01, y: -2, x: 0, rotate: 0, opacity: 0.92 },
+  Papillon: { scale: 1.04, y: -6, x: 0, rotate: 0, opacity: 0.9 }
 };
 
 const SEARCH_ALIASES = {
@@ -567,6 +612,245 @@ function syncQuickViewQtyControls() {
   if (qvQtyMinus) qvQtyMinus.disabled = remaining <= 0 || quickViewState.qty <= 1;
   if (qvQtyPlus) qvQtyPlus.disabled = remaining <= 0 || quickViewState.qty >= remaining;
   if (qvAddToCart) qvAddToCart.disabled = remaining <= 0;
+}
+
+function getTryOnDefaultSettings(product) {
+  return {
+    scale: 1,
+    x: 0,
+    y: 0,
+    rotate: 0,
+    opacity: 0.92,
+    ...(tryOnDefaultsByForme[product && product.forme] || {})
+  };
+}
+
+function updateTryOnSliderLabels() {
+  if (tryOnScaleValue) tryOnScaleValue.textContent = `${Math.round(tryOnState.scale * 100)}%`;
+  if (tryOnYValue) tryOnYValue.textContent = `${tryOnState.y} px`;
+  if (tryOnXValue) tryOnXValue.textContent = `${tryOnState.x} px`;
+  if (tryOnRotateValue) tryOnRotateValue.textContent = `${tryOnState.rotate} deg`;
+  if (tryOnOpacityValue) tryOnOpacityValue.textContent = `${Math.round(tryOnState.opacity * 100)}%`;
+}
+
+function syncTryOnControls() {
+  if (tryOnScale) tryOnScale.value = String(Math.round(tryOnState.scale * 100));
+  if (tryOnY) tryOnY.value = String(tryOnState.y);
+  if (tryOnX) tryOnX.value = String(tryOnState.x);
+  if (tryOnRotate) tryOnRotate.value = String(tryOnState.rotate);
+  if (tryOnOpacity) tryOnOpacity.value = String(Math.round(tryOnState.opacity * 100));
+  updateTryOnSliderLabels();
+}
+
+function updateTryOnStage() {
+  if (!tryOnStage || !tryOnFrame || !tryOnPhoto || !tryOnCamera || !tryOnEmpty) return;
+  const hasPhoto = !!tryOnState.photoSrc;
+  tryOnStage.style.setProperty("--tryon-scale", String(tryOnState.scale));
+  tryOnStage.style.setProperty("--tryon-x", `${tryOnState.x}px`);
+  tryOnStage.style.setProperty("--tryon-y", `${tryOnState.y}px`);
+  tryOnStage.style.setProperty("--tryon-rotate", `${tryOnState.rotate}deg`);
+  tryOnStage.style.setProperty("--tryon-opacity", String(tryOnState.opacity));
+  tryOnPhoto.style.display = hasPhoto ? "block" : "none";
+  tryOnFrame.style.display = hasPhoto && tryOnState.frameSrc ? "block" : "none";
+  tryOnEmpty.style.display = hasPhoto || tryOnState.usingCamera ? "none" : "grid";
+  tryOnCamera.style.display = tryOnState.usingCamera ? "block" : "none";
+  if (tryOnDownload) tryOnDownload.disabled = !hasPhoto;
+}
+
+function setTryOnPhotoSource(src) {
+  tryOnState.photoSrc = src || "";
+  if (tryOnPhoto) {
+    tryOnPhoto.src = tryOnState.photoSrc;
+  }
+  tryOnState.usingCamera = false;
+  if (tryOnCapture) tryOnCapture.disabled = true;
+  if (tryOnStopCamera) tryOnStopCamera.disabled = !tryOnState.stream;
+  updateTryOnStage();
+}
+
+function stopTryOnCamera() {
+  if (tryOnState.stream) {
+    tryOnState.stream.getTracks().forEach((track) => track.stop());
+  }
+  tryOnState.stream = null;
+  tryOnState.usingCamera = false;
+  if (tryOnCamera) {
+    tryOnCamera.pause();
+    tryOnCamera.srcObject = null;
+    tryOnCamera.style.display = "none";
+  }
+  if (tryOnCapture) tryOnCapture.disabled = true;
+  if (tryOnStopCamera) tryOnStopCamera.disabled = true;
+  updateTryOnStage();
+}
+
+async function startTryOnCamera() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    if (tryOnStatus) tryOnStatus.textContent = "La camera n'est pas disponible sur cet appareil.";
+    return;
+  }
+
+  try {
+    stopTryOnCamera();
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "user" },
+      audio: false
+    });
+    tryOnState.stream = stream;
+    tryOnState.usingCamera = true;
+    if (tryOnCamera) {
+      tryOnCamera.srcObject = stream;
+      await tryOnCamera.play().catch(() => {});
+    }
+    if (tryOnCapture) tryOnCapture.disabled = false;
+    if (tryOnStopCamera) tryOnStopCamera.disabled = false;
+    if (tryOnStatus) tryOnStatus.textContent = "Cadrez votre visage puis cliquez sur Capturer.";
+    updateTryOnStage();
+  } catch (_error) {
+    if (tryOnStatus) tryOnStatus.textContent = "Impossible d'activer la camera. Utilisez plutot une photo.";
+  }
+}
+
+function captureTryOnPhoto() {
+  if (!tryOnCamera || !tryOnCamera.videoWidth || !tryOnCamera.videoHeight) {
+    if (tryOnStatus) tryOnStatus.textContent = "La camera n'est pas prete pour la capture.";
+    return;
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = tryOnCamera.videoWidth;
+  canvas.height = tryOnCamera.videoHeight;
+  const context = canvas.getContext("2d");
+  if (!context) return;
+  context.drawImage(tryOnCamera, 0, 0, canvas.width, canvas.height);
+  setTryOnPhotoSource(canvas.toDataURL("image/png"));
+  stopTryOnCamera();
+  if (tryOnStatus) tryOnStatus.textContent = "Photo capturee. Ajustez maintenant la monture.";
+}
+
+function buildTransparentFrameCanvas(image) {
+  const width = image.naturalWidth || image.width || 1;
+  const height = image.naturalHeight || image.height || 1;
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext("2d");
+  if (!context) return image;
+
+  context.drawImage(image, 0, 0, width, height);
+  const pixels = context.getImageData(0, 0, width, height);
+  const data = pixels.data;
+
+  for (let index = 0; index < data.length; index += 4) {
+    const red = data[index];
+    const green = data[index + 1];
+    const blue = data[index + 2];
+    const nearWhite = red > 242 && green > 242 && blue > 242;
+    const softWhite = red > 228 && green > 228 && blue > 228;
+    if (nearWhite) {
+      data[index + 3] = 0;
+    } else if (softWhite) {
+      data[index + 3] = Math.min(data[index + 3], 120);
+    }
+  }
+
+  context.putImageData(pixels, 0, 0);
+  return canvas;
+}
+
+function downloadTryOnPreview() {
+  if (!tryOnState.photoSrc || !tryOnState.frameSrc) {
+    if (tryOnStatus) tryOnStatus.textContent = "Ajoutez d'abord une photo pour exporter l'apercu.";
+    return;
+  }
+
+  const photo = new Image();
+  const frame = new Image();
+  photo.src = tryOnState.photoSrc;
+  frame.src = tryOnState.frameSrc;
+
+  Promise.all([
+    photo.decode().catch(() => undefined),
+    frame.decode().catch(() => undefined)
+  ]).then(() => {
+    const width = photo.naturalWidth || 1200;
+    const height = photo.naturalHeight || 1600;
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    context.drawImage(photo, 0, 0, width, height);
+    const frameWidth = width * 0.72;
+    const ratio = (frame.naturalHeight || 1) / (frame.naturalWidth || 1);
+    const frameHeight = frameWidth * ratio;
+    const centerX = width / 2 + (tryOnState.x / 100) * width * 0.35;
+    const centerY = height / 2 + (tryOnState.y / 100) * height * 0.35;
+
+    context.save();
+    context.globalAlpha = tryOnState.opacity;
+    context.translate(centerX, centerY);
+    context.rotate((tryOnState.rotate * Math.PI) / 180);
+    context.scale(tryOnState.scale, tryOnState.scale);
+    const transparentFrame = buildTransparentFrameCanvas(frame);
+    context.drawImage(transparentFrame, -frameWidth / 2, -frameHeight / 2, frameWidth, frameHeight);
+    context.restore();
+
+    const link = document.createElement("a");
+    const product = getProductById(tryOnState.productId);
+    link.href = canvas.toDataURL("image/png");
+    link.download = `${(product && product.name) || "monocle"}-essayage.png`;
+    link.click();
+    if (tryOnStatus) tryOnStatus.textContent = "Apercu telecharge avec succes.";
+  }).catch(() => {
+    if (tryOnStatus) tryOnStatus.textContent = "Impossible de generer l'apercu pour le moment.";
+  });
+}
+
+function resetTryOnAdjustments(product) {
+  const defaults = getTryOnDefaultSettings(product);
+  tryOnState.scale = defaults.scale;
+  tryOnState.x = defaults.x;
+  tryOnState.y = defaults.y;
+  tryOnState.rotate = defaults.rotate;
+  tryOnState.opacity = defaults.opacity;
+  syncTryOnControls();
+  updateTryOnStage();
+}
+
+function openTryOn(productId) {
+  const product = getProductById(productId);
+  if (!product || !tryOnModal) return;
+  closeQuickView();
+  stopTryOnCamera();
+  tryOnState.productId = product.id;
+  tryOnState.frameSrc = product.image;
+  tryOnState.photoSrc = "";
+  if (tryOnFrame) {
+    tryOnFrame.src = product.image;
+    tryOnFrame.alt = `Monture ${product.name}`;
+  }
+  if (tryOnPhoto) {
+    tryOnPhoto.src = "";
+  }
+  if (tryOnTitle) tryOnTitle.textContent = `Essayez ${product.name} sur votre photo`;
+  if (tryOnSubtitle) {
+    tryOnSubtitle.textContent = `${product.forme} ${product.couleur.toLowerCase()} ${product.genre.toLowerCase()} : chargez une photo de face et ajustez la monture en quelques secondes.`;
+  }
+  if (tryOnUpload) tryOnUpload.value = "";
+  resetTryOnAdjustments(product);
+  updateTryOnStage();
+  if (tryOnStatus) tryOnStatus.textContent = "Importez une photo ou activez la camera pour commencer.";
+  document.body.classList.add("tryon-open");
+  tryOnModal.setAttribute("aria-hidden", "false");
+}
+
+function closeTryOn() {
+  if (!tryOnModal) return;
+  stopTryOnCamera();
+  document.body.classList.remove("tryon-open");
+  tryOnModal.setAttribute("aria-hidden", "true");
 }
 
 function openQuickView(productId) {
@@ -1099,7 +1383,7 @@ function cardTemplate(product) {
         <p class="product-colors">${product.colors} couleurs</p>
         <p class="product-price">Des ${product.price.toFixed(2)} DH</p>
         <p class="product-availability ${availabilityClass}">${availabilityLabel(product, stock)}</p>
-        <a class="product-link" href="#">Essayer en ligne</a>
+        <button class="product-link tryon-link" type="button" data-try-product="${product.id}">Essayer en ligne</button>
       </div>
     </article>
   `;
@@ -1170,6 +1454,12 @@ if (loadMoreButton) {
 
 if (grid) {
   grid.addEventListener("click", (event) => {
+    const tryTarget = event.target.closest("[data-try-product]");
+    if (tryTarget) {
+      const id = Number(tryTarget.getAttribute("data-try-product"));
+      openTryOn(id);
+      return;
+    }
     const quickTarget = event.target.closest("[data-quick-product]");
     if (!quickTarget) return;
     const id = Number(quickTarget.getAttribute("data-quick-product"));
@@ -1229,6 +1519,7 @@ if (qvAddToCart) {
     openCart();
   });
 }
+if (qvTryOn) qvTryOn.addEventListener("click", () => openTryOn(quickViewState.productId));
 if (qvZoom) qvZoom.addEventListener("click", openQuickViewLightbox);
 if (qvImage) qvImage.addEventListener("click", openQuickViewLightbox);
 if (qvLightbox) {
@@ -1239,6 +1530,56 @@ if (qvLightbox) {
 if (qvLightboxPrev) qvLightboxPrev.addEventListener("click", () => shiftQuickViewImage(-1));
 if (qvLightboxNext) qvLightboxNext.addEventListener("click", () => shiftQuickViewImage(1));
 if (qvLightboxClose) qvLightboxClose.addEventListener("click", closeQuickViewLightbox);
+
+if (tryOnModal) {
+  tryOnModal.addEventListener("click", (event) => {
+    if (event.target.closest("[data-tryon-close]")) closeTryOn();
+  });
+}
+if (tryOnCloseButton) tryOnCloseButton.addEventListener("click", closeTryOn);
+if (tryOnUpload) {
+  tryOnUpload.addEventListener("change", async (event) => {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setTryOnPhotoSource(String(reader.result || ""));
+      if (tryOnStatus) tryOnStatus.textContent = "Photo importee. Ajustez la monture avec les reglages.";
+    };
+    reader.readAsDataURL(file);
+  });
+}
+if (tryOnStartCamera) tryOnStartCamera.addEventListener("click", startTryOnCamera);
+if (tryOnCapture) tryOnCapture.addEventListener("click", captureTryOnPhoto);
+if (tryOnStopCamera) tryOnStopCamera.addEventListener("click", () => {
+  stopTryOnCamera();
+  if (tryOnStatus) tryOnStatus.textContent = "Camera arretee. Vous pouvez importer une photo.";
+});
+
+[
+  [tryOnScale, (value) => { tryOnState.scale = Number(value) / 100; }],
+  [tryOnY, (value) => { tryOnState.y = Number(value); }],
+  [tryOnX, (value) => { tryOnState.x = Number(value); }],
+  [tryOnRotate, (value) => { tryOnState.rotate = Number(value); }],
+  [tryOnOpacity, (value) => { tryOnState.opacity = Number(value) / 100; }]
+].forEach(([node, updater]) => {
+  if (!node) return;
+  node.addEventListener("input", (event) => {
+    updater(event.target.value);
+    updateTryOnSliderLabels();
+    updateTryOnStage();
+  });
+});
+
+if (tryOnReset) {
+  tryOnReset.addEventListener("click", () => {
+    const product = getProductById(tryOnState.productId);
+    if (!product) return;
+    resetTryOnAdjustments(product);
+    if (tryOnStatus) tryOnStatus.textContent = "Monture recentree avec les reglages recommandes.";
+  });
+}
+if (tryOnDownload) tryOnDownload.addEventListener("click", downloadTryOnPreview);
 
 if (openCartButton) openCartButton.addEventListener("click", openCart);
 if (closeCartButton) closeCartButton.addEventListener("click", closeCart);
@@ -1368,6 +1709,7 @@ document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") return;
   closeFiltersDrawer();
   closeQuickView();
+  closeTryOn();
   closeCart();
   closeCheckout();
 });

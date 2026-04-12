@@ -187,6 +187,7 @@
         </div>
 
         <button id="qvAddToCart" class="qv-add" type="button">Ajouter au panier</button>
+        <button id="qvTryOn" class="qv-secondary" type="button">Essayer sur ma photo</button>
         <p id="qvMessage" class="qv-message" aria-live="polite"></p>
       </div>
     </section>
@@ -198,6 +199,72 @@
       <button id="qvLightboxNext" class="qv-lightbox-nav next" type="button" aria-label="Photo suivante">›</button>
       <button id="qvLightboxClose" class="qv-lightbox-close" type="button" aria-label="Fermer l'image">×</button>
       <img id="qvLightboxImage" src="" alt="Produit en grand">
+    </section>
+  </div>
+  <div id="tryOnModal" class="tryon-modal" aria-hidden="true">
+    <div class="tryon-backdrop" data-tryon-close="1"></div>
+    <section class="tryon-panel" role="dialog" aria-modal="true" aria-labelledby="tryOnTitle">
+      <button id="tryOnClose" class="tryon-close" type="button" aria-label="Fermer l'essayage">×</button>
+      <div class="tryon-stage-wrap">
+        <div class="tryon-stage-head">
+          <p class="tryon-kicker">Essayage intermediaire</p>
+          <h2 id="tryOnTitle">Essayez la monture sur votre photo</h2>
+          <p id="tryOnSubtitle" class="tryon-subtitle">Chargez une photo de face ou utilisez votre camera pour ajuster la monture.</p>
+        </div>
+        <div id="tryOnStage" class="tryon-stage">
+          <div id="tryOnEmpty" class="tryon-empty">
+            <strong>Ajoutez votre photo</strong>
+            <span>Photo de face, bonne lumiere, visage bien centre.</span>
+          </div>
+          <img id="tryOnPhoto" class="tryon-photo" src="" alt="Votre photo d'essayage">
+          <video id="tryOnCamera" class="tryon-camera" playsinline autoplay muted></video>
+          <img id="tryOnFrame" class="tryon-frame" src="" alt="Monture essayage">
+          <div class="tryon-guide" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="tryon-controls">
+        <div class="tryon-actions">
+          <label class="tryon-action primary" for="tryOnUpload">Importer une photo</label>
+          <input id="tryOnUpload" type="file" accept="image/*" hidden>
+          <button id="tryOnStartCamera" class="tryon-action" type="button">Utiliser la camera</button>
+          <button id="tryOnCapture" class="tryon-action" type="button" disabled>Capturer</button>
+          <button id="tryOnStopCamera" class="tryon-action subtle" type="button" disabled>Arreter camera</button>
+        </div>
+
+        <div class="tryon-sliders">
+          <label>
+            Taille
+            <span id="tryOnScaleValue">100%</span>
+            <input id="tryOnScale" type="range" min="70" max="160" value="100">
+          </label>
+          <label>
+            Hauteur
+            <span id="tryOnYValue">0 px</span>
+            <input id="tryOnY" type="range" min="-180" max="180" value="0">
+          </label>
+          <label>
+            Position horizontale
+            <span id="tryOnXValue">0 px</span>
+            <input id="tryOnX" type="range" min="-180" max="180" value="0">
+          </label>
+          <label>
+            Rotation
+            <span id="tryOnRotateValue">0 deg</span>
+            <input id="tryOnRotate" type="range" min="-25" max="25" value="0">
+          </label>
+          <label>
+            Opacite
+            <span id="tryOnOpacityValue">92%</span>
+            <input id="tryOnOpacity" type="range" min="45" max="100" value="92">
+          </label>
+        </div>
+
+        <div class="tryon-footer">
+          <button id="tryOnReset" class="tryon-action subtle" type="button">Recentrer</button>
+          <button id="tryOnDownload" class="tryon-action primary" type="button" disabled>Telecharger l'apercu</button>
+        </div>
+        <p id="tryOnStatus" class="tryon-status" aria-live="polite">Importez une photo ou activez la camera pour commencer.</p>
+      </div>
     </section>
   </div>
   <div id="cartDrawer" class="cart-drawer" aria-hidden="true">

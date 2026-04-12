@@ -1,6 +1,6 @@
-# PostgreSQL Runtime (production cloud)
+# PostgreSQL Runtime (optionnel)
 
-Le projet supporte PostgreSQL côté runtime:
+Le projet supporte aussi PostgreSQL côté runtime:
 - `docker-compose.postgres.yml`
 - `backend/migrations-postgres/001_init.sql`
 - `backend/src/db/database.js` (connexion + migrations)

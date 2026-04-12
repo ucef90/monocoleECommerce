@@ -64,7 +64,6 @@ Variables supportées:
 - `PORT`
 - `DB_CLIENT`
 - `DB_PATH`
-- `POSTGRES_URL`
 - `STATIC_DIR`
 - `UPLOAD_DIR`
 - `DAILY_SLOT_TOTAL`
@@ -184,12 +183,9 @@ Durcissement appliqué:
 - `healthcheck` sur `app`
 - `healthcheck` sur `postgres` + `depends_on: condition: service_healthy`
 
-## Production env
+## Dev / Test
 
-Fichier prêt:
-- `.env.production`
-
-À adapter avant déploiement:
-- `POSTGRES_URL`
-- `ADMIN_PASSWORD`
-- `ADMIN_SESSION_SECRET`
+Pour la phase actuelle de développement et de test, le flux recommandé est :
+- lancement local avec `npm start`
+- exposition temporaire via `ngrok`
+- admin local sur `http://localhost:8787/admin/login`

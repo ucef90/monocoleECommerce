@@ -24,6 +24,15 @@ const MIME = {
   '.ico': 'image/x-icon'
 };
 
+function staticCacheHeader(ext) {
+  if (ext === '.html') return 'no-cache';
+  if (ext === '.css' || ext === '.js') return 'public, max-age=300, stale-while-revalidate=86400';
+  if (['.png', '.jpg', '.jpeg', '.webp', '.svg', '.ico'].includes(ext)) {
+    return 'public, max-age=604800, stale-while-revalidate=86400';
+  }
+  return 'public, max-age=3600, stale-while-revalidate=86400';
+}
+
 function safeFilePath(root, pathname) {
   const requested = pathname === '/' ? '/index.html' : pathname;
   const decoded = decodeURIComponent(requested);
@@ -42,7 +51,23 @@ function serveStatic(req, res, pathname) {
     }
 
     const ext = path.extname(fullPath).toLowerCase();
-    res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+    const etag = `W/"${stats.size}-${Math.floor(stats.mtimeMs)}"`;
+    if (req.headers['if-none-match'] === etag) {
+      res.writeHead(304, {
+        ETag: etag,
+        'Cache-Control': staticCacheHeader(ext),
+        'Last-Modified': stats.mtime.toUTCString()
+      });
+      return res.end();
+    }
+
+    res.writeHead(200, {
+      'Content-Type': MIME[ext] || 'application/octet-stream',
+      'Content-Length': stats.size,
+      'Cache-Control': staticCacheHeader(ext),
+      ETag: etag,
+      'Last-Modified': stats.mtime.toUTCString()
+    });
     fs.createReadStream(fullPath).pipe(res);
   });
 }

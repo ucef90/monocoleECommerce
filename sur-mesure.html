@@ -7,7 +7,7 @@
   <meta name="description" content="Découvrez le sur-mesure Monocle Optique: accompagnement, choix de monture, ajustage de précision et rendez-vous en boutique a Salé et Kénitra.">
   <meta name="robots" content="index,follow">
   <meta name="theme-color" content="#111214">
-  <link rel="icon" type="image/png" href="./logo.png">
+  <link rel="icon" type="image/png" href="./logo-320.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -589,7 +589,7 @@
 
   <header class="header">
     <a class="logo" href="./index.html" aria-label="Monocle Home">
-      <img src="./logo.png" alt="Monocle">
+      <img src="./logo-320.png" alt="Monocle" width="320" height="320">
     </a>
     <nav>
       <a id="smNavHome" href="./index.html">Accueil</a>
@@ -819,7 +819,9 @@
       function setImage(id, value) {
         var node = document.getElementById(id);
         if (!(node instanceof HTMLImageElement) || !value) return;
-        node.src = String(value);
+        node.src = String(value)
+          .replace("./logo.png", "./logo-320.png")
+          .replace("./monocle.png", "./monocle-store.jpg");
       }
 
       function setAttr(id, name, value) {
@@ -828,30 +830,32 @@
         node.setAttribute(name, String(value));
       }
 
-      async function fetchContent(key) {
-        var res = await fetch("/api/content/" + encodeURIComponent(key), {
+      async function fetchContentBatch(keys) {
+        var query = keys.map(function (key) { return "key=" + encodeURIComponent(key); }).join("&");
+        var res = await fetch("/api/content-batch?" + query, {
           headers: { Accept: "application/json" }
         });
-        if (!res.ok) return null;
-        return res.json();
+        if (!res.ok) return {};
+        var payload = await res.json();
+        return payload && payload.rows ? payload.rows : {};
       }
 
       try {
-        var payloads = await Promise.all([
-          fetchContent("surmesure-meta"),
-          fetchContent("surmesure-hero"),
-          fetchContent("surmesure-offer"),
-          fetchContent("surmesure-story"),
-          fetchContent("surmesure-final"),
-          fetchContent("site-nav")
+        var content = await fetchContentBatch([
+          "surmesure-meta",
+          "surmesure-hero",
+          "surmesure-offer",
+          "surmesure-story",
+          "surmesure-final",
+          "site-nav"
         ]);
 
-        var meta = payloads[0];
-        var hero = payloads[1];
-        var offer = payloads[2];
-        var story = payloads[3];
-        var finalCta = payloads[4];
-        var nav = payloads[5];
+        var meta = content["surmesure-meta"];
+        var hero = content["surmesure-hero"];
+        var offer = content["surmesure-offer"];
+        var story = content["surmesure-story"];
+        var finalCta = content["surmesure-final"];
+        var nav = content["site-nav"];
 
         if (meta) {
           setText("smTopbar", meta.title || (meta.data && meta.data.topbar));

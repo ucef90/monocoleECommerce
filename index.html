@@ -7,7 +7,7 @@
   <meta id="homeMetaDescription" name="description" content="Monocle Optique vous accueille a Salé et Kénitra pour vos lunettes de vue, solaires, ajustages et conseils en boutique. Adresse a Kénitra, horaires et téléphone visibles en ligne.">
   <meta name="robots" content="index,follow">
   <meta name="theme-color" content="#111214">
-  <link rel="icon" type="image/png" href="./logo.png">
+  <link rel="icon" type="image/png" href="./logo-320.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
       "@context": "https://schema.org",
       "@type": "Optician",
       "name": "Monocle Optique",
-      "image": "./logo.png",
+      "image": "./logo-320.png",
       "telephone": "+212661290703",
       "priceRange": "$$",
       "areaServed": ["Salé", "Kénitra"],
@@ -49,7 +49,7 @@
 
   <header class="site-header">
     <a class="brand" href="./index.html" aria-label="Monocle Home">
-      <img src="./logo.png" alt="Monocle">
+      <img src="./logo-320.png" alt="Monocle" width="320" height="320">
     </a>
     <nav>
       <a id="homeNavMaison" href="#maison">La Maison</a>
@@ -76,7 +76,7 @@
         </div>
       </div>
       <div class="hero-media">
-        <img id="homeHeroImage" src="./modele_pk9_1_jylsc_pour_maison_bonnet.jpg" alt="Monture Monocle Optique en presentation" fetchpriority="high">
+        <img id="homeHeroImage" src="./modele_pk9_1_jylsc_pour_maison_bonnet.jpg" alt="Monture Monocle Optique en presentation" width="2560" height="1707" fetchpriority="high">
       </div>
     </section>
 
@@ -106,26 +106,26 @@
 
     <section class="signature-grid" id="surmesure">
       <article>
-        <img src="./h_01-legendre-1-1-768x512.jpg" alt="Monture Legendre" loading="lazy" decoding="async">
+        <img src="./h_01-legendre-1-1-768x512.jpg" alt="Monture Legendre" width="768" height="512" loading="lazy" decoding="async">
         <h3>Legendre</h3>
       </article>
       <article>
-        <img src="./f_01-sully-1-768x512.jpg" alt="Monture Sully" loading="lazy" decoding="async">
+        <img src="./f_01-sully-1-768x512.jpg" alt="Monture Sully" width="768" height="512" loading="lazy" decoding="async">
         <h3>Stuart</h3>
       </article>
       <article>
-        <img src="./h_01-ray-2-1-768x512.jpg" alt="Monture Ray" loading="lazy" decoding="async">
+        <img src="./h_01-ray-2-1-768x512.jpg" alt="Monture Ray" width="768" height="512" loading="lazy" decoding="async">
         <h3>Ray</h3>
       </article>
       <article>
-        <img src="./h_01-auguste-2-768x512.jpg" alt="Monture Auguste" loading="lazy" decoding="async">
+        <img src="./h_01-auguste-2-768x512.jpg" alt="Monture Auguste" width="768" height="512" loading="lazy" decoding="async">
         <h3>Auguste</h3>
       </article>
     </section>
 
     <section class="atelier" id="atelier">
       <div class="atelier-photo">
-        <img id="homeAtelierImage" src="./artisans-hero.jpg" alt="Atelier Monocle">
+        <img id="homeAtelierImage" src="./artisans-hero.jpg" alt="Atelier Monocle" width="2560" height="1000" loading="lazy" decoding="async">
       </div>
       <div class="atelier-copy">
         <p id="homeAtelierEyebrow" class="eyebrow">Nos ateliers-boutiques</p>
@@ -174,7 +174,7 @@
     </div>
     <div class="stores-grid">
       <article class="store-card store-kenitra">
-        <img src="./monocle.png" alt="Magasin Monocle a Kenitra" loading="lazy" decoding="async">
+        <img src="./monocle-store.jpg" alt="Magasin Monocle a Kenitra" width="900" height="1199" loading="lazy" decoding="async">
         <div class="store-meta">
           <p id="homeStoreCity" class="footer-city">Kénitra · Salé</p>
           <p id="homeStoreNote" class="store-note">Monocle Optique · Vue, solaire, ajustage et conseil</p>
@@ -249,7 +249,10 @@
       function setImage(id, value) {
         const node = document.getElementById(id);
         if (!(node instanceof HTMLImageElement) || !value) return;
-        node.src = String(value);
+        const next = String(value)
+          .replace("./logo.png", "./logo-320.png")
+          .replace("./monocle.png", "./monocle-store.jpg");
+        node.src = next;
       }
 
       function setMetaDescription(value) {
@@ -258,27 +261,39 @@
         node.setAttribute("content", String(value));
       }
 
-      async function fetchContent(key) {
-        const res = await fetch("/api/content/" + encodeURIComponent(key), {
+      async function fetchContentBatch(keys) {
+        const query = keys.map((key) => "key=" + encodeURIComponent(key)).join("&");
+        const res = await fetch("/api/content-batch?" + query, {
           headers: { Accept: "application/json" }
         });
-        if (!res.ok) return null;
-        return res.json();
+        if (!res.ok) return {};
+        const payload = await res.json();
+        return payload && payload.rows ? payload.rows : {};
       }
 
       try {
-        const [settings, meta, hero, contact, quote, atelier, process, stores, popup, nav] = await Promise.all([
-          fetchContent("site-settings"),
-          fetchContent("home-meta"),
-          fetchContent("home-hero"),
-          fetchContent("home-contact"),
-          fetchContent("home-quote"),
-          fetchContent("home-atelier"),
-          fetchContent("home-process"),
-          fetchContent("home-stores"),
-          fetchContent("home-popup"),
-          fetchContent("site-nav")
+        const content = await fetchContentBatch([
+          "site-settings",
+          "home-meta",
+          "home-hero",
+          "home-contact",
+          "home-quote",
+          "home-atelier",
+          "home-process",
+          "home-stores",
+          "home-popup",
+          "site-nav"
         ]);
+        const settings = content["site-settings"];
+        const meta = content["home-meta"];
+        const hero = content["home-hero"];
+        const contact = content["home-contact"];
+        const quote = content["home-quote"];
+        const atelier = content["home-atelier"];
+        const process = content["home-process"];
+        const stores = content["home-stores"];
+        const popup = content["home-popup"];
+        const nav = content["site-nav"];
 
         if (settings) {
           setText("homeTopline", settings.title);

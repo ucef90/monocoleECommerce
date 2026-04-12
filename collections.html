@@ -7,7 +7,7 @@
   <meta id="collectionsMetaDescription" name="description" content="Découvrez les collections Monocle Optique: montures de caractere, lignes élégantes et selection visuelle pour vos lunettes a Salé et Kénitra.">
   <meta name="robots" content="index,follow">
   <meta name="theme-color" content="#111214">
-  <link rel="icon" type="image/png" href="./logo.png">
+  <link rel="icon" type="image/png" href="./logo-320.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -254,7 +254,7 @@
   <div id="colsTopbar" class="topbar">Collections Monocle Optique · Salé & Kénitra · 06 61 29 07 03</div>
   <header class="site-header">
     <a class="brand" href="./index.html" aria-label="Monocle Home">
-      <img src="./logo.png" alt="Monocle">
+      <img src="./logo-320.png" alt="Monocle" width="320" height="320">
     </a>
     <nav>
       <a id="colsNavHome" href="./index.html">La Maison</a>
@@ -384,7 +384,10 @@
       function setImage(id, value) {
         const node = document.getElementById(id);
         if (!(node instanceof HTMLImageElement) || !value) return;
-        node.src = String(value);
+        const next = String(value)
+          .replace("./logo.png", "./logo-320.png")
+          .replace("./monocle.png", "./monocle-store.jpg");
+        node.src = next;
       }
 
       function setMetaDescription(value) {
@@ -393,23 +396,32 @@
         node.setAttribute("content", String(value));
       }
 
-      async function fetchContent(key) {
-        const res = await fetch("/api/content/" + encodeURIComponent(key), {
+      async function fetchContentBatch(keys) {
+        const query = keys.map((key) => "key=" + encodeURIComponent(key)).join("&");
+        const res = await fetch("/api/content-batch?" + query, {
           headers: { Accept: "application/json" }
         });
-        if (!res.ok) return null;
-        return res.json();
+        if (!res.ok) return {};
+        const payload = await res.json();
+        return payload && payload.rows ? payload.rows : {};
       }
 
       try {
-        const [productsRes, settings, meta, hero, footer, nav] = await Promise.all([
+        const [productsRes, content] = await Promise.all([
           fetch("/api/products", { headers: { Accept: "application/json" } }),
-          fetchContent("site-settings"),
-          fetchContent("collections-meta"),
-          fetchContent("collections-hero"),
-          fetchContent("collections-footer"),
-          fetchContent("site-nav")
+          fetchContentBatch([
+            "site-settings",
+            "collections-meta",
+            "collections-hero",
+            "collections-footer",
+            "site-nav"
+          ])
         ]);
+        const settings = content["site-settings"];
+        const meta = content["collections-meta"];
+        const hero = content["collections-hero"];
+        const footer = content["collections-footer"];
+        const nav = content["site-nav"];
 
         if (productsRes.ok) {
           const payload = await productsRes.json();

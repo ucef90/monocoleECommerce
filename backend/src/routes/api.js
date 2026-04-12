@@ -125,6 +125,12 @@ function createApiRouter({ slotsService, newsletterService, cmsService, ordersSe
         return json(res, 200, { rows: all });
       }
 
+      if (req.method === 'GET' && url.pathname === '/api/content-batch') {
+        const keys = url.searchParams.getAll('key');
+        const payload = await cmsService.getContentMany(keys);
+        return json(res, 200, { rows: payload });
+      }
+
       if (req.method === 'GET' && url.pathname.startsWith('/api/content/')) {
         const key = parseKeyFromPath(url.pathname, '/api/content/');
         if (!key) return json(res, 400, { error: 'invalid_key' });

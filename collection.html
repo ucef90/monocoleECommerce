@@ -7,7 +7,7 @@
   <meta id="collectionMetaDescription" name="description" content="Explorez le catalogue Monocle Optique: lunettes de vue et solaires, filtres par style, essayage en boutique et accompagnement a Salé et Kénitra.">
   <meta name="robots" content="index,follow">
   <meta name="theme-color" content="#111214">
-  <link rel="icon" type="image/png" href="./logo.png">
+  <link rel="icon" type="image/png" href="./logo-320.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
   <div id="colTopbar" class="topbar">Monocle Optique · Salé & Kénitra · 06 61 29 07 03</div>
   <header class="site-header">
     <a class="brand" href="./index.html" aria-label="Monocle Home">
-      <img src="./logo.png" alt="Monocle">
+      <img src="./logo-320.png" alt="Monocle" width="320" height="320">
     </a>
     <nav>
       <a id="colNavHome" href="./index.html">La Maison</a>
@@ -368,7 +368,10 @@
       function setImage(id, value) {
         const node = document.getElementById(id);
         if (!(node instanceof HTMLImageElement) || !value) return;
-        node.src = String(value);
+        const next = String(value)
+          .replace("./logo.png", "./logo-320.png")
+          .replace("./monocle.png", "./monocle-store.jpg");
+        node.src = next;
       }
 
       function setMetaDescription(value) {
@@ -377,23 +380,31 @@
         node.setAttribute("content", String(value));
       }
 
-      async function fetchContent(key) {
-        const res = await fetch("/api/content/" + encodeURIComponent(key), {
+      async function fetchContentBatch(keys) {
+        const query = keys.map((key) => "key=" + encodeURIComponent(key)).join("&");
+        const res = await fetch("/api/content-batch?" + query, {
           headers: { Accept: "application/json" }
         });
-        if (!res.ok) return null;
-        return res.json();
+        if (!res.ok) return {};
+        const payload = await res.json();
+        return payload && payload.rows ? payload.rows : {};
       }
 
       try {
-        const [settings, meta, hero, trust, footer, nav] = await Promise.all([
-          fetchContent("site-settings"),
-          fetchContent("collection-meta"),
-          fetchContent("collection-hero"),
-          fetchContent("collection-trust"),
-          fetchContent("collection-footer"),
-          fetchContent("site-nav")
+        const content = await fetchContentBatch([
+          "site-settings",
+          "collection-meta",
+          "collection-hero",
+          "collection-trust",
+          "collection-footer",
+          "site-nav"
         ]);
+        const settings = content["site-settings"];
+        const meta = content["collection-meta"];
+        const hero = content["collection-hero"];
+        const trust = content["collection-trust"];
+        const footer = content["collection-footer"];
+        const nav = content["site-nav"];
 
         if (settings) {
           setText("colTopbar", settings.title);
@@ -459,7 +470,7 @@
   <footer class="collection-footer">
     <div class="footer-locations">
       <article class="footer-location">
-        <img id="colFooterImage" src="./monocle.png" alt="Magasin Monocle a Kenitra" loading="lazy" decoding="async">
+        <img id="colFooterImage" src="./monocle-store.jpg" alt="Magasin Monocle a Kenitra" width="900" height="1199" loading="lazy" decoding="async">
         <p id="colFooterCity" class="footer-city">Kénitra · Salé</p>
         <p id="colFooterNote1" class="footer-note">Monocle Optique · résidence lotus, mag n°2 Rue Baghdad, Kénitra</p>
         <p id="colFooterNote2" class="footer-note">06 61 29 07 03 · samedi 10:00-19:00 · dimanche fermé</p>

@@ -229,6 +229,19 @@ function buildCmsService(dbConn, env) {
       return normalizeContent(getContentStmt.get(key));
     }
 
+    async function getContentMany(keys) {
+      const uniqueKeys = Array.from(new Set((Array.isArray(keys) ? keys : []).map((key) => String(key || '').trim()).filter(Boolean)));
+      if (!uniqueKeys.length) return {};
+      const rows = uniqueKeys
+        .map((key) => getContentStmt.get(key))
+        .filter(Boolean)
+        .map(normalizeContent);
+      return rows.reduce((acc, row) => {
+        acc[row.key] = row;
+        return acc;
+      }, {});
+    }
+
     async function listContent() {
       return listContentStmt.all().map(normalizeContent);
     }
@@ -285,6 +298,7 @@ function buildCmsService(dbConn, env) {
       updateProduct,
       deleteProduct,
       getContent,
+      getContentMany,
       listContent,
       upsertContent,
       listMedia,
@@ -418,6 +432,18 @@ function buildCmsService(dbConn, env) {
       return res.rows[0] ? normalizeContent({ ...res.rows[0], data: res.rows[0].data_json }) : null;
     }
 
+    async function getContentMany(keys) {
+      const uniqueKeys = Array.from(new Set((Array.isArray(keys) ? keys : []).map((key) => String(key || '').trim()).filter(Boolean)));
+      if (!uniqueKeys.length) return {};
+      const res = await pool.query('SELECT * FROM site_content WHERE content_key = ANY($1::text[])', [uniqueKeys]);
+      return res.rows
+        .map((row) => normalizeContent({ ...row, data: row.data_json }))
+        .reduce((acc, row) => {
+          acc[row.key] = row;
+          return acc;
+        }, {});
+    }
+
     async function listContent() {
       const res = await pool.query('SELECT * FROM site_content ORDER BY content_key ASC');
       return res.rows.map((row) => normalizeContent({ ...row, data: row.data_json }));
@@ -492,6 +518,7 @@ function buildCmsService(dbConn, env) {
       updateProduct,
       deleteProduct,
       getContent,
+      getContentMany,
       listContent,
       upsertContent,
       listMedia,

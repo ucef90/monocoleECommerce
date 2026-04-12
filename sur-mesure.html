@@ -821,7 +821,9 @@
         if (!(node instanceof HTMLImageElement) || !value) return;
         node.src = String(value)
           .replace("./logo.png", "./logo-320.png")
-          .replace("./monocle.png", "./monocle-store.jpg");
+          .replace("./monocle.png", "./monocle-store.jpg")
+          .replace("./modele_pk9_1_jylsc_pour_maison_bonnet.jpg", "./hero-home-1280.jpg")
+          .replace("./artisans-hero.jpg", "./atelier-hero-1280.jpg");
       }
 
       function setAttr(id, name, value) {

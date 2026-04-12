@@ -189,6 +189,26 @@
       margin-top: 4px;
     }
 
+    .field-help {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: .76rem;
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    .field-tip {
+      border: 1px solid #dbe2ec;
+      background: #f8fbff;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      color: #445062;
+      font-size: .82rem;
+      line-height: 1.6;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -348,6 +368,10 @@
       <div class="grid-2">
         <article class="card">
           <h3>Ajouter / Modifier produit</h3>
+          <div class="field-tip">
+            Un même article peut contenir <strong>plusieurs photos</strong>.
+            Utilisez <strong>Image principale</strong> pour la carte produit, puis ajoutez d'autres angles dans <strong>Photos supplémentaires</strong>.
+          </div>
           <form id="productForm" class="form" novalidate>
             <input id="productId" type="hidden">
             <label>Nom
@@ -401,9 +425,11 @@
             </div>
             <label>Image principale (URL)
               <input id="productImage" type="text" placeholder="ex: /uploads/photo.jpg">
+              <span class="field-help">Photo principale utilisée sur la carte produit et comme vue par défaut.</span>
             </label>
-            <label>Galerie (JSON array)
-              <textarea id="productGallery" placeholder='["/uploads/a.jpg", "/uploads/b.jpg"]'>[]</textarea>
+            <label>Photos supplémentaires
+              <textarea id="productGallery" placeholder="/uploads/angle-1.jpg&#10;/uploads/angle-2.jpg&#10;/uploads/angle-3.jpg"></textarea>
+              <span class="field-help">Vous pouvez coller <strong>une URL par ligne</strong> ou un tableau JSON. Recommandation catalogue: 2 à 4 photos maximum par article.</span>
             </label>
             <label>Description
               <textarea id="productDescription"></textarea>
@@ -651,7 +677,7 @@
           body: 'Monocle Optique vous accompagne en boutique pour trouver la bonne monture, ajuster votre confort visuel et choisir un style adapte.',
           data: {
             eyebrow: 'Lunetterie sur mesure',
-            image_url: './modele_pk9_1_jylsc_pour_maison_bonnet.jpg',
+            image_url: './hero-home-1280.jpg',
             cta_primary_label: 'Prendre rendez-vous',
             cta_primary_url: './collection.html',
             cta_secondary_label: 'Appeler maintenant',
@@ -686,7 +712,7 @@
           body: 'Dans notre boutique, nous prenons le temps de vous connaitre: morphologie, posture, usages optiques et solaire.',
           data: {
             eyebrow: 'Nos ateliers-boutiques',
-            image_url: './artisans-hero.jpg',
+            image_url: './atelier-hero-1280.jpg',
             cta_label: 'Voir la collection solaire',
             cta_url: './collection.html'
           }
@@ -787,7 +813,7 @@
           body: 'Explorez une selection de montures fortes, elegantes et confortables.',
           data: {
             eyebrow: 'Collections Monocle Optique',
-            image_url: './modele_pk9_1_jylsc_pour_maison_bonnet.jpg',
+            image_url: './hero-home-1280.jpg',
             cta_primary_label: 'Voir le catalogue',
             cta_primary_url: './collection.html',
             cta_secondary_label: 'Découvrir le sur-mesure',
@@ -812,7 +838,7 @@
           body: 'Chez Monocle Optique, le sur-mesure permet de mieux choisir, mieux ajuster et mieux incarner votre style.',
           data: {
             kicker: 'Le sur-mesure',
-            image_url: './artisans-hero.jpg',
+            image_url: './atelier-hero-1280.jpg',
             cta_label: 'Réserver ma consultation',
             cta_href: './collection.html',
             sticky_msg: 'Découvrez le sur-mesure Monocle avec un accompagnement premium.'
@@ -997,13 +1023,31 @@
         if (input) input.value = v;
       }
 
+      function formatGalleryInput(gallery) {
+        return (Array.isArray(gallery) ? gallery : [])
+          .map(function (item) { return String(item || '').trim(); })
+          .filter(Boolean)
+          .join('\n');
+      }
+
+      function parseGalleryInput(value) {
+        const raw = String(value || '').trim();
+        if (!raw) return [];
+        if (raw.startsWith('[')) {
+          const parsed = JSON.parse(raw);
+          if (!Array.isArray(parsed)) throw new Error('gallery_not_array');
+          return uniqueSorted(parsed.map(function (item) { return String(item || '').trim(); }).filter(Boolean));
+        }
+        return uniqueSorted(raw.split('\n').map(function (item) { return item.trim(); }).filter(Boolean));
+      }
+
       function resetProductForm() {
         productId.value = '';
         productForm.reset();
         productCurrency.value = 'DH';
         productPrice.value = '0';
         productStock.value = '0';
-        productGallery.value = '[]';
+        productGallery.value = '';
         productExtraInput.value = '';
         productSortOrder.value = '0';
         setSelectOrNew(productCategorySelect, productCategoryNew, '', taxonomies.category);
@@ -1029,7 +1073,7 @@
         productCurrency.value = row.currency || 'DH';
         productStock.value = String(row.stock || 0);
         productImage.value = row.image_url || '';
-        productGallery.value = JSON.stringify(Array.isArray(row.gallery) ? row.gallery : []);
+        productGallery.value = formatGalleryInput(row.gallery);
         productDescription.value = row.description || '';
         productActive.checked = !!row.active;
       }
@@ -1042,11 +1086,13 @@
 
         productsRows.innerHTML = items.map(function (row) {
           const filters = [row.genre, row.couleur, row.forme, row.matiere].filter(Boolean).join(' · ');
+          const photoCount = uniqueSorted([row.image_url].concat(Array.isArray(row.gallery) ? row.gallery : []).filter(Boolean)).length;
           return '<tr class="product-row" draggable="true" data-product-id="' + row.id + '">' +
             '<td>' + row.id + '</td>' +
             '<td><strong>' + row.title + '</strong><br><small>' + row.slug + '</small>' +
             (row.category ? '<br><small>Catégorie: ' + row.category + '</small>' : '') +
             (filters ? '<br><small>Filtres: ' + filters + '</small>' : '') +
+            '<br><small>Photos: ' + photoCount + '</small>' +
             '</td>' +
             '<td>' + (row.sort_order || 0) + '</td>' +
             '<td>' + row.currency + ' ' + Number(row.price).toFixed(2) + '</td>' +
@@ -1293,10 +1339,9 @@
         event.preventDefault();
         let gallery = [];
         try {
-          gallery = JSON.parse(productGallery.value || '[]');
-          if (!Array.isArray(gallery)) throw new Error();
+          gallery = parseGalleryInput(productGallery.value);
         } catch (_error) {
-          setMsg('Galerie JSON invalide.', true);
+          setMsg('Photos supplémentaires invalides. Utilise une URL par ligne ou un tableau JSON.', true);
           return;
         }
 

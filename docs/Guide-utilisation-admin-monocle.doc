@@ -252,7 +252,7 @@
   <div class="box">
     <pre>{
   "eyebrow": "Lunetterie sur mesure",
-  "image_url": "./modele_pk9_1_jylsc_pour_maison_bonnet.jpg",
+  "image_url": "./hero-home-1280.jpg",
   "cta_primary_label": "Prendre rendez-vous",
   "cta_primary_url": "./collection.html",
   "cta_secondary_label": "Appeler maintenant",
@@ -274,7 +274,7 @@
   "opening_hours_full": "samedi 10:00-19:00 · dimanche fermé · lundi-vendredi 10:00-20:30",
   "opening_note": "Dimanche fermé pour garder un service en boutique plus qualitatif.",
   "maps_url": "https://www.google.com/maps/search/?api=1&query=résidence+lotus+mag+2+Rue+Baghdad+Kénitra",
-  "store_image_url": "./monocle.png"
+  "store_image_url": "./monocle-store.jpg"
 }</pre>
   </div>
 
@@ -285,9 +285,69 @@
   <ul>
     <li>Ajouter un nouveau produit</li>
     <li>Modifier le nom, le slug, la catégorie, les filtres, le prix, la devise, le stock</li>
-    <li>Ajouter une image principale et une galerie</li>
+    <li>Ajouter une image principale et plusieurs photos supplémentaires pour le même article</li>
     <li>Activer ou désactiver un produit</li>
     <li>Changer l'ordre d'affichage des produits</li>
+  </ul>
+
+  <h3>6.1. Ajouter plusieurs photos pour un même article</h3>
+  <p>
+    Oui, le compte admin permet bien d'ajouter <strong>plusieurs photos sur un seul produit</strong>.
+    Le site utilise:
+  </p>
+  <ul>
+    <li><strong>Image principale</strong>: photo utilisée sur la carte produit et comme vue par défaut</li>
+    <li><strong>Photos supplémentaires</strong>: autres angles affichés dans la vue rapide, le plein écran et l'essayage</li>
+  </ul>
+  <p>
+    Dans l'admin, vous pouvez maintenant coller les photos supplémentaires avec <strong>une URL par ligne</strong>.
+    Exemple:
+  </p>
+  <div class="box">
+    <pre>/uploads/solaire-noir-face.jpg
+/uploads/solaire-noir-3-4.jpg
+/uploads/solaire-noir-profil.jpg</pre>
+  </div>
+  <p>
+    Il est aussi possible d'utiliser un tableau JSON, mais le format ligne par ligne est plus simple au quotidien.
+  </p>
+
+  <h3>6.2. Recommandation de taille et poids pour les images produit</h3>
+  <p>
+    Pour garder un catalogue rapide et propre, voici la recommandation à suivre pour les photos de lunettes.
+  </p>
+  <table>
+    <tr>
+      <th>Type d'image</th>
+      <th>Taille recommandée</th>
+      <th>Poids conseillé</th>
+      <th>Conseil</th>
+    </tr>
+    <tr>
+      <td>Image principale produit</td>
+      <td>1200 px à 1600 px de large</td>
+      <td>80 KB à 220 KB</td>
+      <td>Fond propre, lunette bien centrée, format JPG optimisé.</td>
+    </tr>
+    <tr>
+      <td>Photos supplémentaires produit</td>
+      <td>1200 px à 1600 px de large</td>
+      <td>80 KB à 220 KB</td>
+      <td>Prévoir face, 3/4 et profil si possible.</td>
+    </tr>
+    <tr>
+      <td>Image très lourde à éviter</td>
+      <td>Supérieure à 2000 px</td>
+      <td>Au-delà de 300 KB</td>
+      <td>Risque de ralentir le catalogue et l'affichage mobile.</td>
+    </tr>
+  </table>
+
+  <h3>6.3. Nombre conseillé de photos par produit</h3>
+  <ul>
+    <li><strong>Minimum recommandé</strong>: 2 photos</li>
+    <li><strong>Idéal</strong>: 3 photos</li>
+    <li><strong>Maximum conseillé</strong>: 4 photos pour éviter de surcharger la gestion et le chargement</li>
   </ul>
 
   <h3>Conseil</h3>
@@ -322,6 +382,7 @@
     <li>Vérifier que le JSON est valide avant d'enregistrer.</li>
     <li>Recharger la page publique après modification.</li>
     <li>Uploader les images dans l'onglet Médias avant de les utiliser dans le contenu.</li>
+    <li>Compresser les images produit avant upload pour rester idéalement sous 220 KB par photo.</li>
   </ul>
 
   <h2>10. Erreurs fréquentes à éviter</h2>

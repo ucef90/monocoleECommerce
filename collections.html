@@ -267,7 +267,7 @@
 
   <main>
     <section class="hero">
-      <img id="colsHeroImage" src="./modele_pk9_1_jylsc_pour_maison_bonnet.jpg" alt="Collection Monocle" fetchpriority="high">
+      <img id="colsHeroImage" src="./hero-home-1280.jpg" alt="Collection Monocle" width="1280" height="853" fetchpriority="high">
       <div class="hero-copy">
         <p id="colsHeroEyebrow" class="eyebrow">Collections Monocle Optique</p>
         <h1 id="colsHeroTitle">Collections artistiques et montures de caractere.</h1>
@@ -386,7 +386,9 @@
         if (!(node instanceof HTMLImageElement) || !value) return;
         const next = String(value)
           .replace("./logo.png", "./logo-320.png")
-          .replace("./monocle.png", "./monocle-store.jpg");
+          .replace("./monocle.png", "./monocle-store.jpg")
+          .replace("./modele_pk9_1_jylsc_pour_maison_bonnet.jpg", "./hero-home-1280.jpg")
+          .replace("./artisans-hero.jpg", "./atelier-hero-1280.jpg");
         node.src = next;
       }
 

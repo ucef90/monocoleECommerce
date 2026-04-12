@@ -76,7 +76,7 @@
         </div>
       </div>
       <div class="hero-media">
-        <img id="homeHeroImage" src="./modele_pk9_1_jylsc_pour_maison_bonnet.jpg" alt="Monture Monocle Optique en presentation" width="2560" height="1707" fetchpriority="high">
+        <img id="homeHeroImage" src="./hero-home-1280.jpg" alt="Monture Monocle Optique en presentation" width="1280" height="853" fetchpriority="high">
       </div>
     </section>
 
@@ -125,7 +125,7 @@
 
     <section class="atelier" id="atelier">
       <div class="atelier-photo">
-        <img id="homeAtelierImage" src="./artisans-hero.jpg" alt="Atelier Monocle" width="2560" height="1000" loading="lazy" decoding="async">
+        <img id="homeAtelierImage" src="./atelier-hero-1280.jpg" alt="Atelier Monocle" width="1280" height="500" loading="lazy" decoding="async">
       </div>
       <div class="atelier-copy">
         <p id="homeAtelierEyebrow" class="eyebrow">Nos ateliers-boutiques</p>
@@ -251,7 +251,9 @@
         if (!(node instanceof HTMLImageElement) || !value) return;
         const next = String(value)
           .replace("./logo.png", "./logo-320.png")
-          .replace("./monocle.png", "./monocle-store.jpg");
+          .replace("./monocle.png", "./monocle-store.jpg")
+          .replace("./modele_pk9_1_jylsc_pour_maison_bonnet.jpg", "./hero-home-1280.jpg")
+          .replace("./artisans-hero.jpg", "./atelier-hero-1280.jpg");
         node.src = next;
       }
 

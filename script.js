@@ -9,6 +9,7 @@ const fallbackProducts = [
     extra: ["Oversize"],
     colors: 3,
     stock: 5,
+    gallery: ["./modele_pk9_1_jylsc_pour_maison_bonnet.jpg", "./f_01-clifford-1-768x512.jpg", "./f_01-sully-1-768x512.jpg"],
     price: 190,
     nouveaute: true,
     image: "./modele_pk9_1_jylsc_pour_maison_bonnet.jpg"
@@ -23,6 +24,7 @@ const fallbackProducts = [
     extra: ["Polarisant"],
     colors: 2,
     stock: 4,
+    gallery: ["./h_01-ray-2-1-768x512.jpg", "./01-cordier-1-768x512.jpg", "./h_01-legendre-1-1-768x512.jpg"],
     price: 190,
     nouveaute: true,
     image: "./h_01-ray-2-1-768x512.jpg"
@@ -37,6 +39,7 @@ const fallbackProducts = [
     extra: ["Polarisant"],
     colors: 3,
     stock: 6,
+    gallery: ["./h_01-auguste-2-768x512.jpg", "./mb-aria.jpg", "./mb-seven.jpg"],
     price: 170,
     nouveaute: true,
     image: "./h_01-auguste-2-768x512.jpg"
@@ -51,6 +54,7 @@ const fallbackProducts = [
     extra: [],
     colors: 4,
     stock: 2,
+    gallery: ["./h_01-longuemare-4-768x512.jpg", "./mb-longuemare.jpg", "./mb-wall.jpg"],
     price: 150,
     nouveaute: true,
     image: "./h_01-longuemare-4-768x512.jpg"
@@ -65,6 +69,7 @@ const fallbackProducts = [
     extra: ["Polarisant"],
     colors: 2,
     stock: 3,
+    gallery: ["./f_01-sully-1-768x512.jpg", "./mb-lorenzo.jpg", "./mb-raph.jpg"],
     price: 210,
     nouveaute: false,
     image: "./f_01-sully-1-768x512.jpg"
@@ -79,6 +84,7 @@ const fallbackProducts = [
     extra: ["Oversize"],
     colors: 4,
     stock: 7,
+    gallery: ["./f_01-clifford-1-768x512.jpg", "./01-cordier-1-768x512.jpg", "./mb-catch.jpg"],
     price: 175,
     nouveaute: false,
     image: "./f_01-clifford-1-768x512.jpg"
@@ -93,6 +99,7 @@ const fallbackProducts = [
     extra: [],
     colors: 4,
     stock: 0,
+    gallery: ["./f_01-seven-1-1-768x512.jpg", "./mb-seven.jpg", "./mb-stuart.jpg"],
     price: 130,
     nouveaute: true,
     image: "./f_01-seven-1-1-768x512.jpg"
@@ -107,6 +114,7 @@ const fallbackProducts = [
     extra: ["Polarisant"],
     colors: 3,
     stock: 8,
+    gallery: ["./01-cordier-1-768x512.jpg", "./h_01-ray-2-1-768x512.jpg", "./mb-catch.jpg"],
     price: 150,
     nouveaute: false,
     image: "./01-cordier-1-768x512.jpg"
@@ -121,6 +129,7 @@ const fallbackProducts = [
     extra: [],
     colors: 2,
     stock: 1,
+    gallery: ["./f_01-tom-15-768x512.jpg", "./mb-wall.jpg", "./mb-lorenzo.jpg"],
     price: 145,
     nouveaute: true,
     image: "./f_01-tom-15-768x512.jpg"
@@ -135,6 +144,7 @@ const fallbackProducts = [
     extra: ["Polarisant"],
     colors: 3,
     stock: 5,
+    gallery: ["./h_01-legendre-1-1-768x512.jpg", "./h_01-ray-2-1-768x512.jpg", "./mb-raph.jpg"],
     price: 220,
     nouveaute: true,
     image: "./h_01-legendre-1-1-768x512.jpg"
@@ -149,6 +159,7 @@ const fallbackProducts = [
     extra: ["Oversize"],
     colors: 4,
     stock: 3,
+    gallery: ["./f_01-sully-1-768x512.jpg", "./f_01-seven-1-1-768x512.jpg", "./mb-seven.jpg"],
     price: 185,
     nouveaute: false,
     image: "./f_01-sully-1-768x512.jpg"
@@ -163,6 +174,7 @@ const fallbackProducts = [
     extra: ["Polarisant"],
     colors: 2,
     stock: 6,
+    gallery: ["./h_01-ray-2-1-768x512.jpg", "./richard_modele-terry-optimised.jpg", "./01-cordier-1-768x512.jpg"],
     price: 210,
     nouveaute: false,
     image: "./h_01-ray-2-1-768x512.jpg"
@@ -177,6 +189,7 @@ const fallbackProducts = [
     extra: [],
     colors: 3,
     stock: 4,
+    gallery: ["./h_01-auguste-2-768x512.jpg", "./mb-aria.jpg", "./mb-lorenzo.jpg"],
     price: 175,
     nouveaute: true,
     image: "./h_01-auguste-2-768x512.jpg"
@@ -191,6 +204,7 @@ const fallbackProducts = [
     extra: [],
     colors: 3,
     stock: 2,
+    gallery: ["./f_01-clifford-1-768x512.jpg", "./f_01-tom-15-768x512.jpg", "./mb-stuart.jpg"],
     price: 168,
     nouveaute: false,
     image: "./f_01-clifford-1-768x512.jpg"
@@ -205,6 +219,7 @@ const fallbackProducts = [
     extra: ["Oversize"],
     colors: 4,
     stock: 5,
+    gallery: ["./01-cordier-1-768x512.jpg", "./f_01-clifford-1-768x512.jpg", "./mb-catch.jpg"],
     price: 198,
     nouveaute: true,
     image: "./01-cordier-1-768x512.jpg"
@@ -219,6 +234,7 @@ const fallbackProducts = [
     extra: ["Polarisant"],
     colors: 2,
     stock: 1,
+    gallery: ["./richard_modele-terry-optimised.jpg", "./h_01-ray-2-1-768x512.jpg", "./mb-wall.jpg"],
     price: 230,
     nouveaute: true,
     image: "./richard_modele-terry-optimised.jpg"
@@ -233,6 +249,7 @@ const fallbackProducts = [
     extra: ["Oversize"],
     colors: 3,
     stock: 4,
+    gallery: ["./f_01-seven-1-1-768x512.jpg", "./mb-seven.jpg", "./mb-aria.jpg"],
     price: 179,
     nouveaute: false,
     image: "./f_01-seven-1-1-768x512.jpg"
@@ -247,6 +264,7 @@ const fallbackProducts = [
     extra: ["Polarisant"],
     colors: 2,
     stock: 0,
+    gallery: ["./f_01-tom-15-768x512.jpg", "./mb-lorenzo.jpg", "./mb-raph.jpg"],
     price: 188,
     nouveaute: true,
     image: "./f_01-tom-15-768x512.jpg"
@@ -271,6 +289,8 @@ const clearFiltersMobileButton = document.getElementById("clearFiltersMobile");
 const quickViewModal = document.getElementById("quickViewModal");
 const qvClose = document.getElementById("qvClose");
 const qvImage = document.getElementById("qvImage");
+const qvZoom = document.getElementById("qvZoom");
+const qvThumbs = document.getElementById("qvThumbs");
 const qvBadge = document.getElementById("qvBadge");
 const qvTitle = document.getElementById("qvTitle");
 const qvMeta = document.getElementById("qvMeta");
@@ -283,6 +303,11 @@ const qvQtyPlus = document.getElementById("qvQtyPlus");
 const qvQtyValue = document.getElementById("qvQtyValue");
 const qvAddToCart = document.getElementById("qvAddToCart");
 const qvMessage = document.getElementById("qvMessage");
+const qvLightbox = document.getElementById("qvLightbox");
+const qvLightboxImage = document.getElementById("qvLightboxImage");
+const qvLightboxPrev = document.getElementById("qvLightboxPrev");
+const qvLightboxNext = document.getElementById("qvLightboxNext");
+const qvLightboxClose = document.getElementById("qvLightboxClose");
 const openCartButton = document.getElementById("openCart");
 const closeCartButton = document.getElementById("closeCart");
 const cartDrawer = document.getElementById("cartDrawer");
@@ -324,7 +349,9 @@ const quickViewState = {
   productId: null,
   color: null,
   size: null,
-  qty: 1
+  qty: 1,
+  images: [],
+  imageIndex: 0
 };
 
 const colorVariants = {
@@ -382,6 +409,7 @@ function mapCmsProduct(row, index) {
   const isOversize = extraList.length ? extraList.includes("Oversize") : /oversize/i.test(rawText);
   const image = pickFirst(row.image_url, gallery[0] || "./modele_pk9_1_jylsc_pour_maison_bonnet.jpg");
   const colors = Math.max(2, Math.min(6, gallery.length + 1));
+  const images = Array.from(new Set([image].concat(gallery).filter(Boolean))).slice(0, 3);
 
   return {
     id: Number(pickFirst(row.id, index + 1)),
@@ -394,6 +422,7 @@ function mapCmsProduct(row, index) {
     extra: extraList.length ? extraList : [isPolar ? "Polarisant" : "", isOversize ? "Oversize" : ""].filter(Boolean),
     colors,
     stock: Math.max(0, Number(pickFirst(row.stock, 0)) || 0),
+    gallery: images,
     price: Number(pickFirst(row.price, 0)) || 0,
     nouveaute: !!row.active,
     image
@@ -489,6 +518,50 @@ function renderQuickOptions(container, options, activeValue, dataKey) {
     .join("");
 }
 
+function getQuickViewImages(product) {
+  const images = Array.isArray(product && product.gallery) ? product.gallery.filter(Boolean) : [];
+  return Array.from(new Set([product.image].concat(images).filter(Boolean))).slice(0, 3);
+}
+
+function renderQuickViewImage() {
+  const src = quickViewState.images[quickViewState.imageIndex] || quickViewState.images[0] || "";
+  if (qvImage) {
+    qvImage.src = src;
+    qvImage.alt = qvTitle ? qvTitle.textContent : "Produit";
+  }
+  if (!qvThumbs) return;
+  qvThumbs.innerHTML = quickViewState.images.map((image, index) => {
+    const activeClass = index === quickViewState.imageIndex ? "active" : "";
+    return `<button class="quickview-thumb ${activeClass}" type="button" data-thumb-index="${index}" aria-label="Voir l'angle ${index + 1}"><img src="${image}" alt="Vue ${index + 1}"></button>`;
+  }).join("");
+}
+
+function openQuickViewLightbox() {
+  if (!qvLightbox || !qvLightboxImage) return;
+  const src = quickViewState.images[quickViewState.imageIndex] || (qvImage && qvImage.src) || "";
+  if (!src) return;
+  qvLightboxImage.src = src;
+  qvLightboxImage.alt = qvImage ? qvImage.alt : "Produit en grand";
+  qvLightbox.setAttribute("aria-hidden", "false");
+  document.body.classList.add("qv-lightbox-open");
+}
+
+function closeQuickViewLightbox() {
+  if (!qvLightbox) return;
+  qvLightbox.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("qv-lightbox-open");
+}
+
+function shiftQuickViewImage(step) {
+  if (!quickViewState.images.length) return;
+  const total = quickViewState.images.length;
+  quickViewState.imageIndex = (quickViewState.imageIndex + step + total) % total;
+  renderQuickViewImage();
+  if (document.body.classList.contains("qv-lightbox-open")) {
+    openQuickViewLightbox();
+  }
+}
+
 function syncQuickViewQtyControls() {
   const remaining = getRemainingStock(quickViewState.productId);
   if (qvQtyMinus) qvQtyMinus.disabled = remaining <= 0 || quickViewState.qty <= 1;
@@ -503,14 +576,15 @@ function openQuickView(productId) {
 
   const colors = getVariantColors(product);
   const sizes = getVariantSizes(product);
+  const images = getQuickViewImages(product);
 
   quickViewState.productId = product.id;
   quickViewState.color = colors[0];
   quickViewState.size = sizes[0];
   quickViewState.qty = 1;
+  quickViewState.images = images;
+  quickViewState.imageIndex = 0;
 
-  qvImage.src = product.image;
-  qvImage.alt = product.name;
   qvTitle.textContent = product.name;
   qvMeta.textContent = `${product.genre} | ${product.forme} | ${product.matiere}`;
   if (qvStock) {
@@ -524,6 +598,7 @@ function openQuickView(productId) {
   qvMessage.textContent = remaining > 0 ? "" : "Ce modele n'est plus disponible pour le moment.";
   renderQuickOptions(qvColors, colors, quickViewState.color, "color");
   renderQuickOptions(qvSizes, sizes, quickViewState.size, "size");
+  renderQuickViewImage();
   syncQuickViewQtyControls();
 
   document.body.classList.add("quickview-open");
@@ -532,6 +607,7 @@ function openQuickView(productId) {
 
 function closeQuickView() {
   if (!quickViewModal) return;
+  closeQuickViewLightbox();
   document.body.classList.remove("quickview-open");
   quickViewModal.setAttribute("aria-hidden", "true");
 }
@@ -1106,6 +1182,13 @@ if (quickViewModal) {
     const closeTarget = event.target.closest("[data-quick-close]");
     if (closeTarget) closeQuickView();
 
+    const thumbTarget = event.target.closest("[data-thumb-index]");
+    if (thumbTarget) {
+      quickViewState.imageIndex = Number(thumbTarget.getAttribute("data-thumb-index") || "0");
+      renderQuickViewImage();
+      return;
+    }
+
     const optionTarget = event.target.closest("[data-option-key]");
     if (!optionTarget) return;
     const key = optionTarget.getAttribute("data-option-key");
@@ -1146,6 +1229,16 @@ if (qvAddToCart) {
     openCart();
   });
 }
+if (qvZoom) qvZoom.addEventListener("click", openQuickViewLightbox);
+if (qvImage) qvImage.addEventListener("click", openQuickViewLightbox);
+if (qvLightbox) {
+  qvLightbox.addEventListener("click", (event) => {
+    if (event.target.closest("[data-lightbox-close]")) closeQuickViewLightbox();
+  });
+}
+if (qvLightboxPrev) qvLightboxPrev.addEventListener("click", () => shiftQuickViewImage(-1));
+if (qvLightboxNext) qvLightboxNext.addEventListener("click", () => shiftQuickViewImage(1));
+if (qvLightboxClose) qvLightboxClose.addEventListener("click", closeQuickViewLightbox);
 
 if (openCartButton) openCartButton.addEventListener("click", openCart);
 if (closeCartButton) closeCartButton.addEventListener("click", closeCart);

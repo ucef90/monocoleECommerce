@@ -154,7 +154,11 @@
     <section class="quickview-panel" role="dialog" aria-modal="true" aria-labelledby="qvTitle">
       <button id="qvClose" class="quickview-close" aria-label="Fermer">×</button>
       <div class="quickview-media">
-        <img id="qvImage" src="" alt="Produit">
+        <button id="qvZoom" class="quickview-zoom" type="button" aria-label="Voir l'image en grand">Plein ecran</button>
+        <div class="quickview-image-stage">
+          <img id="qvImage" src="" alt="Produit">
+        </div>
+        <div id="qvThumbs" class="quickview-thumbs" aria-label="Autres vues du produit"></div>
       </div>
       <div class="quickview-content">
         <p id="qvBadge" class="quickview-badge"></p>
@@ -185,6 +189,15 @@
         <button id="qvAddToCart" class="qv-add" type="button">Ajouter au panier</button>
         <p id="qvMessage" class="qv-message" aria-live="polite"></p>
       </div>
+    </section>
+  </div>
+  <div id="qvLightbox" class="qv-lightbox" aria-hidden="true">
+    <div class="qv-lightbox-backdrop" data-lightbox-close="1"></div>
+    <section class="qv-lightbox-panel" role="dialog" aria-modal="true" aria-label="Image produit en grand">
+      <button id="qvLightboxPrev" class="qv-lightbox-nav prev" type="button" aria-label="Photo précédente">‹</button>
+      <button id="qvLightboxNext" class="qv-lightbox-nav next" type="button" aria-label="Photo suivante">›</button>
+      <button id="qvLightboxClose" class="qv-lightbox-close" type="button" aria-label="Fermer l'image">×</button>
+      <img id="qvLightboxImage" src="" alt="Produit en grand">
     </section>
   </div>
   <div id="cartDrawer" class="cart-drawer" aria-hidden="true">

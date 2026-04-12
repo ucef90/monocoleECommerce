@@ -23,7 +23,9 @@ const env = {
   adminUsername: process.env.ADMIN_USERNAME || 'admin',
   adminPassword: process.env.ADMIN_PASSWORD || 'admin123',
   adminSessionSecret: process.env.ADMIN_SESSION_SECRET || 'change-me-in-production',
-  adminSessionHours: toInt(process.env.ADMIN_SESSION_HOURS, 12)
+  adminSessionHours: toInt(process.env.ADMIN_SESSION_HOURS, 12),
+  openaiApiKey: process.env.OPENAI_API_KEY || '',
+  openaiChatModel: process.env.OPENAI_CHAT_MODEL || 'gpt-4.1-mini'
 };
 
 module.exports = { env };

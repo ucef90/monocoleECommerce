@@ -24,6 +24,7 @@ Ce projet est structuré avec:
 - `POST /api/newsletter/subscribe`
 - `GET /api/newsletter/stats`
 - `GET /api/products`
+- `POST /api/chat`
 - `GET /api/content`
 - `GET /api/content/:key`
 - `GET /api/media`
@@ -72,6 +73,8 @@ Variables supportées:
 - `ADMIN_PASSWORD`
 - `ADMIN_SESSION_SECRET`
 - `ADMIN_SESSION_HOURS`
+- `OPENAI_API_KEY`
+- `OPENAI_CHAT_MODEL`
 
 ## Notes
 
@@ -90,6 +93,10 @@ Variables supportées:
   - `home-hero`
   - `home-quote`
   - `home-stores`
+- Un assistant Monocle est disponible sur les pages publiques:
+  - mode `fallback` sans clé IA
+  - mode `ai` si `OPENAI_API_KEY` est configurée
+  - endpoint backend: `POST /api/chat`
 - Navigation/labels globaux pilotables via:
   - `site-nav`
 - La page `collection.html` peut être pilotée via:

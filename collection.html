@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=20260414a">
   <link rel="stylesheet" href="./chat-widget.css">
 </head>
 <body>
@@ -20,8 +20,10 @@
     <a class="brand" href="./index.html" aria-label="Monocle Home">
       <img src="./logo-320.png" alt="Monocle" width="320" height="320">
     </a>
-    <nav>
+    <nav class="collection-nav">
       <a id="colNavHome" href="./index.html">La Maison</a>
+      <a href="./collection.html?category=Solaire">Solaire</a>
+      <a href="./collection.html?category=Optique">Optique</a>
       <a id="colNavCustom" href="./sur-mesure.html">Le sur-mesure</a>
       <a class="active" href="./collection.html">Catalogue</a>
       <a id="colNavCollections" href="./collections.html">Collections</a>
@@ -33,32 +35,57 @@
         Panier
         <span id="cartCount" class="cart-count">0</span>
       </button>
+      <button id="collectionMenuToggle" class="collection-menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="collectionMobileMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </header>
 
-  <section class="hero">
-    <p id="colHeroBreadcrumb" class="breadcrumb">Accueil / Catalogue / Lunettes</p>
-    <p id="colHeroEyebrow" class="eyebrow">Collection</p>
-    <h1 id="colHeroTitle">Catalogue lunettes de vue et solaires</h1>
-    <p id="colHeroBody">Retrouvez les montures Monocle Optique avec filtres par forme, couleur et matiere, puis contactez la boutique pour un essayage ou un rendez-vous a Salé et Kénitra.</p>
-  </section>
+  <aside id="collectionMobileMenu" class="collection-mobile-menu" aria-hidden="true">
+    <div class="collection-mobile-panel">
+      <div class="collection-mobile-head">
+        <strong>Monocle</strong>
+        <button id="collectionMenuClose" class="collection-mobile-close" type="button" aria-label="Fermer le menu">×</button>
+      </div>
+      <nav class="collection-mobile-links" aria-label="Navigation collection">
+        <a id="colNavMobileHome" href="./index.html">La Maison</a>
+        <a href="./collection.html?category=Solaire">Solaire</a>
+        <a href="./collection.html?category=Optique">Optique</a>
+        <a href="./collection.html">Catalogue</a>
+        <a id="colNavMobileCollections" href="./collections.html">Collections</a>
+        <a id="colNavMobileAtelier" href="./index.html#atelier">Atelier</a>
+        <a id="colNavMobileCustom" href="./sur-mesure.html">Le sur-mesure</a>
+      </nav>
+      <div class="collection-mobile-actions">
+        <button id="colMobileHeaderCta" class="header-cta" type="button">Prendre rendez-vous</button>
+        <a class="mobile-phone-link" href="tel:+212661290703">Appeler</a>
+      </div>
+    </div>
+  </aside>
 
-  <section class="catalog-trust" aria-label="Informations pratiques">
-    <article class="catalog-trust-card">
-      <p id="colTrust1Label" class="catalog-trust-label">Telephone</p>
-      <strong id="colTrust1Title">06 61 29 07 03</strong>
-      <a id="colTrust1Link" class="catalog-trust-link" href="tel:+212661290703">Appeler maintenant</a>
-    </article>
-    <article class="catalog-trust-card">
-      <p id="colTrust2Label" class="catalog-trust-label">Adresse</p>
-      <strong id="colTrust2Title">résidence lotus, mag n°2 Rue Baghdad, Kénitra</strong>
-      <span id="colTrust2Body">Service Monocle Optique pour Kénitra et Salé.</span>
-    </article>
-    <article class="catalog-trust-card">
-      <p id="colTrust3Label" class="catalog-trust-label">Horaires</p>
-      <strong id="colTrust3Title">Lundi a vendredi 10:00-20:30</strong>
-      <span id="colTrust3Body">Samedi 10:00-19:00 · Dimanche fermé.</span>
-    </article>
+  <section class="hero collection-hero">
+    <div class="collection-hero-copy">
+      <p id="colHeroBreadcrumb" class="breadcrumb">Accueil / Catalogue / Lunettes</p>
+      <p id="colHeroEyebrow" class="eyebrow">Collection</p>
+      <h1 id="colHeroTitle">Catalogue lunettes de vue et solaires</h1>
+      <p id="colHeroBody">Retrouvez les montures Monocle Optique avec filtres par forme, couleur et matiere, puis contactez la boutique pour un essayage ou un rendez-vous a Salé et Kénitra.</p>
+    </div>
+    <div id="collectionHeroMedia" class="collection-hero-media" hidden>
+      <video
+        id="collectionHeroVideo"
+        class="collection-hero-video"
+        muted
+        loop
+        playsinline
+        controls
+        preload="metadata"
+        poster="./hero-home-1280.jpg"
+      >
+        <source src="./YTDown.com_YouTube_Tchin-Tchin-d-Afflelou-2-paires-de-lunet_Media_WKA5G7PDMPw_001_1080p.mp4" type="video/mp4">
+      </video>
+    </div>
   </section>
 
   <main class="catalog">
@@ -150,6 +177,24 @@
       </div>
     </section>
   </main>
+
+  <section class="catalog-trust catalog-trust-bottom" aria-label="Informations pratiques">
+    <article class="catalog-trust-card">
+      <p id="colTrust1Label" class="catalog-trust-label">Telephone</p>
+      <strong id="colTrust1Title">06 61 29 07 03</strong>
+      <a id="colTrust1Link" class="catalog-trust-link" href="tel:+212661290703">Appeler maintenant</a>
+    </article>
+    <article class="catalog-trust-card">
+      <p id="colTrust2Label" class="catalog-trust-label">Adresse</p>
+      <strong id="colTrust2Title">résidence lotus, mag n°2 Rue Baghdad, Kénitra</strong>
+      <span id="colTrust2Body">Service Monocle Optique pour Kénitra et Salé.</span>
+    </article>
+    <article class="catalog-trust-card">
+      <p id="colTrust3Label" class="catalog-trust-label">Horaires</p>
+      <strong id="colTrust3Title">Lundi a vendredi 10:00-20:30</strong>
+      <span id="colTrust3Body">Samedi 10:00-19:00 · Dimanche fermé.</span>
+    </article>
+  </section>
   <div id="filtersOverlay" class="filters-overlay" aria-hidden="true"></div>
   <div id="quickViewModal" class="quickview-modal" aria-hidden="true">
     <div class="quickview-backdrop" data-quick-close="1"></div>
@@ -470,7 +515,48 @@
       }
     })();
   </script>
-  <script src="./script.js"></script>
+  <script src="./script.js?v=20260414a"></script>
+  <script>
+    (function () {
+      const toggle = document.getElementById("collectionMenuToggle");
+      const closeBtn = document.getElementById("collectionMenuClose");
+      const menu = document.getElementById("collectionMobileMenu");
+      if (!toggle || !closeBtn || !menu) return;
+
+      function setMenu(open) {
+        menu.classList.toggle("open", open);
+        menu.setAttribute("aria-hidden", open ? "false" : "true");
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        document.body.classList.toggle("menu-open", open);
+      }
+
+      toggle.addEventListener("click", function () {
+        setMenu(!menu.classList.contains("open"));
+      });
+
+      closeBtn.addEventListener("click", function () {
+        setMenu(false);
+      });
+
+      menu.addEventListener("click", function (event) {
+        if (event.target === menu) setMenu(false);
+      });
+
+      menu.querySelectorAll("a, button").forEach(function (node) {
+        node.addEventListener("click", function () {
+          if (node.id === "colMobileHeaderCta") {
+            const cta = document.getElementById("colHeaderCta");
+            if (cta) cta.click();
+          }
+          setMenu(false);
+        });
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") setMenu(false);
+      });
+    })();
+  </script>
   <script defer src="./chat-widget.js"></script>
   <footer class="collection-footer">
     <div class="footer-locations">

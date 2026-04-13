@@ -315,6 +315,8 @@ let products = fallbackProducts.slice();
 const grid = document.getElementById("grid");
 const sortSelect = document.getElementById("sortSelect");
 const searchInput = document.getElementById("searchInput");
+const collectionHeroMedia = document.getElementById("collectionHeroMedia");
+const collectionHeroVideo = document.getElementById("collectionHeroVideo");
 const searchSuggestions = document.getElementById("searchSuggestions");
 const countNode = document.getElementById("count");
 const activeFiltersNode = document.getElementById("activeFilters");
@@ -1362,6 +1364,25 @@ function readInitialFiltersFromUrl() {
   }
 }
 
+function updateCollectionHeroMedia() {
+  if (!collectionHeroMedia) return;
+  const genre = selectedValues("genre");
+  const showMenVideo = genre.length === 1 && genre[0] === "Homme";
+  collectionHeroMedia.hidden = !showMenVideo;
+
+  if (!collectionHeroVideo) return;
+  if (showMenVideo) {
+    const playAttempt = collectionHeroVideo.play();
+    if (playAttempt && typeof playAttempt.catch === "function") {
+      playAttempt.catch(() => {});
+    }
+    return;
+  }
+
+  collectionHeroVideo.pause();
+  collectionHeroVideo.currentTime = 0;
+}
+
 function buildSearchIndex(product) {
   return normalizeSearchText([
     product.name,
@@ -1473,6 +1494,7 @@ function cardTemplate(product) {
 }
 
 function render() {
+  updateCollectionHeroMedia();
   const filtered = applyFilters(products);
   const ordered = applySort(filtered);
   const visible = ordered.slice(0, visibleCount);

@@ -161,6 +161,9 @@ const fallbackProducts = [
     stock: 3,
     gallery: ["./f_01-sully-1-768x512.jpg", "./f_01-seven-1-1-768x512.jpg", "./mb-seven.jpg"],
     price: 185,
+    base_price: 215,
+    promo_price: 185,
+    promo_active: true,
     nouveaute: false,
     image: "./f_01-sully-1-768x512.jpg"
   },
@@ -176,6 +179,9 @@ const fallbackProducts = [
     stock: 6,
     gallery: ["./h_01-ray-2-1-768x512.jpg", "./richard_modele-terry-optimised.jpg", "./01-cordier-1-768x512.jpg"],
     price: 210,
+    base_price: 245,
+    promo_price: 210,
+    promo_active: true,
     nouveaute: false,
     image: "./h_01-ray-2-1-768x512.jpg"
   },
@@ -221,6 +227,9 @@ const fallbackProducts = [
     stock: 5,
     gallery: ["./01-cordier-1-768x512.jpg", "./f_01-clifford-1-768x512.jpg", "./mb-catch.jpg"],
     price: 198,
+    base_price: 228,
+    promo_price: 198,
+    promo_active: true,
     nouveaute: true,
     image: "./01-cordier-1-768x512.jpg"
   },
@@ -268,6 +277,36 @@ const fallbackProducts = [
     price: 188,
     nouveaute: true,
     image: "./f_01-tom-15-768x512.jpg"
+  },
+  {
+    id: 19,
+    name: "Tina Junior",
+    genre: "Enfant",
+    couleur: "Rose",
+    forme: "Carree",
+    matiere: "Acetate",
+    extra: [],
+    colors: 3,
+    stock: 6,
+    gallery: ["./fit_aa_07630629487307_tina_front_sjkvovhpgxpuz832.webp", "./f_01-clifford-1-768x512.jpg", "./f_01-seven-1-1-768x512.jpg"],
+    price: 120,
+    nouveaute: true,
+    image: "./fit_aa_07630629487307_tina_front_sjkvovhpgxpuz832.webp"
+  },
+  {
+    id: 20,
+    name: "Mini Ray",
+    genre: "Enfant",
+    couleur: "Noir",
+    forme: "Ronde",
+    matiere: "Acetate",
+    extra: [],
+    colors: 2,
+    stock: 5,
+    gallery: ["./fit_aa_07630629487307_tina_front_sjkvovhpgxpuz832.webp", "./h_01-ray-2-1-768x512.jpg", "./01-cordier-1-768x512.jpg"],
+    price: 115,
+    nouveaute: false,
+    image: "./fit_aa_07630629487307_tina_front_sjkvovhpgxpuz832.webp"
   }
 ];
 
@@ -366,6 +405,9 @@ const checkoutForm = {
   cardCvc: document.getElementById("coCardCvc")
 };
 const filterInputs = [...document.querySelectorAll('.filters input[type="checkbox"]')];
+const pageParams = new URLSearchParams(window.location.search);
+const promoMode = pageParams.get("promo") === "1";
+const promoProductNames = new Set(["Sully Lumiere", "Ray Heritage", "Cordier Signature"]);
 const mobileQuery = window.matchMedia("(max-width: 860px)");
 const PAGE_SIZE = 8;
 let visibleCount = PAGE_SIZE;
@@ -445,7 +487,7 @@ function mapCmsProduct(row, index) {
 
   const gallery = Array.isArray(row.gallery) ? row.gallery : [];
   const rawText = [row.category, row.description, row.title].join(" ");
-  const genre = String(row.genre || inferFromText(rawText, ["Femme", "Homme", "Unisexe"], "Unisexe"));
+  const genre = String(row.genre || inferFromText(rawText, ["Femme", "Homme", "Enfant", "Unisexe"], "Unisexe"));
   const couleur = String(row.couleur || inferFromText(rawText, ["Noir", "Ecaille", "Or", "Vert"], "Noir"));
   const forme = String(row.forme || inferFromText(rawText, ["Pilote", "Ronde", "Carree", "Papillon"], "Ronde"));
   const matiere = String(row.matiere || inferFromText(rawText, ["Acetate", "Metal", "Combine"], "Acetate"));
@@ -469,9 +511,32 @@ function mapCmsProduct(row, index) {
     stock: Math.max(0, Number(pickFirst(row.stock, 0)) || 0),
     gallery: images,
     price: Number(pickFirst(row.price, 0)) || 0,
+    base_price: Number(pickFirst(row.base_price, row.price, 0)) || 0,
+    promo_price: Number(pickFirst(row.promo_price, 0)) || 0,
+    promo_active: !!row.promo_active && (Number(pickFirst(row.promo_price, 0)) || 0) > 0,
     nouveaute: !!row.active,
     image
   };
+}
+
+function getDisplayPrice(product) {
+  const basePrice = Number(product.base_price ?? product.price) || 0;
+  const promoPrice = Number(product.promo_price) || 0;
+  const promoActive = !!product.promo_active && promoPrice > 0;
+  const currentPrice = promoActive ? promoPrice : (Number(product.price) || basePrice);
+  return { basePrice, promoPrice, promoActive, currentPrice };
+}
+
+function productPriceMarkup(product, options) {
+  const settings = options || {};
+  const { basePrice, promoPrice, promoActive, currentPrice } = getDisplayPrice(product);
+  const prefix = settings.prefix || "";
+
+  if (promoActive) {
+    return `${prefix}<span class="price-original">DH ${basePrice.toFixed(2)}</span><span class="price-current">DH ${promoPrice.toFixed(2)}</span>`;
+  }
+
+  return `${prefix}<span class="price-current">DH ${currentPrice.toFixed(2)}</span>`;
 }
 
 async function loadProductsFromApi() {
@@ -875,7 +940,8 @@ function openQuickView(productId) {
     qvStock.textContent = availabilityLabel(product, remaining);
     qvStock.className = `quickview-stock ${remaining <= 0 ? "is-out" : remaining <= 3 ? "is-low" : "is-in"}`;
   }
-  qvPrice.textContent = `DH ${product.price.toFixed(2)}`;
+  qvPrice.className = `quickview-price ${product.promo_active ? "is-promo" : ""}`;
+  qvPrice.innerHTML = productPriceMarkup(product);
   qvBadge.textContent = product.nouveaute ? "Nouveaute" : "Edition permanente";
   quickViewState.qty = remaining > 0 ? 1 : 0;
   qvQtyValue.textContent = String(Math.max(quickViewState.qty, 0));
@@ -1261,7 +1327,7 @@ function selectedValues(groupName) {
 }
 
 function readInitialFiltersFromUrl() {
-  const params = new URLSearchParams(window.location.search);
+  const params = pageParams;
   const entries = [
     ['category', params.get('category')],
     ['genre', params.get('genre')],
@@ -1279,6 +1345,20 @@ function readInitialFiltersFromUrl() {
   const q = params.get("q");
   if (q && searchInput) {
     searchInput.value = q;
+  }
+
+  if (promoMode) {
+    const heroEyebrow = document.getElementById("colHeroEyebrow");
+    const heroTitle = document.getElementById("colHeroTitle");
+    const heroBody = document.getElementById("colHeroBody");
+    const toolbarSub = document.getElementById("colToolbarSub");
+    const breadcrumb = document.getElementById("colHeroBreadcrumb");
+
+    if (heroEyebrow) heroEyebrow.textContent = "Promotions";
+    if (heroTitle) heroTitle.textContent = "Collection promotions Monocle";
+    if (heroBody) heroBody.textContent = "Retrouvez directement les montures actuellement mises en avant en promotion, avec leurs visuels et leurs détails essentiels.";
+    if (toolbarSub) toolbarSub.textContent = "Sélection des montures actuellement proposées en promotion.";
+    if (breadcrumb) breadcrumb.textContent = "Accueil / Catalogue / Promotions";
   }
 }
 
@@ -1340,13 +1420,14 @@ function applyFilters(items) {
   return items.filter((item) => {
     const searchBlob = buildSearchIndex(item);
     const bySearch = !mappedQuery || searchBlob.includes(mappedQuery);
+    const byPromo = !promoMode || !!item.promo_active || promoProductNames.has(item.name);
     const byCategory = !category.length || category.includes(item.category || "Solaire");
     const byGenre = !genre.length || genre.includes(item.genre);
     const byCouleur = !couleur.length || couleur.includes(item.couleur);
     const byForme = !forme.length || forme.includes(item.forme);
     const byMatiere = !matiere.length || matiere.includes(item.matiere);
     const byExtra = !extra.length || extra.every((val) => item.extra.includes(val));
-    return bySearch && byCategory && byGenre && byCouleur && byForme && byMatiere && byExtra;
+    return bySearch && byPromo && byCategory && byGenre && byCouleur && byForme && byMatiere && byExtra;
   });
 }
 
@@ -1363,6 +1444,8 @@ function applySort(items) {
 
 function cardTemplate(product) {
   const badges = [];
+  if (promoMode && promoProductNames.has(product.name)) badges.push('<span class="badge">Promotion</span>');
+  if (product.promo_active) badges.push('<span class="badge">Promo</span>');
   if (product.nouveaute) badges.push('<span class="badge">Nouveaute</span>');
   if (product.extra.includes("Polarisant")) badges.push('<span class="badge">Polarisant</span>');
   badges.push(`<span class="badge">${product.couleur}</span>`);
@@ -1381,7 +1464,7 @@ function cardTemplate(product) {
         <h3 class="product-name">${product.name}</h3>
         <p class="product-meta">${product.genre} | ${product.forme} | ${product.matiere}</p>
         <p class="product-colors">${product.colors} couleurs</p>
-        <p class="product-price">Des ${product.price.toFixed(2)} DH</p>
+        <p class="product-price ${product.promo_active ? "is-promo" : ""}">${productPriceMarkup(product, { prefix: "Des " })}</p>
         <p class="product-availability ${availabilityClass}">${availabilityLabel(product, stock)}</p>
         <button class="product-link tryon-link" type="button" data-try-product="${product.id}">Essayer en ligne</button>
       </div>

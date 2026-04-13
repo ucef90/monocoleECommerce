@@ -31,12 +31,19 @@ function parseJsonSafe(value, fallback) {
 function normalizeProduct(row) {
   if (!row) return null;
   const extrasRaw = row.extra_json ?? row.extra ?? '[]';
+  const basePrice = Number(row.base_price ?? row.price) || 0;
+  const promoPrice = Number(row.promo_price) || 0;
+  const promoActive = typeof row.promo_active === 'boolean' ? row.promo_active : Number(row.promo_active) === 1;
+  const effectivePrice = promoActive && promoPrice > 0 ? promoPrice : basePrice;
   return {
     id: Number(row.id),
     slug: String(row.slug),
     title: String(row.title),
     description: String(row.description || ''),
-    price: Number(row.price) || 0,
+    price: effectivePrice,
+    base_price: basePrice,
+    promo_price: promoPrice,
+    promo_active: promoActive,
     currency: String(row.currency || 'DH'),
     image_url: String(row.image_url || ''),
     gallery: Array.isArray(row.gallery)
@@ -92,12 +99,12 @@ function buildCmsService(dbConn, env) {
     const getProductStmt = db.prepare('SELECT * FROM products WHERE id = ?');
     const createProductStmt = db.prepare(`
       INSERT INTO products(
-        slug, title, description, price, currency, image_url, gallery_json, category, genre, couleur, forme, matiere, extra_json, sort_order, stock, active, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        slug, title, description, price, base_price, promo_price, promo_active, currency, image_url, gallery_json, category, genre, couleur, forme, matiere, extra_json, sort_order, stock, active, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
     const updateProductStmt = db.prepare(`
       UPDATE products
-      SET slug = ?, title = ?, description = ?, price = ?, currency = ?, image_url = ?, gallery_json = ?, category = ?, genre = ?, couleur = ?, forme = ?, matiere = ?, extra_json = ?, sort_order = ?, stock = ?, active = ?, updated_at = ?
+      SET slug = ?, title = ?, description = ?, price = ?, base_price = ?, promo_price = ?, promo_active = ?, currency = ?, image_url = ?, gallery_json = ?, category = ?, genre = ?, couleur = ?, forme = ?, matiere = ?, extra_json = ?, sort_order = ?, stock = ?, active = ?, updated_at = ?
       WHERE id = ?
     `);
     const deleteProductStmt = db.prepare('DELETE FROM products WHERE id = ?');
@@ -134,6 +141,10 @@ function buildCmsService(dbConn, env) {
 
       const gallery = Array.isArray(payload.gallery) ? payload.gallery : [];
       const extra = Array.isArray(payload.extra) ? payload.extra : [];
+      const basePrice = Math.max(0, Number(payload.base_price ?? payload.price) || 0);
+      const promoPrice = Math.max(0, Number(payload.promo_price) || 0);
+      const promoActive = !!payload.promo_active && promoPrice > 0;
+      const effectivePrice = promoActive ? promoPrice : basePrice;
       const maxSort = maxSortOrderStmt.get();
       const nextSort = Number(payload.sort_order);
       const sortOrder = Number.isFinite(nextSort) && nextSort > 0
@@ -144,7 +155,10 @@ function buildCmsService(dbConn, env) {
           slug,
           title,
           String(payload.description || ''),
-          Number(payload.price) || 0,
+          effectivePrice,
+          basePrice,
+          promoPrice,
+          promoActive ? 1 : 0,
           String(payload.currency || 'DH'),
           String(payload.image_url || ''),
           JSON.stringify(gallery),
@@ -176,7 +190,9 @@ function buildCmsService(dbConn, env) {
         slug: safeSlug(payload.slug ?? current.slug),
         title: String(payload.title ?? current.title).trim(),
         description: String(payload.description ?? current.description ?? ''),
-        price: Number(payload.price ?? current.price) || 0,
+        base_price: Math.max(0, Number(payload.base_price ?? current.base_price ?? current.price) || 0),
+        promo_price: Math.max(0, Number(payload.promo_price ?? current.promo_price) || 0),
+        promo_active: payload.promo_active === undefined ? (typeof current.promo_active === 'boolean' ? current.promo_active : Number(current.promo_active) === 1) : !!payload.promo_active,
         currency: String(payload.currency ?? current.currency ?? 'DH'),
         image_url: String(payload.image_url ?? current.image_url ?? ''),
         gallery_json: JSON.stringify(Array.isArray(payload.gallery) ? payload.gallery : parseJsonSafe(current.gallery_json || '[]', [])),
@@ -191,6 +207,8 @@ function buildCmsService(dbConn, env) {
         active: payload.active === undefined ? current.active : (payload.active ? 1 : 0),
         updated_at: new Date().toISOString()
       };
+      next.promo_active = !!next.promo_active && next.promo_price > 0;
+      next.price = next.promo_active ? next.promo_price : next.base_price;
 
       try {
         updateProductStmt.run(
@@ -198,6 +216,9 @@ function buildCmsService(dbConn, env) {
           next.title,
           next.description,
           next.price,
+          next.base_price,
+          next.promo_price,
+          next.promo_active ? 1 : 0,
           next.currency,
           next.image_url,
           next.gallery_json,
@@ -330,14 +351,22 @@ function buildCmsService(dbConn, env) {
       try {
         const res = await pool.query(
           `INSERT INTO products(
-            slug, title, description, price, currency, image_url, gallery_json, category, genre, couleur, forme, matiere, extra_json, sort_order, stock, active, created_at, updated_at
-          ) VALUES($1,$2,$3,$4,$5,$6,$7::jsonb,$8,$9,$10,$11,$12,$13::jsonb,$14,$15,$16,$17::timestamptz,$18::timestamptz)
+            slug, title, description, price, base_price, promo_price, promo_active, currency, image_url, gallery_json, category, genre, couleur, forme, matiere, extra_json, sort_order, stock, active, created_at, updated_at
+          ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10::jsonb,$11,$12,$13,$14,$15,$16::jsonb,$17,$18,$19,$20::timestamptz,$21::timestamptz)
           RETURNING *`,
           [
             slug,
             title,
             String(payload.description || ''),
-            Number(payload.price) || 0,
+            (() => {
+              const basePrice = Math.max(0, Number(payload.base_price ?? payload.price) || 0);
+              const promoPrice = Math.max(0, Number(payload.promo_price) || 0);
+              const promoActive = !!payload.promo_active && promoPrice > 0;
+              return promoActive ? promoPrice : basePrice;
+            })(),
+            Math.max(0, Number(payload.base_price ?? payload.price) || 0),
+            Math.max(0, Number(payload.promo_price) || 0),
+            !!payload.promo_active && Math.max(0, Number(payload.promo_price) || 0) > 0,
             String(payload.currency || 'DH'),
             String(payload.image_url || ''),
             JSON.stringify(gallery),
@@ -370,7 +399,9 @@ function buildCmsService(dbConn, env) {
         slug: safeSlug(payload.slug ?? current.slug),
         title: String(payload.title ?? current.title).trim(),
         description: String(payload.description ?? current.description ?? ''),
-        price: Number(payload.price ?? current.price) || 0,
+        base_price: Math.max(0, Number(payload.base_price ?? current.base_price ?? current.price) || 0),
+        promo_price: Math.max(0, Number(payload.promo_price ?? current.promo_price) || 0),
+        promo_active: payload.promo_active === undefined ? !!current.promo_active : !!payload.promo_active,
         currency: String(payload.currency ?? current.currency ?? 'DH'),
         image_url: String(payload.image_url ?? current.image_url ?? ''),
         gallery_json: JSON.stringify(Array.isArray(payload.gallery) ? payload.gallery : (current.gallery_json || [])),
@@ -385,20 +416,25 @@ function buildCmsService(dbConn, env) {
         active: payload.active === undefined ? current.active : !!payload.active,
         updated_at: new Date().toISOString()
       };
+      next.promo_active = !!next.promo_active && next.promo_price > 0;
+      next.price = next.promo_active ? next.promo_price : next.base_price;
 
       try {
         const res = await pool.query(
           `UPDATE products
-           SET slug = $1, title = $2, description = $3, price = $4, currency = $5, image_url = $6,
-               gallery_json = $7::jsonb, category = $8, genre = $9, couleur = $10, forme = $11, matiere = $12,
-               extra_json = $13::jsonb, sort_order = $14, stock = $15, active = $16, updated_at = $17::timestamptz
-           WHERE id = $18
+           SET slug = $1, title = $2, description = $3, price = $4, base_price = $5, promo_price = $6, promo_active = $7, currency = $8, image_url = $9,
+               gallery_json = $10::jsonb, category = $11, genre = $12, couleur = $13, forme = $14, matiere = $15,
+               extra_json = $16::jsonb, sort_order = $17, stock = $18, active = $19, updated_at = $20::timestamptz
+           WHERE id = $21
            RETURNING *`,
           [
             next.slug,
             next.title,
             next.description,
             next.price,
+            next.base_price,
+            next.promo_price,
+            next.promo_active,
             next.currency,
             next.image_url,
             next.gallery_json,

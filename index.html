@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link id="homeTheme" rel="stylesheet" href="./home-b.css">
+  <link id="homeTheme" rel="stylesheet" href="./home-b.css?v=20260413j">
   <link rel="stylesheet" href="./chat-widget.css">
   <script type="application/ld+json">
     {
@@ -52,32 +52,257 @@
     <a class="brand" href="./index.html" aria-label="Monocle Home">
       <img src="./logo-320.png" alt="Monocle" width="320" height="320">
     </a>
-    <nav>
+    <nav id="siteNav" class="site-nav" aria-label="Navigation principale">
       <a id="homeNavMaison" href="#maison">La Maison</a>
-      <a id="homeNavCustom" href="./sur-mesure.html">Le sur-mesure</a>
+      <a href="./collection.html?category=Solaire">Solaire</a>
+      <a href="./collection.html?category=Optique">Optique</a>
+      <a href="./collection.html">Catalogue</a>
+      <a id="homeNavCollections" href="./collections.html">Collections</a>
       <a id="homeNavAtelier" href="#atelier">Atelier</a>
-      <a id="homeNavCollections" href="./collections.html">Collection</a>
+      <a id="homeNavCustom" href="./sur-mesure.html">Le sur-mesure</a>
     </nav>
-    <a id="homeHeaderCta" class="header-cta" href="./collection.html">Prendre rendez-vous</a>
+    <div class="header-cta-group">
+      <a id="homeHeaderCta" class="header-cta" href="./collection.html">Prendre rendez-vous</a>
+      <button id="mobileMenuToggle" class="mobile-menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
   </header>
 
+  <aside id="mobileMenu" class="mobile-menu" aria-hidden="true">
+    <div class="mobile-menu-panel">
+      <div class="mobile-menu-head">
+        <strong>Monocle</strong>
+        <button id="mobileMenuClose" class="mobile-menu-close" type="button" aria-label="Fermer le menu">×</button>
+      </div>
+      <nav class="mobile-menu-links" aria-label="Navigation mobile">
+        <a href="#maison">Accueil</a>
+        <a href="./collection.html?category=Solaire">Solaire</a>
+        <a href="./collection.html?category=Optique">Optique</a>
+        <a href="./collection.html">Catalogue</a>
+        <a href="./collections.html">Collections</a>
+        <a href="./sur-mesure.html">Sur-mesure</a>
+        <a href="#atelier">Atelier</a>
+      </nav>
+      <div class="mobile-menu-actions">
+        <a class="primary" href="./collection.html">Voir les lunettes</a>
+        <a class="ghost" href="tel:+212661290703">Appeler</a>
+      </div>
+    </div>
+  </aside>
+
   <main>
-    <section class="hero" id="maison">
-      <div class="hero-copy">
-        <p id="homeHeroEyebrow" class="eyebrow">Lunetterie sur mesure</p>
-        <h1 id="homeHeroTitle">Votre opticien a Salé et Kénitra pour des lunettes de vue et solaires bien choisies.</h1>
-        <p id="homeHeroBody" class="intro">
-          Monocle Optique vous accompagne en boutique pour trouver la bonne monture,
-          ajuster votre confort visuel et choisir un style adapte a votre visage,
-          a votre usage quotidien et a votre budget.
-        </p>
-        <div class="hero-actions">
-          <a id="homeHeroCtaPrimary" class="primary" href="./collection.html">Prendre rendez-vous</a>
-          <a id="homeHeroCtaSecondary" class="ghost" href="tel:+212661290703">Appeler maintenant</a>
+    <section class="hero hero-video-shell" id="maison">
+      <div class="hero-video-stage">
+        <img class="hero-mobile-image" src="./hero-home-1280.jpg" alt="Monture Monocle" width="1280" height="853" loading="eager" decoding="async">
+        <video id="homeHeroVideo" class="hero-video" autoplay muted loop playsinline poster="./hero-home-1280.jpg">
+          <source src="./monocle-hero.mp4" type="video/mp4">
+        </video>
+        <div class="hero-video-overlay">
+          <h1 id="homeHeroTitle">Monocle, pour une allure juste et un confort durable.</h1>
+          <div class="hero-actions">
+            <a id="homeHeroCtaPrimary" class="primary" href="./collection.html">Voir les lunettes</a>
+            <a id="homeHeroCtaSecondary" class="ghost hero-ghost-light" href="./sur-mesure.html">Découvrir le sur-mesure</a>
+          </div>
         </div>
       </div>
-      <div class="hero-media">
-        <img id="homeHeroImage" src="./hero-home-1280.jpg" alt="Monture Monocle Optique en presentation" width="1280" height="853" fetchpriority="high">
+    </section>
+
+    <section class="visual-selection visual-selection-compact" aria-label="Selection de lunettes Monocle">
+      <div class="section-heading section-heading-compact">
+        <div>
+          <h2>Trouvez votre prochaine monture et explorez la collection.</h2>
+        </div>
+      </div>
+      <div class="selection-grid">
+        <article class="selection-card" data-home-product="sully-lumiere">
+          <a class="selection-media" href="./collection.html?genre=Femme">
+            <img src="./f_01-sully-1-768x512.jpg" alt="Lunette femme Monocle" width="768" height="512" loading="lazy" decoding="async">
+          </a>
+          <div class="selection-body">
+            <div class="selection-badges">
+              <span class="selection-badge">Nouveaute</span>
+              <span class="selection-badge">Ecaille</span>
+            </div>
+            <h3>Sully Lumiere</h3>
+            <p class="selection-meta">Femme | Papillon | Acetate</p>
+            <p class="selection-colors">4 couleurs</p>
+            <p class="selection-price">Des 1 850 DH</p>
+            <p class="selection-availability is-in">Disponible en boutique</p>
+            <div class="selection-actions">
+              <button class="selection-link selection-link-btn" type="button" data-home-quick="sully-lumiere">Vue rapide</button>
+              <a class="selection-link" href="./collection.html?genre=Femme">Essayer</a>
+            </div>
+          </div>
+        </article>
+        <article class="selection-card" data-home-product="ray-heritage">
+          <a class="selection-media" href="./collection.html?genre=Homme">
+            <img src="./h_01-ray-2-1-768x512.jpg" alt="Lunette homme Monocle" width="768" height="512" loading="lazy" decoding="async">
+          </a>
+          <div class="selection-body">
+            <div class="selection-badges">
+              <span class="selection-badge">Polarisant</span>
+              <span class="selection-badge">Noir</span>
+            </div>
+            <h3>Ray Heritage</h3>
+            <p class="selection-meta">Homme | Pilote | Metal</p>
+            <p class="selection-colors">3 couleurs</p>
+            <p class="selection-price">Des 2 100 DH</p>
+            <p class="selection-availability is-in">Disponible en boutique</p>
+            <div class="selection-actions">
+              <button class="selection-link selection-link-btn" type="button" data-home-quick="ray-heritage">Vue rapide</button>
+              <a class="selection-link" href="./collection.html?genre=Homme">Essayer</a>
+            </div>
+          </div>
+        </article>
+        <article class="selection-card" data-home-product="cordier-signature">
+          <a class="selection-media" href="./collection.html?genre=Unisexe">
+            <img src="./01-cordier-1-768x512.jpg" alt="Lunette collection Monocle" width="768" height="512" loading="lazy" decoding="async">
+          </a>
+          <div class="selection-body">
+            <div class="selection-badges">
+              <span class="selection-badge">Signature</span>
+              <span class="selection-badge">Optique</span>
+            </div>
+            <h3>Cordier Signature</h3>
+            <p class="selection-meta">Unisexe | Ronde | Combine</p>
+            <p class="selection-colors">4 couleurs</p>
+            <p class="selection-price">Des 1 980 DH</p>
+            <p class="selection-availability is-low">Stock limite</p>
+            <div class="selection-actions">
+              <button class="selection-link selection-link-btn" type="button" data-home-quick="cordier-signature">Vue rapide</button>
+              <a class="selection-link" href="./collection.html?genre=Unisexe">Essayer</a>
+            </div>
+          </div>
+        </article>
+        <article class="selection-card" data-home-product="auguste-prime">
+          <a class="selection-media" href="./collection.html?forme=Ronde">
+            <img src="./h_01-auguste-2-768x512.jpg" alt="Lunette solaire Monocle" width="768" height="512" loading="lazy" decoding="async">
+          </a>
+          <div class="selection-body">
+            <div class="selection-badges">
+              <span class="selection-badge">Ronde</span>
+              <span class="selection-badge">Or</span>
+            </div>
+            <h3>Auguste Prime</h3>
+            <p class="selection-meta">Homme | Ronde | Metal</p>
+            <p class="selection-colors">3 couleurs</p>
+            <p class="selection-price">Des 1 750 DH</p>
+            <p class="selection-availability is-in">Disponible en boutique</p>
+            <div class="selection-actions">
+              <button class="selection-link selection-link-btn" type="button" data-home-quick="auguste-prime">Vue rapide</button>
+              <a class="selection-link" href="./collection.html?forme=Ronde">Essayer</a>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="selection-footer selection-footer-compact">
+        <a class="primary" href="./collection.html">Voir toute la collection</a>
+      </div>
+    </section>
+
+    <section id="categories" class="category-hub" aria-label="Catégories Monocle">
+      <div class="section-heading">
+        <p class="section-kicker">Explorer rapidement</p>
+        <h2>Choisissez votre univers en un clic</h2>
+      </div>
+    </section>
+
+    <section class="collections-spotlight" aria-label="Collections homme femme enfant">
+      <div class="collections-spotlight-grid">
+        <a class="collection-panel collection-panel-men" href="./collection.html?genre=Homme">
+          <img src="./h_01-legendre-1-1-768x512.jpg" alt="Collection homme Monocle" width="768" height="512" loading="lazy" decoding="async">
+          <span>Collection Homme</span>
+        </a>
+        <a class="collection-panel collection-panel-women" href="./collection.html?genre=Femme">
+          <img src="./f_01-sully-1-768x512.jpg" alt="Collection femme Monocle" width="768" height="512" loading="lazy" decoding="async">
+          <span>Collection Femme</span>
+        </a>
+        <a class="collection-panel collection-panel-kids" href="./collection.html?genre=Enfant">
+          <img src="./fit_aa_07630629487307_tina_front_sjkvovhpgxpuz832.webp" alt="Collection enfant Monocle" width="600" height="600" loading="lazy" decoding="async">
+          <span>Collection Enfant</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="quick-catalog" aria-label="Sélection visible dès l'accueil">
+      <div class="section-heading quick-catalog-head">
+        <div>
+          <p class="section-kicker">Promotions du moment</p>
+          <h2>Profitez de nos offres sur une sélection de montures Monocle.</h2>
+        </div>
+      </div>
+      <div class="selection-footer selection-footer-compact">
+        <a class="primary" href="./collection.html?promo=1">Voir toutes les promotions</a>
+      </div>
+      <div class="quick-grid">
+        <article class="product-card home-promo-card">
+          <div class="product-media">
+            <img class="product-image" src="/uploads/product-main-1775987883228-f_01-seven-1-1-768x512.jpg" alt="Monture femme Monocle en promotion" loading="lazy" decoding="async">
+            <a class="quick-view home-promo-cta" href="./collection.html?promo=1&q=Kaleos">Voir l'offre</a>
+          </div>
+          <div class="product-body">
+            <div class="badges">
+              <span class="badge">Promotion</span>
+              <span class="badge">Femme</span>
+            </div>
+            <h3 class="product-name">Kaleos</h3>
+            <p class="product-meta">Femme | Ronde | Acetate</p>
+            <p class="product-colors">3 couleurs</p>
+            <p class="product-price is-promo">Des <span class="price-original">DH 1 000.00</span><span class="price-current">DH 850.00</span></p>
+            <p class="product-availability is-low">Stock limite</p>
+            <a class="product-link" href="./collection.html?promo=1&q=Kaleos">Essayer en ligne</a>
+          </div>
+        </article>
+        <article class="product-card home-promo-card">
+          <div class="product-media">
+            <img class="product-image" src="./h_01-ray-2-1-768x512.jpg" alt="Monture homme Monocle en promotion" loading="lazy" decoding="async">
+            <a class="quick-view home-promo-cta" href="./collection.html?promo=1&q=Jet%20Line">Voir l'offre</a>
+          </div>
+          <div class="product-body">
+            <div class="badges">
+              <span class="badge">Promotion</span>
+              <span class="badge">Polarisant</span>
+            </div>
+            <h3 class="product-name">Jet Line</h3>
+            <p class="product-meta">Homme | Pilote | Metal</p>
+            <p class="product-colors">2 couleurs</p>
+            <p class="product-price is-promo">Des <span class="price-original">DH 190.00</span><span class="price-current">DH 160.00</span></p>
+            <p class="product-availability is-in">Disponible en boutique</p>
+            <a class="product-link" href="./collection.html?promo=1&q=Jet%20Line">Essayer en ligne</a>
+          </div>
+        </article>
+        <article class="product-card home-promo-card">
+          <div class="product-media">
+            <img class="product-image" src="./f_01-sully-1-768x512.jpg" alt="Monture femme Monocle en promotion" loading="lazy" decoding="async">
+            <a class="quick-view home-promo-cta" href="./collection.html?promo=1&q=Liquid%20Velvet">Voir l'offre</a>
+          </div>
+          <div class="product-body">
+            <div class="badges">
+              <span class="badge">Promotion</span>
+              <span class="badge">Papillon</span>
+            </div>
+            <h3 class="product-name">Liquid Velvet</h3>
+            <p class="product-meta">Femme | Papillon | Metal</p>
+            <p class="product-colors">2 couleurs</p>
+            <p class="product-price is-promo">Des <span class="price-original">DH 210.00</span><span class="price-current">DH 180.00</span></p>
+            <p class="product-availability is-in">Disponible en boutique</p>
+            <a class="product-link" href="./collection.html?promo=1&q=Liquid%20Velvet">Essayer en ligne</a>
+          </div>
+        </article>
+        <article class="quick-card quick-card-callout">
+          <div class="quick-card-body">
+            <p class="quick-card-tag">Offres en boutique</p>
+            <h3>Découvrez nos montures en promotion avant la prochaine sélection.</h3>
+            <p class="quick-card-copy">Passez par la collection pour voir les offres disponibles ou contactez la boutique pour vérifier les modèles encore en stock.</p>
+            <div class="quick-card-actions">
+              <a class="primary" href="./collection.html?promo=1">Voir les promotions</a>
+              <a class="ghost" href="tel:+212661290703">Appeler</a>
+            </div>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -96,31 +321,6 @@
         <p id="homeContactHoursLabel" class="mini-note">Horaires</p>
         <strong id="homeContactHoursTitle">Lun-ven 10:00-20:30 · Sam 10:00-19:00</strong>
         <span id="homeContactHoursBody">Dimanche ferme pour garder un service en boutique plus qualitatif le reste de la semaine.</span>
-      </article>
-    </section>
-
-    <section class="quote-block">
-      <p id="homeQuoteText">
-        Quelques idees de montures, mais la votre reste a creer.
-      </p>
-    </section>
-
-    <section class="signature-grid" id="surmesure">
-      <article>
-        <img src="./h_01-legendre-1-1-768x512.jpg" alt="Monture Legendre" width="768" height="512" loading="lazy" decoding="async">
-        <h3>Legendre</h3>
-      </article>
-      <article>
-        <img src="./f_01-sully-1-768x512.jpg" alt="Monture Sully" width="768" height="512" loading="lazy" decoding="async">
-        <h3>Stuart</h3>
-      </article>
-      <article>
-        <img src="./h_01-ray-2-1-768x512.jpg" alt="Monture Ray" width="768" height="512" loading="lazy" decoding="async">
-        <h3>Ray</h3>
-      </article>
-      <article>
-        <img src="./h_01-auguste-2-768x512.jpg" alt="Monture Auguste" width="768" height="512" loading="lazy" decoding="async">
-        <h3>Auguste</h3>
       </article>
     </section>
 
@@ -195,11 +395,95 @@
     <p id="homeFooterText">MONOCLE OPTIQUE · Salé & Kénitra</p>
   </footer>
 
+  <div id="homeQuickViewModal" class="home-quickview-modal" aria-hidden="true">
+    <div class="home-quickview-backdrop" data-home-quick-close="1"></div>
+    <section class="home-quickview-panel" role="dialog" aria-modal="true" aria-labelledby="homeQvTitle">
+      <button id="homeQvClose" class="home-quickview-close" type="button" aria-label="Fermer">×</button>
+      <div class="home-quickview-media">
+        <button id="homeQvZoom" class="home-quickview-zoom" type="button" aria-label="Voir l'image en grand">Plein ecran</button>
+        <div class="home-quickview-image-stage">
+          <img id="homeQvImage" src="" alt="Produit">
+        </div>
+        <div id="homeQvThumbs" class="home-quickview-thumbs" aria-label="Autres vues du produit"></div>
+      </div>
+      <div class="home-quickview-content">
+        <p id="homeQvBadge" class="home-quickview-badge"></p>
+        <h2 id="homeQvTitle"></h2>
+        <p id="homeQvMeta" class="home-quickview-meta"></p>
+        <p id="homeQvStock" class="home-quickview-stock"></p>
+        <p id="homeQvPrice" class="home-quickview-price"></p>
+
+        <div class="home-quickview-group">
+          <p>Couleur</p>
+          <div id="homeQvColors" class="home-option-row"></div>
+        </div>
+
+        <div class="home-quickview-group">
+          <p>Taille</p>
+          <div id="homeQvSizes" class="home-option-row"></div>
+        </div>
+
+        <div class="home-quickview-actions">
+          <a id="homeQvExplore" class="primary" href="./collection.html">Voir dans la collection</a>
+          <a id="homeQvTry" class="ghost" href="./collection.html">Essayer</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="homeQvLightbox" class="home-qv-lightbox" aria-hidden="true">
+    <div class="home-qv-lightbox-backdrop" data-home-lightbox-close="1"></div>
+    <section class="home-qv-lightbox-panel" role="dialog" aria-modal="true" aria-label="Image produit en grand">
+      <button id="homeQvLightboxPrev" class="home-qv-lightbox-nav prev" type="button" aria-label="Photo précédente">‹</button>
+      <button id="homeQvLightboxNext" class="home-qv-lightbox-nav next" type="button" aria-label="Photo suivante">›</button>
+      <button id="homeQvLightboxClose" class="home-qv-lightbox-close" type="button" aria-label="Fermer l'image">×</button>
+      <img id="homeQvLightboxImage" src="" alt="Produit en grand">
+    </section>
+  </div>
+
   <div class="qa-switch" aria-label="Comparaison visuelle A/B">
     <span>QA</span>
     <a id="qaA" href="?v=a">A</a>
     <a id="qaB" href="?v=b">B</a>
   </div>
+
+  <script>
+    (function () {
+      const toggle = document.getElementById("mobileMenuToggle");
+      const closeBtn = document.getElementById("mobileMenuClose");
+      const menu = document.getElementById("mobileMenu");
+      if (!toggle || !closeBtn || !menu) return;
+
+      function setMenu(open) {
+        menu.classList.toggle("open", open);
+        menu.setAttribute("aria-hidden", open ? "false" : "true");
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        document.body.classList.toggle("menu-open", open);
+      }
+
+      toggle.addEventListener("click", function () {
+        setMenu(!menu.classList.contains("open"));
+      });
+
+      closeBtn.addEventListener("click", function () {
+        setMenu(false);
+      });
+
+      menu.addEventListener("click", function (event) {
+        if (event.target === menu) setMenu(false);
+      });
+
+      menu.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          setMenu(false);
+        });
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") setMenu(false);
+      });
+    })();
+  </script>
 
   <script>
     (function () {
@@ -213,6 +497,295 @@
         qaA.classList.toggle("active", variant === "a");
         qaB.classList.toggle("active", variant === "b");
       }
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const homeProducts = {
+        "sully-lumiere": {
+          id: "sully-lumiere",
+          name: "Sully Lumiere",
+          badge: "Nouveaute",
+          genre: "Femme",
+          forme: "Papillon",
+          matiere: "Acetate",
+          stockLabel: "Disponible en boutique",
+          stockClass: "is-in",
+          basePrice: 2150,
+          promoPrice: 1850,
+          promoActive: true,
+          colors: ["Ecaille miel", "Noir brillant", "Rose fumee", "Sable dore"],
+          sizes: ["49-20", "51-20"],
+          images: [
+            "./f_01-sully-1-768x512.jpg",
+            "./f_01-seven-1-1-768x512.jpg",
+            "./mb-seven.jpg"
+          ],
+          collectionHref: "./collection.html?genre=Femme"
+        },
+        "ray-heritage": {
+          id: "ray-heritage",
+          name: "Ray Heritage",
+          badge: "Polarisant",
+          genre: "Homme",
+          forme: "Pilote",
+          matiere: "Metal",
+          stockLabel: "Disponible en boutique",
+          stockClass: "is-in",
+          basePrice: 2450,
+          promoPrice: 2100,
+          promoActive: true,
+          colors: ["Noir mat", "Gun metal", "Vert bouteille"],
+          sizes: ["55-17", "58-17"],
+          images: [
+            "./h_01-ray-2-1-768x512.jpg",
+            "./01-cordier-1-768x512.jpg",
+            "./h_01-legendre-1-1-768x512.jpg"
+          ],
+          collectionHref: "./collection.html?genre=Homme"
+        },
+        "cordier-signature": {
+          id: "cordier-signature",
+          name: "Cordier Signature",
+          badge: "Signature",
+          genre: "Unisexe",
+          forme: "Ronde",
+          matiere: "Combine",
+          stockLabel: "Stock limite",
+          stockClass: "is-low",
+          basePrice: 2280,
+          promoPrice: 1980,
+          promoActive: true,
+          colors: ["Ecaille ambre", "Noir satin", "Transparent fumee", "Miel profond"],
+          sizes: ["47-22", "49-22"],
+          images: [
+            "./01-cordier-1-768x512.jpg",
+            "./f_01-clifford-1-768x512.jpg",
+            "./mb-catch.jpg"
+          ],
+          collectionHref: "./collection.html?genre=Unisexe"
+        },
+        "auguste-prime": {
+          id: "auguste-prime",
+          name: "Auguste Prime",
+          badge: "Ronde",
+          genre: "Homme",
+          forme: "Ronde",
+          matiere: "Metal",
+          stockLabel: "Disponible en boutique",
+          stockClass: "is-in",
+          basePrice: 1750,
+          promoPrice: 0,
+          promoActive: false,
+          colors: ["Or brosse", "Noir profond", "Bronze clair"],
+          sizes: ["48-21", "50-21"],
+          images: [
+            "./h_01-auguste-2-768x512.jpg",
+            "./mb-aria.jpg",
+            "./mb-lorenzo.jpg"
+          ],
+          collectionHref: "./collection.html?forme=Ronde"
+        }
+      };
+
+      const state = {
+        productId: null,
+        imageIndex: 0,
+        activeColor: "",
+        activeSize: ""
+      };
+
+      const modal = document.getElementById("homeQuickViewModal");
+      const closeBtn = document.getElementById("homeQvClose");
+      const zoomBtn = document.getElementById("homeQvZoom");
+      const image = document.getElementById("homeQvImage");
+      const thumbs = document.getElementById("homeQvThumbs");
+      const badge = document.getElementById("homeQvBadge");
+      const title = document.getElementById("homeQvTitle");
+      const meta = document.getElementById("homeQvMeta");
+      const stock = document.getElementById("homeQvStock");
+      const price = document.getElementById("homeQvPrice");
+      const colors = document.getElementById("homeQvColors");
+      const sizes = document.getElementById("homeQvSizes");
+      const explore = document.getElementById("homeQvExplore");
+      const tryLink = document.getElementById("homeQvTry");
+      const lightbox = document.getElementById("homeQvLightbox");
+      const lightboxImage = document.getElementById("homeQvLightboxImage");
+      const lightboxPrev = document.getElementById("homeQvLightboxPrev");
+      const lightboxNext = document.getElementById("homeQvLightboxNext");
+      const lightboxClose = document.getElementById("homeQvLightboxClose");
+      const quickButtons = Array.from(document.querySelectorAll("[data-home-quick]"));
+
+      if (
+        !modal || !closeBtn || !zoomBtn || !image || !thumbs || !badge || !title || !meta ||
+        !stock || !price || !colors || !sizes || !explore || !tryLink ||
+        !lightbox || !lightboxImage || !lightboxPrev || !lightboxNext || !lightboxClose ||
+        !quickButtons.length
+      ) return;
+
+      function getCurrentProduct() {
+        return homeProducts[state.productId] || null;
+      }
+
+      function renderOptions(container, options, activeValue, type) {
+        container.innerHTML = options.map(function (option) {
+          const activeClass = option === activeValue ? "active" : "";
+          return '<button class="home-option-btn ' + activeClass + '" type="button" data-home-option="' + type + '" data-home-value="' + option + '">' + option + "</button>";
+        }).join("");
+      }
+
+      function renderImage() {
+        const product = getCurrentProduct();
+        if (!product) return;
+        const src = product.images[state.imageIndex] || product.images[0] || "";
+        image.src = src;
+        image.alt = product.name;
+        lightboxImage.src = src;
+        lightboxImage.alt = product.name + " en grand";
+        thumbs.innerHTML = product.images.map(function (srcItem, index) {
+          const activeClass = index === state.imageIndex ? "active" : "";
+          return '<button class="home-quickview-thumb ' + activeClass + '" type="button" data-thumb-index="' + index + '" aria-label="Voir la photo ' + (index + 1) + '"><img src="' + srcItem + '" alt="Vue ' + (index + 1) + '"></button>';
+        }).join("");
+      }
+
+      function shiftImage(step) {
+        const product = getCurrentProduct();
+        if (!product || !product.images.length) return;
+        const total = product.images.length;
+        state.imageIndex = (state.imageIndex + step + total) % total;
+        renderImage();
+      }
+
+      function openLightbox() {
+        if (!getCurrentProduct()) return;
+        lightbox.setAttribute("aria-hidden", "false");
+        document.body.classList.add("home-qv-lightbox-open");
+      }
+
+      function closeLightbox() {
+        lightbox.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("home-qv-lightbox-open");
+      }
+
+      function formatHomePrice(product) {
+        const basePrice = Number(product.basePrice || 0);
+        const promoPrice = Number(product.promoPrice || 0);
+        const promoActive = !!product.promoActive && promoPrice > 0;
+        if (promoActive) {
+          return '<span class="price-original">DH ' + basePrice.toFixed(2) + '</span><span class="price-current">DH ' + promoPrice.toFixed(2) + '</span>';
+        }
+        return '<span class="price-current">DH ' + basePrice.toFixed(2) + '</span>';
+      }
+
+      function openQuickView(productId) {
+        const product = homeProducts[productId];
+        if (!product) return;
+
+        state.productId = productId;
+        state.imageIndex = 0;
+        state.activeColor = product.colors[0] || "";
+        state.activeSize = product.sizes[0] || "";
+
+        badge.textContent = product.badge || "";
+        badge.style.display = product.badge ? "inline-block" : "none";
+        title.textContent = product.name;
+        meta.textContent = [product.genre, product.forme, product.matiere].filter(Boolean).join(" | ");
+        stock.textContent = product.stockLabel;
+        stock.className = "home-quickview-stock " + (product.stockClass || "");
+        price.className = 'home-quickview-price ' + (product.promoActive ? 'is-promo' : '');
+        price.innerHTML = formatHomePrice(product);
+        explore.setAttribute("href", product.collectionHref);
+        tryLink.setAttribute("href", product.collectionHref);
+
+        renderOptions(colors, product.colors, state.activeColor, "color");
+        renderOptions(sizes, product.sizes, state.activeSize, "size");
+        renderImage();
+
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("home-quickview-open");
+      }
+
+      function closeQuickView() {
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("home-quickview-open");
+        closeLightbox();
+      }
+
+      quickButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          openQuickView(button.getAttribute("data-home-quick"));
+        });
+      });
+
+      modal.addEventListener("click", function (event) {
+        const closeTrigger = event.target.closest("[data-home-quick-close]");
+        const thumbButton = event.target.closest("[data-thumb-index]");
+        const optionButton = event.target.closest("[data-home-option]");
+
+        if (closeTrigger) {
+          closeQuickView();
+          return;
+        }
+
+        if (thumbButton) {
+          state.imageIndex = Number(thumbButton.getAttribute("data-thumb-index")) || 0;
+          renderImage();
+          return;
+        }
+
+        if (optionButton) {
+          const type = optionButton.getAttribute("data-home-option");
+          const value = optionButton.getAttribute("data-home-value") || "";
+          const product = getCurrentProduct();
+          if (!product) return;
+          if (type === "color") {
+            state.activeColor = value;
+            renderOptions(colors, product.colors, state.activeColor, "color");
+          }
+          if (type === "size") {
+            state.activeSize = value;
+            renderOptions(sizes, product.sizes, state.activeSize, "size");
+          }
+        }
+      });
+
+      closeBtn.addEventListener("click", closeQuickView);
+      zoomBtn.addEventListener("click", openLightbox);
+      image.addEventListener("click", openLightbox);
+
+      lightbox.addEventListener("click", function (event) {
+        if (event.target.closest("[data-home-lightbox-close]")) {
+          closeLightbox();
+        }
+      });
+
+      lightboxClose.addEventListener("click", closeLightbox);
+      lightboxPrev.addEventListener("click", function () {
+        shiftImage(-1);
+      });
+      lightboxNext.addEventListener("click", function () {
+        shiftImage(1);
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (modal.getAttribute("aria-hidden") === "false" && event.key === "Escape") {
+          if (lightbox.getAttribute("aria-hidden") === "false") {
+            closeLightbox();
+            return;
+          }
+          closeQuickView();
+          return;
+        }
+
+        if (lightbox.getAttribute("aria-hidden") === "false" && event.key === "ArrowLeft") {
+          shiftImage(-1);
+        }
+
+        if (lightbox.getAttribute("aria-hidden") === "false" && event.key === "ArrowRight") {
+          shiftImage(1);
+        }
+      });
     })();
   </script>
 

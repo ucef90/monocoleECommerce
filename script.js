@@ -1367,7 +1367,7 @@ function readInitialFiltersFromUrl() {
 function updateCollectionHeroMedia() {
   if (!collectionHeroMedia) return;
   const genre = selectedValues("genre");
-  const showMenVideo = genre.length === 1 && genre[0] === "Homme";
+  const showMenVideo = true;
   collectionHeroMedia.hidden = !showMenVideo;
 
   if (!collectionHeroVideo) return;

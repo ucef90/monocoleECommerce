@@ -1902,6 +1902,20 @@ body.checkout-open {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .product-image {
+    height: 176px;
+    object-fit: contain;
+    object-position: center;
+    background: #f5efe6;
+    padding: 8px;
+  }
+
+  .quick-view {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
+  }
+
   .quickview-panel {
     grid-template-columns: 1fr;
     width: min(96vw, 640px);
@@ -2029,6 +2043,21 @@ body.checkout-open {
 
   .products-grid {
     grid-template-columns: 1fr;
+  }
+
+  .product-image {
+    height: 188px;
+    padding: 8px;
+  }
+
+  .product-body {
+    padding: 10px 10px 12px;
+  }
+
+  .quick-view {
+    font-size: 0.68rem;
+    padding: 7px 12px;
+    bottom: 8px;
   }
 
   .collection-shortcut {

@@ -14,11 +14,11 @@
   <link rel="stylesheet" href="./chat-widget.css">
   <style>
     :root {
-      --bg: #f5f7fa;
-      --panel: #ffffff;
-      --text: #101114;
-      --muted: #5d6673;
-      --line: #dfe5ec;
+      --bg: #f5f2ec;
+      --panel: #fffdf9;
+      --text: #161618;
+      --muted: #6a645d;
+      --line: #ddd5ca;
       --strong: #111214;
     }
 
@@ -28,7 +28,9 @@
       margin: 0;
       font-family: "Source Sans 3", sans-serif;
       color: var(--text);
-      background: var(--bg);
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.9), transparent 34%),
+        linear-gradient(180deg, #f7f4ef 0%, #f3eee7 100%);
     }
 
     .topbar {
@@ -49,10 +51,10 @@
       grid-template-columns: auto 1fr auto;
       gap: 18px;
       align-items: center;
-      background: rgba(255, 255, 255, 0.96);
+      background: rgba(247, 244, 239, 0.92);
       border-bottom: 1px solid var(--line);
-      padding: 12px 24px;
-      backdrop-filter: blur(8px);
+      padding: 16px 34px;
+      backdrop-filter: blur(12px);
     }
 
     .brand img {
@@ -74,10 +76,8 @@
     nav a {
       text-decoration: none;
       color: var(--muted);
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
+      font-size: 0.98rem;
+      font-weight: 600;
     }
 
     nav a.active,
@@ -86,15 +86,106 @@
     .cta {
       border: 1px solid var(--strong);
       background: var(--strong);
-      color: #f8f9fb;
+      color: #fff;
       text-decoration: none;
       border-radius: 999px;
-      padding: 9px 14px;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      padding: 12px 18px;
+      font-size: 0.92rem;
       font-weight: 700;
       white-space: nowrap;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid rgba(23, 23, 26, 0.18);
+      background: #fff;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      width: 18px;
+      height: 2px;
+      border-radius: 999px;
+      background: #111214;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 45;
+      display: none;
+      background: rgba(10, 10, 12, 0.42);
+    }
+
+    .mobile-menu.open {
+      display: block;
+    }
+
+    .mobile-menu-panel {
+      width: min(92vw, 360px);
+      height: 100%;
+      margin-left: auto;
+      background: #fffdf9;
+      padding: 20px;
+      display: grid;
+      align-content: start;
+      gap: 20px;
+      box-shadow: -12px 0 36px rgba(16, 17, 20, 0.16);
+    }
+
+    .mobile-menu-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mobile-menu-head strong {
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+    }
+
+    .mobile-menu-close {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid rgba(23, 23, 26, 0.16);
+      background: #fff;
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .mobile-menu-links {
+      display: grid;
+      gap: 6px;
+    }
+
+    .mobile-menu-links a {
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(23, 23, 26, 0.08);
+      color: var(--text);
+    }
+
+    .mobile-menu-actions {
+      display: grid;
+      gap: 10px;
     }
 
     main {
@@ -107,8 +198,9 @@
       border: 1px solid var(--line);
       border-radius: 16px;
       overflow: hidden;
-      background: var(--panel);
+      background: rgba(255, 253, 249, 0.86);
       margin-bottom: 24px;
+      box-shadow: 0 22px 50px rgba(16, 17, 20, 0.06);
     }
 
     .hero img {
@@ -145,7 +237,7 @@
 
     .hero-copy p {
       margin: 0;
-      color: #424c5b;
+      color: #4d4842;
       line-height: 1.7;
       max-width: 85ch;
     }
@@ -175,9 +267,9 @@
     }
 
     .btn.ghost {
-      border: 1px solid #cfd6e0;
+      border: 1px solid rgba(23, 23, 26, 0.22);
       background: #fff;
-      color: #2f3846;
+      color: #2f2b27;
     }
 
     .grid {
@@ -191,6 +283,7 @@
       border-radius: 12px;
       background: var(--panel);
       overflow: hidden;
+      box-shadow: 0 12px 28px rgba(16, 17, 20, 0.05);
     }
 
     .card-link {
@@ -238,9 +331,25 @@
 
     @media (max-width: 760px) {
       .site-header {
-        grid-template-columns: 1fr;
-        justify-items: center;
-        text-align: center;
+        grid-template-columns: auto 1fr auto;
+        justify-items: stretch;
+        text-align: left;
+        gap: 14px;
+        padding: 14px 18px;
+      }
+
+      nav,
+      .header-actions .cta {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: inline-flex;
+      }
+
+      .brand img {
+        max-width: 190px;
+        max-height: 58px;
       }
 
       .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -263,8 +372,36 @@
       <a id="colsNavSolar" href="./collection.html">Solaire</a>
       <a class="active" href="./collections.html">Collections</a>
     </nav>
-    <a id="colsHeaderCta" class="cta" href="tel:+212661290703">Appeler</a>
+    <div class="header-actions">
+      <a id="colsHeaderCta" class="cta" href="tel:+212661290703">Appeler</a>
+      <button id="colsMenuToggle" class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="colsMobileMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
   </header>
+
+  <aside id="colsMobileMenu" class="mobile-menu" aria-hidden="true">
+    <div class="mobile-menu-panel">
+      <div class="mobile-menu-head">
+        <strong>Monocle</strong>
+        <button id="colsMenuClose" class="mobile-menu-close" type="button" aria-label="Fermer le menu">×</button>
+      </div>
+      <nav class="mobile-menu-links" aria-label="Navigation collections">
+        <a href="./index.html">La Maison</a>
+        <a href="./collection.html?category=Solaire">Solaire</a>
+        <a href="./collection.html?category=Optique">Optique</a>
+        <a href="./collection.html">Catalogue</a>
+        <a href="./collections.html">Collections</a>
+        <a href="./sur-mesure.html">Sur-mesure</a>
+      </nav>
+      <div class="mobile-menu-actions">
+        <a class="cta" href="./collection.html">Voir le catalogue</a>
+        <a class="cta" href="tel:+212661290703">Appeler</a>
+      </div>
+    </div>
+  </aside>
 
   <main>
     <section class="hero">
@@ -342,8 +479,37 @@
 
   <script>
     (async function () {
+      const menu = document.getElementById("colsMobileMenu");
+      const menuToggle = document.getElementById("colsMenuToggle");
+      const menuClose = document.getElementById("colsMenuClose");
       const grid = document.getElementById("collectionsGrid");
       if (!grid) return;
+
+      function setMenu(open) {
+        if (!menu || !menuToggle) return;
+        menu.classList.toggle("open", open);
+        menu.setAttribute("aria-hidden", open ? "false" : "true");
+        menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
+        document.body.style.overflow = open ? "hidden" : "";
+      }
+
+      if (menuToggle) {
+        menuToggle.addEventListener("click", function () {
+          setMenu(!menu.classList.contains("open"));
+        });
+      }
+
+      if (menuClose) {
+        menuClose.addEventListener("click", function () {
+          setMenu(false);
+        });
+      }
+
+      if (menu) {
+        menu.addEventListener("click", function (event) {
+          if (event.target === menu) setMenu(false);
+        });
+      }
 
       function buildHref(row) {
         const params = new URLSearchParams();

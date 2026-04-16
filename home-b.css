@@ -8,6 +8,7 @@
   --ink: #17171a;
   --accent: #d8b07b;
   --accent-soft: #f3e5d2;
+  --nav-active: #2f6bff;
 }
 
 * {
@@ -83,6 +84,11 @@ a {
 
 .site-nav a:hover {
   color: #111214;
+}
+
+.site-nav a.is-active,
+.mobile-menu-links a.is-active {
+  color: var(--nav-active);
 }
 
 .header-cta-group {
@@ -204,6 +210,7 @@ a {
   font-weight: 700;
   padding: 12px 0;
   border-bottom: 1px solid rgba(23, 23, 26, 0.08);
+  color: #161618;
 }
 
 .mobile-menu-actions {

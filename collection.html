@@ -21,13 +21,11 @@
       <img src="./logo-320.png" alt="Monocle" width="320" height="320">
     </a>
     <nav class="collection-nav">
-      <a id="colNavHome" href="./index.html">La Maison</a>
-      <a href="./collection.html?category=Solaire">Solaire</a>
-      <a href="./collection.html?category=Optique">Optique</a>
-      <a id="colNavCustom" href="./sur-mesure.html">Le sur-mesure</a>
-      <a class="active" href="./collection.html">Catalogue</a>
-      <a id="colNavCollections" href="./collections.html">Collections</a>
-      <a id="colNavAtelier" href="./index.html#atelier">Ateliers</a>
+      <a id="colNavHome" data-nav="home" href="./index.html">La Maison</a>
+      <a data-nav="solaire" href="./collection.html?category=Solaire">Solaire</a>
+      <a data-nav="optique" href="./collection.html?category=Optique">Optique</a>
+      <a id="colNavCollections" data-nav="collections" href="./collections.html">Collections</a>
+      <a id="colNavAtelier" data-nav="atelier" href="./index.html#atelier">Atelier</a>
     </nav>
     <div class="header-actions">
       <button id="colHeaderCta" class="header-cta">Prendre rendez-vous</button>
@@ -50,13 +48,11 @@
         <button id="collectionMenuClose" class="collection-mobile-close" type="button" aria-label="Fermer le menu">×</button>
       </div>
       <nav class="collection-mobile-links" aria-label="Navigation collection">
-        <a id="colNavMobileHome" href="./index.html">La Maison</a>
-        <a href="./collection.html?category=Solaire">Solaire</a>
-        <a href="./collection.html?category=Optique">Optique</a>
-        <a href="./collection.html">Catalogue</a>
-        <a id="colNavMobileCollections" href="./collections.html">Collections</a>
-        <a id="colNavMobileAtelier" href="./index.html#atelier">Atelier</a>
-        <a id="colNavMobileCustom" href="./sur-mesure.html">Le sur-mesure</a>
+        <a id="colNavMobileHome" data-nav="home" href="./index.html">La Maison</a>
+        <a data-nav="solaire" href="./collection.html?category=Solaire">Solaire</a>
+        <a data-nav="optique" href="./collection.html?category=Optique">Optique</a>
+        <a id="colNavMobileCollections" data-nav="collections" href="./collections.html">Collections</a>
+        <a id="colNavMobileAtelier" data-nav="atelier" href="./index.html#atelier">Atelier</a>
       </nav>
       <div class="collection-mobile-actions">
         <button id="colMobileHeaderCta" class="header-cta" type="button">Prendre rendez-vous</button>
@@ -505,7 +501,6 @@
 
         if (nav) {
           setText("colNavHome", nav.data && nav.data.home_label);
-          setText("colNavCustom", nav.data && nav.data.custom_label);
           setText("colNavCollections", nav.data && nav.data.collections_label);
           setText("colNavAtelier", nav.data && nav.data.ateliers_label);
           setText("colHeaderCta", nav.data && nav.data.cta_label);
@@ -515,6 +510,7 @@
       }
     })();
   </script>
+  <script src="./nav-active.js"></script>
   <script src="./script.js?v=20260414b"></script>
   <script>
     (function () {

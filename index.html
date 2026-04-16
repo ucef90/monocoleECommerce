@@ -53,13 +53,11 @@
       <img src="./logo-320.png" alt="Monocle" width="320" height="320">
     </a>
     <nav id="siteNav" class="site-nav" aria-label="Navigation principale">
-      <a id="homeNavMaison" href="#maison">La Maison</a>
-      <a href="./collection.html?category=Solaire">Solaire</a>
-      <a href="./collection.html?category=Optique">Optique</a>
-      <a href="./collection.html">Catalogue</a>
-      <a id="homeNavCollections" href="./collections.html">Collections</a>
-      <a id="homeNavAtelier" href="#atelier">Atelier</a>
-      <a id="homeNavCustom" href="./sur-mesure.html">Le sur-mesure</a>
+      <a id="homeNavMaison" data-nav="home" href="#maison">La Maison</a>
+      <a data-nav="solaire" href="./collection.html?category=Solaire">Solaire</a>
+      <a data-nav="optique" href="./collection.html?category=Optique">Optique</a>
+      <a id="homeNavCollections" data-nav="collections" href="./collections.html">Collections</a>
+      <a id="homeNavAtelier" data-nav="atelier" href="#atelier">Atelier</a>
     </nav>
     <div class="header-cta-group">
       <button id="mobileMenuToggle" class="mobile-menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileMenu">
@@ -77,13 +75,11 @@
         <button id="mobileMenuClose" class="mobile-menu-close" type="button" aria-label="Fermer le menu">×</button>
       </div>
       <nav class="mobile-menu-links" aria-label="Navigation mobile">
-        <a href="#maison">Accueil</a>
-        <a href="./collection.html?category=Solaire">Solaire</a>
-        <a href="./collection.html?category=Optique">Optique</a>
-        <a href="./collection.html">Catalogue</a>
-        <a href="./collections.html">Collections</a>
-        <a href="./sur-mesure.html">Sur-mesure</a>
-        <a href="#atelier">Atelier</a>
+        <a data-nav="home" href="#maison">La Maison</a>
+        <a data-nav="solaire" href="./collection.html?category=Solaire">Solaire</a>
+        <a data-nav="optique" href="./collection.html?category=Optique">Optique</a>
+        <a data-nav="collections" href="./collections.html">Collections</a>
+        <a data-nav="atelier" href="#atelier">Atelier</a>
       </nav>
       <div class="mobile-menu-actions">
         <a class="primary" href="./collection.html">Voir les lunettes</a>
@@ -102,7 +98,7 @@
           <h1 id="homeHeroTitle">Monocle, pour une allure juste et un confort durable.</h1>
           <div class="hero-actions">
             <a id="homeHeroCtaPrimary" class="primary" href="./collection.html">Voir les lunettes</a>
-            <a id="homeHeroCtaSecondary" class="ghost hero-ghost-light" href="./sur-mesure.html">Découvrir le sur-mesure</a>
+            <a id="homeHeroCtaSecondary" class="ghost hero-ghost-light" href="./collections.html">Voir les collections</a>
           </div>
         </div>
       </div>
@@ -812,6 +808,18 @@
         node.setAttribute("href", String(value));
       }
 
+      function normalizePublicHref(value, fallback) {
+        if (!value) return fallback;
+        const next = String(value);
+        return next.indexOf("sur-mesure") !== -1 ? fallback : next;
+      }
+
+      function normalizePublicLabel(value, fallback) {
+        if (!value) return fallback;
+        const next = String(value);
+        return next.toLowerCase().indexOf("sur-mesure") !== -1 ? fallback : next;
+      }
+
       function setImage(id, value) {
         const node = document.getElementById(id);
         if (!(node instanceof HTMLImageElement) || !value) return;
@@ -889,8 +897,8 @@
           setText("homeHeroBody", hero.body);
           setText("homeHeroCtaPrimary", hero.data && hero.data.cta_primary_label);
           setHref("homeHeroCtaPrimary", hero.data && hero.data.cta_primary_url);
-          setText("homeHeroCtaSecondary", hero.data && hero.data.cta_secondary_label);
-          setHref("homeHeroCtaSecondary", hero.data && hero.data.cta_secondary_url);
+          setText("homeHeroCtaSecondary", normalizePublicLabel(hero.data && hero.data.cta_secondary_label, "Voir les collections"));
+          setHref("homeHeroCtaSecondary", normalizePublicHref(hero.data && hero.data.cta_secondary_url, "./collections.html"));
           setImage("homeHeroImage", hero.data && hero.data.image_url);
         }
 
@@ -952,7 +960,6 @@
         if (nav) {
           setText("homeTopline", nav.data && nav.data.topline);
           setText("homeNavMaison", nav.data && nav.data.home_label);
-          setText("homeNavCustom", nav.data && nav.data.custom_label);
           setText("homeNavAtelier", nav.data && nav.data.ateliers_label);
           setText("homeNavCollections", nav.data && nav.data.collections_label);
           setText("homeFooterText", nav.data && nav.data.footer_text);
@@ -1173,6 +1180,7 @@
       });
     })();
   </script>
+  <script src="./nav-active.js"></script>
   <script defer src="./chat-widget.js"></script>
 </body>
 </html>

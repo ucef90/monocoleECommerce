@@ -7,6 +7,7 @@
   --line: #ddd5ca;
   --gold: #1a1b1f;
   --gold-soft: #f3e5d2;
+  --nav-active: #2f6bff;
 }
 
 * {
@@ -21,6 +22,7 @@ body {
     radial-gradient(circle at 0% 0%, #ffffff 0, transparent 42%),
     radial-gradient(circle at 100% 15%, #f2ece3 0, transparent 45%),
     var(--bg);
+  overflow-x: hidden;
 }
 
 .topbar {
@@ -64,20 +66,27 @@ body {
 }
 
 .collection-nav {
-  display: none;
-  gap: 28px;
-  justify-content: center;
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
+  gap: 26px;
+  flex-wrap: nowrap;
 }
 
 .collection-nav a {
   text-decoration: none;
   color: var(--muted);
   font-weight: 600;
+  font-size: 0.98rem;
 }
 
-.collection-nav a.active,
 .collection-nav a:hover {
   color: var(--text);
+}
+
+.collection-nav a.is-active,
+.collection-mobile-links a.is-active {
+  color: var(--nav-active);
 }
 
 .header-cta {
@@ -97,7 +106,7 @@ body {
 }
 
 .collection-menu-toggle {
-  display: inline-flex;
+  display: none;
   width: 46px;
   height: 46px;
   border-radius: 999px;
@@ -169,6 +178,7 @@ body {
   font-weight: 700;
   padding: 12px 0;
   border-bottom: 1px solid rgba(20, 21, 24, 0.08);
+  color: var(--text);
 }
 
 .collection-mobile-actions {
@@ -1761,20 +1771,22 @@ body.checkout-open {
   overflow: hidden;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1100px) {
   .site-header {
     grid-template-columns: auto 1fr auto;
-    gap: 10px;
+    gap: 14px;
     text-align: left;
-    padding: 16px;
+    padding: 14px 18px;
   }
 
   .brand img {
-    max-height: 54px;
-    max-width: 62vw;
+    max-height: 58px;
+    max-width: 190px;
   }
 
-  .header-actions .header-cta {
+  .collection-nav,
+  .header-actions .header-cta,
+  .cart-btn {
     display: none;
   }
 
@@ -1784,6 +1796,16 @@ body.checkout-open {
 
   .collection-menu-toggle {
     display: inline-flex;
+  }
+
+  .hero,
+  .catalog-trust-bottom,
+  .collection-shortcuts,
+  .collection-featured-strip,
+  .catalog {
+    width: min(1320px, calc(100vw - 24px));
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .hero {

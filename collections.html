@@ -20,6 +20,7 @@
       --muted: #6a645d;
       --line: #ddd5ca;
       --strong: #111214;
+      --nav-active: #2f6bff;
     }
 
     * { box-sizing: border-box; }
@@ -31,6 +32,7 @@
       background:
         radial-gradient(circle at top left, rgba(255, 255, 255, 0.9), transparent 34%),
         linear-gradient(180deg, #f7f4ef 0%, #f3eee7 100%);
+      overflow-x: hidden;
     }
 
     .topbar {
@@ -48,7 +50,7 @@
       top: 0;
       z-index: 20;
       display: grid;
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: auto 1fr;
       gap: 18px;
       align-items: center;
       background: rgba(247, 244, 239, 0.92);
@@ -66,22 +68,27 @@
       object-fit: contain;
     }
 
-    nav {
+    .header-nav {
       display: flex;
-      justify-content: center;
-      gap: 18px;
-      flex-wrap: wrap;
+      justify-content: flex-end;
+      margin-left: auto;
+      gap: 26px;
+      flex-wrap: nowrap;
     }
 
-    nav a {
+    .header-nav a {
       text-decoration: none;
       color: var(--muted);
       font-size: 0.98rem;
       font-weight: 600;
     }
 
-    nav a.active,
-    nav a:hover { color: var(--text); }
+    .header-nav a:hover { color: var(--text); }
+
+    .header-nav a.is-active,
+    .mobile-menu-links a.is-active {
+      color: var(--nav-active);
+    }
 
     .cta {
       border: 1px solid var(--strong);
@@ -100,6 +107,11 @@
       align-items: center;
       gap: 10px;
       justify-content: flex-end;
+      margin-left: auto;
+    }
+
+    .header-actions .cta {
+      display: none;
     }
 
     .menu-toggle {
@@ -329,7 +341,7 @@
       .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
-    @media (max-width: 760px) {
+    @media (max-width: 1100px) {
       .site-header {
         grid-template-columns: auto 1fr auto;
         justify-items: stretch;
@@ -338,7 +350,7 @@
         padding: 14px 18px;
       }
 
-      nav,
+      .header-nav,
       .header-actions .cta {
         display: none;
       }
@@ -350,6 +362,11 @@
       .brand img {
         max-width: 190px;
         max-height: 58px;
+      }
+
+      main,
+      footer {
+        width: min(1320px, calc(100vw - 24px));
       }
 
       .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -366,14 +383,14 @@
     <a class="brand" href="./index.html" aria-label="Monocle Home">
       <img src="./logo-320.png" alt="Monocle" width="320" height="320">
     </a>
-    <nav>
-      <a id="colsNavHome" href="./index.html">La Maison</a>
-      <a id="colsNavCustom" href="./sur-mesure.html">Le sur-mesure</a>
-      <a id="colsNavSolar" href="./collection.html">Solaire</a>
-      <a class="active" href="./collections.html">Collections</a>
+    <nav class="header-nav">
+      <a id="colsNavHome" data-nav="home" href="./index.html">La Maison</a>
+      <a id="colsNavSolar" data-nav="solaire" href="./collection.html?category=Solaire">Solaire</a>
+      <a data-nav="optique" href="./collection.html?category=Optique">Optique</a>
+      <a data-nav="collections" href="./collections.html">Collections</a>
+      <a data-nav="atelier" href="./index.html#atelier">Atelier</a>
     </nav>
     <div class="header-actions">
-      <a id="colsHeaderCta" class="cta" href="tel:+212661290703">Appeler</a>
       <button id="colsMenuToggle" class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="colsMobileMenu">
         <span></span>
         <span></span>
@@ -389,15 +406,14 @@
         <button id="colsMenuClose" class="mobile-menu-close" type="button" aria-label="Fermer le menu">×</button>
       </div>
       <nav class="mobile-menu-links" aria-label="Navigation collections">
-        <a href="./index.html">La Maison</a>
-        <a href="./collection.html?category=Solaire">Solaire</a>
-        <a href="./collection.html?category=Optique">Optique</a>
-        <a href="./collection.html">Catalogue</a>
-        <a href="./collections.html">Collections</a>
-        <a href="./sur-mesure.html">Sur-mesure</a>
+        <a data-nav="home" href="./index.html">La Maison</a>
+        <a data-nav="solaire" href="./collection.html?category=Solaire">Solaire</a>
+        <a data-nav="optique" href="./collection.html?category=Optique">Optique</a>
+        <a data-nav="collections" href="./collections.html">Collections</a>
+        <a data-nav="atelier" href="./index.html#atelier">Atelier</a>
       </nav>
       <div class="mobile-menu-actions">
-        <a class="cta" href="./collection.html">Voir le catalogue</a>
+        <a class="cta" href="./collection.html?category=Optique">Voir les lunettes</a>
         <a class="cta" href="tel:+212661290703">Appeler</a>
       </div>
     </div>
@@ -416,7 +432,7 @@
         </p>
         <div class="hero-actions">
           <a id="colsHeroPrimary" class="btn primary" href="./collection.html">Voir le catalogue</a>
-          <a id="colsHeroSecondary" class="btn ghost" href="./sur-mesure.html">Découvrir le sur-mesure</a>
+          <a id="colsHeroSecondary" class="btn ghost" href="./collection.html?category=Optique">Voir la selection optique</a>
         </div>
       </div>
     </section>
@@ -548,6 +564,18 @@
         node.setAttribute("href", String(value));
       }
 
+      function normalizePublicHref(value, fallback) {
+        if (!value) return fallback;
+        const next = String(value);
+        return next.indexOf("sur-mesure") !== -1 ? fallback : next;
+      }
+
+      function normalizePublicLabel(value, fallback) {
+        if (!value) return fallback;
+        const next = String(value);
+        return next.toLowerCase().indexOf("sur-mesure") !== -1 ? fallback : next;
+      }
+
       function setImage(id, value) {
         const node = document.getElementById(id);
         if (!(node instanceof HTMLImageElement) || !value) return;
@@ -621,8 +649,8 @@
           setText("colsHeroBody", hero.body);
           setText("colsHeroPrimary", hero.data && hero.data.cta_primary_label);
           setHref("colsHeroPrimary", hero.data && hero.data.cta_primary_url);
-          setText("colsHeroSecondary", hero.data && hero.data.cta_secondary_label);
-          setHref("colsHeroSecondary", hero.data && hero.data.cta_secondary_url);
+          setText("colsHeroSecondary", normalizePublicLabel(hero.data && hero.data.cta_secondary_label, "Voir la selection optique"));
+          setHref("colsHeroSecondary", normalizePublicHref(hero.data && hero.data.cta_secondary_url, "./collection.html?category=Optique"));
           setImage("colsHeroImage", hero.data && hero.data.image_url);
         }
 
@@ -632,7 +660,6 @@
 
         if (nav) {
           setText("colsNavHome", nav.data && nav.data.home_label);
-          setText("colsNavCustom", nav.data && nav.data.custom_label);
           setText("colsNavSolar", nav.data && nav.data.solar_label);
           setText("colsHeaderCta", nav.data && nav.data.collections_cta_label);
         }
@@ -649,6 +676,7 @@
       });
     })();
   </script>
+  <script src="./nav-active.js"></script>
   <script defer src="./chat-widget.js"></script>
   <footer id="colsFooter">Monocle Optique · Collections · Salé & Kénitra</footer>
 </body>

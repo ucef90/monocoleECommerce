@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20260414b">
+  <link rel="stylesheet" href="./styles.css?v=20260416cod">
   <link rel="stylesheet" href="./chat-widget.css">
 </head>
 <body>
@@ -320,7 +320,7 @@
       <div id="cartItems" class="cart-items"></div>
       <div class="cart-footer">
         <p>Sous-total: <strong id="cartSubtotal">DH 0.00</strong></p>
-        <button id="checkoutBtn" class="checkout-btn" type="button">Passer la commande</button>
+        <button id="checkoutBtn" class="checkout-btn" type="button">Commander a la livraison</button>
       </div>
     </aside>
   </div>
@@ -328,60 +328,40 @@
     <div class="checkout-backdrop" data-checkout-close="1"></div>
     <section class="checkout-panel" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
       <div class="checkout-head">
-        <h2 id="checkoutTitle">Finaliser la commande</h2>
+        <h2 id="checkoutTitle">Commande avec paiement a la livraison</h2>
         <button id="closeCheckout" class="checkout-close" aria-label="Fermer le checkout">×</button>
       </div>
 
       <ol class="checkout-steps">
         <li id="stepLabel1" class="active">1. Client</li>
         <li id="stepLabel2">2. Livraison</li>
-        <li id="stepLabel3">3. Paiement</li>
-        <li id="stepLabel4">4. Confirmation</li>
+        <li id="stepLabel3">3. Confirmation</li>
       </ol>
 
       <div class="checkout-body">
         <section id="step1" class="checkout-step active">
           <h3>Informations client</h3>
+          <p class="checkout-intro">Nous utilisons surtout votre telephone pour confirmer la commande et la livraison au Maroc.</p>
           <label>Nom complet <input id="coName" type="text" autocomplete="name"></label>
-          <label>Email <input id="coEmail" type="email" autocomplete="email"></label>
-          <label>Téléphone <input id="coPhone" type="tel" autocomplete="tel"></label>
+          <label>Téléphone / WhatsApp <input id="coPhone" type="tel" autocomplete="tel" placeholder="06XXXXXXXX ou +2126XXXXXXXX"></label>
+          <label>Email (facultatif) <input id="coEmail" type="email" autocomplete="email" placeholder="utile seulement si vous voulez une copie"></label>
         </section>
 
         <section id="step2" class="checkout-step">
-          <h3>Adresse de livraison</h3>
-          <label>Adresse <input id="coAddress" type="text" autocomplete="street-address"></label>
-          <label>Ville <input id="coCity" type="text" autocomplete="address-level2"></label>
-          <label>Code postal <input id="coZip" type="text" autocomplete="postal-code"></label>
-          <label>Pays
-            <select id="coCountry">
-              <option value="">Choisir</option>
-              <option value="Morocco">Maroc</option>
-              <option value="France">France</option>
-              <option value="Switzerland">Suisse</option>
-            </select>
-          </label>
-          <fieldset class="ship-method">
-            <legend>Mode de livraison</legend>
-            <label><input type="radio" name="shippingMethod" value="standard" checked> Standard (DH 9.00)</label>
-            <label><input type="radio" name="shippingMethod" value="express"> Express (DH 19.00)</label>
-          </fieldset>
+          <h3>Livraison au Maroc</h3>
+          <label>Ville <input id="coCity" type="text" autocomplete="address-level2" placeholder="Casablanca, Rabat, Kénitra..."></label>
+          <label>Adresse complète <input id="coAddress" type="text" autocomplete="street-address" placeholder="Rue, numéro, résidence..."></label>
+          <label>Quartier / repère (facultatif) <input id="coDistrict" type="text" placeholder="Près de..., étage, point de repère..."></label>
+          <div class="cod-note">
+            <strong>Paiement à la livraison</strong>
+            <p>Vous payez à la réception. Un conseiller Monocle peut vous contacter par téléphone ou WhatsApp pour confirmer l'adresse et la disponibilité.</p>
+          </div>
         </section>
 
         <section id="step3" class="checkout-step">
-          <h3>Paiement simulé</h3>
-          <label>Nom sur la carte <input id="coCardName" type="text" autocomplete="cc-name"></label>
-          <label>Numéro de carte <input id="coCardNumber" type="text" inputmode="numeric" placeholder="4242 4242 4242 4242" autocomplete="cc-number"></label>
-          <div class="payment-row">
-            <label>Expiration (MM/AA) <input id="coCardExpiry" type="text" placeholder="12/30" autocomplete="cc-exp"></label>
-            <label>CVC <input id="coCardCvc" type="text" inputmode="numeric" placeholder="123" autocomplete="cc-csc"></label>
-          </div>
-          <p class="sim-note">Paiement de démonstration: aucune transaction réelle n'est effectuée.</p>
-        </section>
-
-        <section id="step4" class="checkout-step">
           <h3>Confirmation</h3>
           <div id="confirmationSummary" class="confirmation-summary"></div>
-          <p class="confirm-note">Votre commande est enregistrée et le stock est réservé dès validation. Le paiement en ligne reste en préparation.</p>
+          <p class="confirm-note">Votre commande est enregistrée avec paiement à la livraison. Monocle pourra confirmer les détails par téléphone ou WhatsApp avant expédition.</p>
         </section>
       </div>
 
@@ -511,7 +491,7 @@
     })();
   </script>
   <script src="./nav-active.js"></script>
-  <script src="./script.js?v=20260414b"></script>
+  <script src="./script.js?v=20260416cod"></script>
   <script>
     (function () {
       const toggle = document.getElementById("collectionMenuToggle");

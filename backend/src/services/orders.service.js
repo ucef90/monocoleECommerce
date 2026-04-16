@@ -56,26 +56,26 @@ function validatePayload(payload) {
     .filter((item) => Number.isInteger(item.product_id) && item.product_id > 0 && item.qty > 0);
 
   if (String(customer.name || '').trim().length < 3) return { ok: false, code: 400, error: 'invalid_customer_name' };
-  if (!isEmailValid(customer.email)) return { ok: false, code: 400, error: 'invalid_customer_email' };
-  if (digitsOnly(customer.phone).length < 8) return { ok: false, code: 400, error: 'invalid_customer_phone' };
+  const normalizedEmail = String(customer.email || '').trim();
+  if (normalizedEmail && !isEmailValid(normalizedEmail)) return { ok: false, code: 400, error: 'invalid_customer_email' };
+  if (digitsOnly(customer.phone).length < 9) return { ok: false, code: 400, error: 'invalid_customer_phone' };
   if (String(shipping.address || '').trim().length < 5) return { ok: false, code: 400, error: 'invalid_shipping_address' };
   if (String(shipping.city || '').trim().length < 2) return { ok: false, code: 400, error: 'invalid_shipping_city' };
-  if (String(shipping.zip || '').trim().length < 3) return { ok: false, code: 400, error: 'invalid_shipping_zip' };
-  if (String(shipping.country || '').trim().length < 2) return { ok: false, code: 400, error: 'invalid_shipping_country' };
-  if (!['standard', 'express'].includes(String(shipping.method || ''))) return { ok: false, code: 400, error: 'invalid_shipping_method' };
+  if (String(shipping.country || 'Morocco').trim().length < 2) return { ok: false, code: 400, error: 'invalid_shipping_country' };
+  if (!['standard', 'express', 'cod'].includes(String(shipping.method || 'cod'))) return { ok: false, code: 400, error: 'invalid_shipping_method' };
   if (!normalizedItems.length) return { ok: false, code: 400, error: 'empty_items' };
 
   return {
     ok: true,
     data: {
       customer_name: String(customer.name).trim(),
-      customer_email: String(customer.email).trim(),
+      customer_email: normalizedEmail,
       customer_phone: String(customer.phone).trim(),
       shipping_address: String(shipping.address).trim(),
       shipping_city: String(shipping.city).trim(),
-      shipping_zip: String(shipping.zip).trim(),
-      shipping_country: String(shipping.country).trim(),
-      shipping_method: String(shipping.method),
+      shipping_zip: String(shipping.zip || '').trim(),
+      shipping_country: String(shipping.country || 'Morocco').trim(),
+      shipping_method: String(shipping.method || 'cod'),
       shipping_cost: toMoney(shipping.cost),
       items: normalizedItems
     }

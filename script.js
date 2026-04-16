@@ -389,7 +389,7 @@ const checkoutPrevButton = document.getElementById("checkoutPrev");
 const checkoutNextButton = document.getElementById("checkoutNext");
 const checkoutErrorNode = document.getElementById("checkoutError");
 const confirmationSummaryNode = document.getElementById("confirmationSummary");
-const checkoutSteps = [1, 2, 3, 4].map((idx) => ({
+const checkoutSteps = [1, 2, 3].map((idx) => ({
   section: document.getElementById(`step${idx}`),
   label: document.getElementById(`stepLabel${idx}`)
 }));
@@ -399,12 +399,7 @@ const checkoutForm = {
   phone: document.getElementById("coPhone"),
   address: document.getElementById("coAddress"),
   city: document.getElementById("coCity"),
-  zip: document.getElementById("coZip"),
-  country: document.getElementById("coCountry"),
-  cardName: document.getElementById("coCardName"),
-  cardNumber: document.getElementById("coCardNumber"),
-  cardExpiry: document.getElementById("coCardExpiry"),
-  cardCvc: document.getElementById("coCardCvc")
+  district: document.getElementById("coDistrict")
 };
 const filterInputs = [...document.querySelectorAll('.filters input[type="checkbox"]')];
 const pageParams = new URLSearchParams(window.location.search);
@@ -1023,8 +1018,7 @@ function cartSubtotal() {
 }
 
 function shippingCost() {
-  const selected = document.querySelector('input[name="shippingMethod"]:checked');
-  return selected && selected.value === "express" ? 19 : 9;
+  return 0;
 }
 
 function renderCart() {
@@ -1128,14 +1122,14 @@ function validateCheckoutStep(step) {
       checkoutErrorNode.textContent = "Nom complet invalide.";
       return false;
     }
-    if (!isEmailValid(email)) {
+    if (email && !isEmailValid(email)) {
       markInvalid(checkoutForm.email);
       checkoutErrorNode.textContent = "Email invalide.";
       return false;
     }
-    if (phone.length < 8) {
+    if (phone.length < 9) {
       markInvalid(checkoutForm.phone);
-      checkoutErrorNode.textContent = "Téléphone invalide.";
+      checkoutErrorNode.textContent = "Téléphone / WhatsApp invalide.";
       return false;
     }
     return true;
@@ -1144,8 +1138,6 @@ function validateCheckoutStep(step) {
   if (step === 2) {
     const address = checkoutForm.address.value.trim();
     const city = checkoutForm.city.value.trim();
-    const zip = checkoutForm.zip.value.trim();
-    const country = checkoutForm.country.value;
     if (address.length < 5) {
       markInvalid(checkoutForm.address);
       checkoutErrorNode.textContent = "Adresse invalide.";
@@ -1154,45 +1146,6 @@ function validateCheckoutStep(step) {
     if (city.length < 2) {
       markInvalid(checkoutForm.city);
       checkoutErrorNode.textContent = "Ville invalide.";
-      return false;
-    }
-    if (zip.length < 3) {
-      markInvalid(checkoutForm.zip);
-      checkoutErrorNode.textContent = "Code postal invalide.";
-      return false;
-    }
-    if (!country) {
-      markInvalid(checkoutForm.country);
-      checkoutErrorNode.textContent = "Veuillez choisir un pays.";
-      return false;
-    }
-    return true;
-  }
-
-  if (step === 3) {
-    const cardName = checkoutForm.cardName.value.trim();
-    const cardNumber = digitsOnly(checkoutForm.cardNumber.value);
-    const cardExpiry = checkoutForm.cardExpiry.value.trim();
-    const cardCvc = digitsOnly(checkoutForm.cardCvc.value);
-    const expiryOk = /^(0[1-9]|1[0-2])\/\d{2}$/.test(cardExpiry);
-    if (cardName.length < 3) {
-      markInvalid(checkoutForm.cardName);
-      checkoutErrorNode.textContent = "Nom sur la carte invalide.";
-      return false;
-    }
-    if (cardNumber.length < 13) {
-      markInvalid(checkoutForm.cardNumber);
-      checkoutErrorNode.textContent = "Numéro de carte invalide.";
-      return false;
-    }
-    if (!expiryOk) {
-      markInvalid(checkoutForm.cardExpiry);
-      checkoutErrorNode.textContent = "Date d'expiration invalide.";
-      return false;
-    }
-    if (cardCvc.length < 3) {
-      markInvalid(checkoutForm.cardCvc);
-      checkoutErrorNode.textContent = "CVC invalide.";
       return false;
     }
     return true;
@@ -1206,17 +1159,25 @@ function buildConfirmationSummary() {
   const subtotal = cartSubtotal();
   const shipping = shippingCost();
   const total = subtotal + shipping;
+  const email = checkoutForm.email.value.trim();
+  const district = checkoutForm.district && checkoutForm.district.value.trim();
+  const deliveryLine = [checkoutForm.address.value.trim(), district, checkoutForm.city.value.trim(), "Maroc"]
+    .filter(Boolean)
+    .join(", ");
   confirmationSummaryNode.innerHTML = [
-    `<p><strong>Client:</strong> ${checkoutForm.name.value.trim()} (${checkoutForm.email.value.trim()})</p>`,
-    `<p><strong>Livraison:</strong> ${checkoutForm.address.value.trim()}, ${checkoutForm.city.value.trim()}, ${checkoutForm.zip.value.trim()}, ${checkoutForm.country.value}</p>`,
+    `<p><strong>Client:</strong> ${checkoutForm.name.value.trim()}${email ? ` (${email})` : ""}</p>`,
+    `<p><strong>Telephone / WhatsApp:</strong> ${checkoutForm.phone.value.trim()}</p>`,
+    `<p><strong>Livraison:</strong> ${deliveryLine}</p>`,
+    `<p><strong>Paiement:</strong> A la livraison</p>`,
     `<p><strong>Articles:</strong> ${itemsCount}</p>`,
     `<p><strong>Sous-total:</strong> DH ${subtotal.toFixed(2)}</p>`,
-    `<p><strong>Livraison:</strong> DH ${shipping.toFixed(2)}</p>`,
-    `<p><strong>Total:</strong> DH ${total.toFixed(2)}</p>`
+    `<p><strong>Livraison:</strong> Confirmee par telephone</p>`,
+    `<p><strong>Total actuel:</strong> DH ${total.toFixed(2)}</p>`
   ].join("");
 }
 
 function orderPayload() {
+  const district = checkoutForm.district && checkoutForm.district.value.trim();
   return {
     customer: {
       name: checkoutForm.name.value.trim(),
@@ -1224,11 +1185,11 @@ function orderPayload() {
       phone: checkoutForm.phone.value.trim()
     },
     shipping: {
-      address: checkoutForm.address.value.trim(),
+      address: [checkoutForm.address.value.trim(), district].filter(Boolean).join(" - "),
       city: checkoutForm.city.value.trim(),
-      zip: checkoutForm.zip.value.trim(),
-      country: checkoutForm.country.value,
-      method: (document.querySelector('input[name="shippingMethod"]:checked') || {}).value || "standard",
+      zip: "",
+      country: "Morocco",
+      method: "cod",
       cost: shippingCost()
     },
     items: cart.map((item) => ({
@@ -1276,9 +1237,9 @@ function renderCheckoutStep() {
   });
 
   checkoutPrevButton.style.visibility = checkoutStep === 1 ? "hidden" : "visible";
-  checkoutNextButton.textContent = checkoutStep === 4 ? "Valider la commande" : "Continuer";
+  checkoutNextButton.textContent = checkoutStep === 3 ? "Confirmer la commande" : "Continuer";
 
-  if (checkoutStep === 4) {
+  if (checkoutStep === 3) {
     buildConfirmationSummary();
   }
 }
@@ -1735,7 +1696,7 @@ if (checkoutPrevButton) {
 
 if (checkoutNextButton) {
   checkoutNextButton.addEventListener("click", async () => {
-    if (checkoutStep < 4) {
+    if (checkoutStep < 3) {
       const ok = validateCheckoutStep(checkoutStep);
       if (!ok) return;
       checkoutStep += 1;
@@ -1779,10 +1740,11 @@ if (checkoutNextButton) {
     render();
     confirmationSummaryNode.innerHTML = [
       `<p><strong>Reference:</strong> ${order.reference}</p>`,
-      `<p><strong>Client:</strong> ${order.customer_name} (${order.customer_email})</p>`,
-      `<p><strong>Livraison:</strong> ${order.shipping_address}, ${order.shipping_city}, ${order.shipping_zip}, ${order.shipping_country}</p>`,
+      `<p><strong>Client:</strong> ${order.customer_name}${order.customer_email ? ` (${order.customer_email})` : ""}</p>`,
+      `<p><strong>Telephone:</strong> ${order.customer_phone}</p>`,
+      `<p><strong>Livraison:</strong> ${order.shipping_address}, ${order.shipping_city}, ${order.shipping_country}</p>`,
       `<p><strong>Total:</strong> DH ${Number(order.total).toFixed(2)}</p>`,
-      `<p><strong>Statut:</strong> Commande recue, confirmation manuelle a suivre.</p>`
+      `<p><strong>Statut:</strong> Commande recue. Confirmation telephonique a suivre.</p>`
     ].join("");
     checkoutErrorNode.style.color = "#23643c";
     checkoutErrorNode.textContent = `Commande enregistree avec succes. Reference ${order.reference}.`;

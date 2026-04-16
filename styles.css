@@ -1618,7 +1618,7 @@ body.cart-open {
   padding: 10px 16px;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   border-bottom: 1px solid #e8ecf2;
 }
@@ -1655,6 +1655,13 @@ body.cart-open {
   font-size: 1.05rem;
 }
 
+.checkout-intro {
+  margin: 0 0 12px;
+  color: #667082;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
 .checkout-step label {
   display: block;
   margin-bottom: 10px;
@@ -1678,32 +1685,24 @@ body.cart-open {
   border-color: #cc2a2a;
 }
 
-.ship-method {
+.cod-note {
   border: 1px solid #e4e9f0;
-  border-radius: 10px;
-  padding: 10px 12px;
+  border-radius: 12px;
+  background: #f8f9fb;
+  padding: 12px;
 }
 
-.ship-method legend {
-  padding: 0 4px;
-  font-size: 0.82rem;
-  color: #596170;
+.cod-note strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #111214;
 }
 
-.ship-method label {
-  margin: 0 0 6px;
-}
-
-.payment-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.sim-note {
-  margin: 8px 0 0;
-  font-size: 0.8rem;
-  color: #646b78;
+.cod-note p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: #5e6878;
+  line-height: 1.6;
 }
 
 .confirmation-summary {
@@ -2047,10 +2046,6 @@ body.checkout-open {
 
   .checkout-steps {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .payment-row {
-    grid-template-columns: 1fr;
   }
 }
 

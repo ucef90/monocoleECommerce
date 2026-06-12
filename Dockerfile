@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
@@ -12,6 +12,8 @@ COPY *.js ./
 COPY *.png ./
 COPY *.jpg ./
 COPY *.jpeg ./
+COPY *.webp ./
+COPY *.mp4 ./
 
 EXPOSE 8787
 

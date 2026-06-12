@@ -1,0 +1,444 @@
+/* ============================================================
+   Monocle — Modern elevation layer (Warby Parker / Ace & Tate)
+   Additive only — loaded after styles.css and home-b.css
+   ============================================================ */
+
+/* -------------------------------------------------------------
+   1. Fluid design tokens
+   ------------------------------------------------------------- */
+:root {
+  /* Fluid type scale (clamp(min, fluid, max)) */
+  --fs-xs:    clamp(0.72rem, 0.68rem + 0.18vw, 0.82rem);
+  --fs-sm:    clamp(0.86rem, 0.82rem + 0.2vw, 0.96rem);
+  --fs-base:  clamp(1rem,    0.95rem + 0.25vw, 1.12rem);
+  --fs-lg:    clamp(1.18rem, 1.1rem + 0.4vw,   1.4rem);
+  --fs-xl:    clamp(1.5rem,  1.3rem + 1vw,     2.1rem);
+  --fs-2xl:   clamp(2rem,    1.6rem + 2vw,     3.2rem);
+  --fs-3xl:   clamp(2.6rem,  2rem + 3vw,       4.6rem);
+  --fs-hero:  clamp(2.8rem,  2rem + 4.5vw,     5.6rem);
+
+  /* Fluid spacing */
+  --sp-1:  clamp(0.4rem, 0.35rem + 0.15vw, 0.6rem);
+  --sp-2:  clamp(0.7rem, 0.6rem + 0.3vw,   1rem);
+  --sp-3:  clamp(1rem,   0.85rem + 0.5vw,  1.5rem);
+  --sp-4:  clamp(1.5rem, 1.2rem + 1vw,     2.4rem);
+  --sp-5:  clamp(2rem,   1.5rem + 2vw,     4rem);
+  --sp-6:  clamp(3rem,   2.2rem + 3vw,     6rem);
+  --sp-7:  clamp(4rem,   3rem + 4vw,       8rem);
+
+  /* Refined radii */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-xl: 32px;
+  --r-pill: 999px;
+
+  /* Refined elevation */
+  --shadow-1: 0 1px 2px rgba(20, 21, 24, 0.04), 0 1px 1px rgba(20, 21, 24, 0.03);
+  --shadow-2: 0 6px 18px rgba(20, 21, 24, 0.06), 0 2px 6px rgba(20, 21, 24, 0.04);
+  --shadow-3: 0 22px 50px rgba(20, 21, 24, 0.1),  0 8px 20px rgba(20, 21, 24, 0.06);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 180ms;
+  --dur-base: 320ms;
+  --dur-slow: 520ms;
+}
+
+/* -------------------------------------------------------------
+   2. Global polish
+   ------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.55;
+}
+
+::selection {
+  background: var(--text);
+  color: var(--bg);
+}
+
+/* Focus visible (accessibility) */
+:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* -------------------------------------------------------------
+   3. Typography elevation
+   ------------------------------------------------------------- */
+h1, h2, h3, h4 {
+  font-feature-settings: "kern" 1, "liga" 1, "dlig" 1;
+  letter-spacing: -0.01em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+  max-width: 68ch;
+}
+
+/* Section kickers — editorial small caps */
+.section-kicker,
+.eyebrow,
+[class*="kicker"] {
+  font-family: "Source Sans 3", sans-serif !important;
+  font-size: var(--fs-xs) !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--muted);
+  font-feature-settings: "smcp" 1, "c2sc" 1;
+}
+
+/* Refined display headings */
+.section-heading h2,
+.hero-title,
+.hero h1,
+.section-title {
+  font-family: "Cormorant Garamond", "Marcellus", serif !important;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+}
+
+/* -------------------------------------------------------------
+   4. Hero — bigger breath, refined CTA
+   ------------------------------------------------------------- */
+.hero,
+.hero-video-shell {
+  position: relative;
+}
+
+.hero-video-overlay {
+  padding: var(--sp-6) var(--sp-4) !important;
+}
+
+.hero-video-overlay h1,
+.hero-title {
+  font-size: var(--fs-hero) !important;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  margin-bottom: var(--sp-3);
+}
+
+.hero-actions {
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+}
+
+/* Hero entrance */
+@keyframes monocle-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.hero-video-overlay > * {
+  animation: monocle-fade-up var(--dur-slow) var(--ease-out) both;
+}
+.hero-video-overlay > *:nth-child(1) { animation-delay: 100ms; }
+.hero-video-overlay > *:nth-child(2) { animation-delay: 220ms; }
+.hero-video-overlay > *:nth-child(3) { animation-delay: 340ms; }
+.hero-video-overlay > *:nth-child(4) { animation-delay: 460ms; }
+
+/* -------------------------------------------------------------
+   5. Buttons — refined CTA
+   ------------------------------------------------------------- */
+.header-cta,
+.cta-primary,
+.btn-primary,
+.hero-actions a,
+.hero-actions button,
+button.cta-primary {
+  border-radius: var(--r-pill);
+  padding: 0.95em 1.7em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  font-size: var(--fs-sm);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+  will-change: transform;
+}
+
+.header-cta:hover,
+.cta-primary:hover,
+.btn-primary:hover,
+.hero-actions a:hover,
+.hero-actions button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-2);
+}
+
+.header-cta:active,
+.cta-primary:active,
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-1);
+}
+
+/* -------------------------------------------------------------
+   6. Header polish
+   ------------------------------------------------------------- */
+.site-header {
+  padding-top: var(--sp-2);
+  padding-bottom: var(--sp-2);
+}
+
+.collection-nav a {
+  position: relative;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.collection-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.collection-nav a:hover::after,
+.collection-nav a.is-active::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+/* -------------------------------------------------------------
+   7. Section spacing + heading rhythm
+   ------------------------------------------------------------- */
+main > section,
+section.section {
+  padding-top: var(--sp-6);
+  padding-bottom: var(--sp-6);
+}
+
+.section-heading {
+  margin-bottom: var(--sp-5);
+}
+
+.section-heading p,
+.section-heading .section-lead {
+  font-size: var(--fs-lg);
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* -------------------------------------------------------------
+   8. Product cards — elevated
+   ------------------------------------------------------------- */
+.product-card {
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--card, #fff);
+  box-shadow: var(--shadow-1);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+  will-change: transform;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-3);
+}
+
+.product-card img,
+.product-card .product-image,
+.product-card picture > img {
+  transition: transform 600ms var(--ease-out);
+  will-change: transform;
+}
+
+.product-card:hover img,
+.product-card:hover picture > img {
+  transform: scale(1.04);
+}
+
+.product-card .product-info,
+.product-card .product-body {
+  padding: var(--sp-3);
+}
+
+.product-card .product-title,
+.product-card h3 {
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.product-card .product-price {
+  font-feature-settings: "tnum" 1;
+  letter-spacing: 0.01em;
+}
+
+/* -------------------------------------------------------------
+   9. Tile / category cards (home "Explorer rapidement")
+   ------------------------------------------------------------- */
+.tile,
+.category-tile,
+.universe-tile {
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.tile:hover,
+.category-tile:hover,
+.universe-tile:hover {
+  transform: translateY(-3px);
+}
+
+.tile img,
+.category-tile img,
+.universe-tile img {
+  transition: transform 700ms var(--ease-out);
+}
+
+.tile:hover img,
+.category-tile:hover img,
+.universe-tile:hover img {
+  transform: scale(1.05);
+}
+
+/* -------------------------------------------------------------
+   10. Images — global polish
+   ------------------------------------------------------------- */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: inherit;
+}
+
+picture > img {
+  border-radius: inherit;
+}
+
+/* -------------------------------------------------------------
+   11. Footer refinement
+   ------------------------------------------------------------- */
+footer,
+.site-footer {
+  padding-top: var(--sp-7);
+  padding-bottom: var(--sp-5);
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+footer a,
+.site-footer a {
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+footer a:hover,
+.site-footer a:hover {
+  opacity: 0.65;
+}
+
+/* -------------------------------------------------------------
+   12. Scroll-revealed sections (CSS only via animation-timeline)
+   Progressive enhancement — only browsers that support it.
+   ------------------------------------------------------------- */
+@supports (animation-timeline: view()) {
+  main > section,
+  section.section {
+    animation: monocle-fade-up var(--dur-slow) var(--ease-out) both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 35%;
+  }
+}
+
+/* -------------------------------------------------------------
+   13. Forms — refined inputs
+   ------------------------------------------------------------- */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="search"],
+input[type="number"],
+textarea,
+select {
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  padding: 0.85em 1em;
+  font-size: var(--fs-sm);
+  font-family: inherit;
+  background: var(--surface, #fff);
+  transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--text);
+  box-shadow: 0 0 0 4px rgba(20, 21, 24, 0.06);
+  outline: none;
+}
+
+/* -------------------------------------------------------------
+   14. Mobile refinement
+   ------------------------------------------------------------- */
+@media (max-width: 720px) {
+  .hero-video-overlay {
+    padding: var(--sp-5) var(--sp-3) !important;
+  }
+  .product-card:hover {
+    transform: none;
+  }
+  main > section,
+  section.section {
+    padding-top: var(--sp-5);
+    padding-bottom: var(--sp-5);
+  }
+}
+
+/* -------------------------------------------------------------
+   15. Print
+   ------------------------------------------------------------- */
+@media print {
+  .site-header,
+  .topbar,
+  .header-cta,
+  .chat-widget,
+  footer { display: none !important; }
+}

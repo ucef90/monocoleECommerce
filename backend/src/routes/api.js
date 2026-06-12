@@ -24,6 +24,42 @@ function toCsv(rows) {
 }
 
 function createApiRouter({ slotsService, newsletterService, cmsService, ordersService, authService, chatService, env }) {
+  const loginAttempts = new Map();
+  const RL_MAX_ATTEMPTS = 5;
+  const RL_WINDOW_MS = 5 * 60 * 1000;
+  const RL_BLOCK_MS = 15 * 60 * 1000;
+
+  function getClientIp(req) {
+    const xff = req.headers['x-forwarded-for'];
+    if (xff) return String(xff).split(',')[0].trim();
+    return req.socket.remoteAddress || 'unknown';
+  }
+
+  function checkLoginRateLimit(ip) {
+    const now = Date.now();
+    let entry = loginAttempts.get(ip);
+    if (!entry) entry = { count: 0, firstAttempt: now, blockedUntil: 0 };
+    if (entry.blockedUntil > now) {
+      return { allowed: false, retryAfter: Math.ceil((entry.blockedUntil - now) / 1000) };
+    }
+    if (now - entry.firstAttempt > RL_WINDOW_MS) {
+      entry.count = 0;
+      entry.firstAttempt = now;
+    }
+    entry.count += 1;
+    if (entry.count > RL_MAX_ATTEMPTS) {
+      entry.blockedUntil = now + RL_BLOCK_MS;
+      loginAttempts.set(ip, entry);
+      return { allowed: false, retryAfter: Math.ceil(RL_BLOCK_MS / 1000) };
+    }
+    loginAttempts.set(ip, entry);
+    return { allowed: true };
+  }
+
+  function resetLoginAttempts(ip) {
+    loginAttempts.delete(ip);
+  }
+
   function parseIdFromPath(pathname, prefix) {
     if (!pathname.startsWith(prefix)) return null;
     const value = pathname.slice(prefix.length);
@@ -104,6 +140,8 @@ function createApiRouter({ slotsService, newsletterService, cmsService, ordersSe
       if (req.method === 'POST' && url.pathname === '/api/chat') {
         try {
           const body = await parseJsonBody(req);
+          const msg = String((body && body.message) || '');
+          if (msg.length > 2000) return json(res, 400, { error: 'message_too_long', max: 2000 });
           const result = await chatService.reply(body || {});
           if (!result.ok) return json(res, result.code, { error: result.error });
           return json(res, result.code, result.data);
@@ -158,6 +196,12 @@ function createApiRouter({ slotsService, newsletterService, cmsService, ordersSe
       }
 
       if (req.method === 'POST' && url.pathname === '/api/admin/login') {
+        const clientIp = getClientIp(req);
+        const rl = checkLoginRateLimit(clientIp);
+        if (!rl.allowed) {
+          res.setHeader('Retry-After', String(rl.retryAfter));
+          return json(res, 429, { error: 'too_many_attempts', retry_after: rl.retryAfter });
+        }
         try {
           const body = await parseJsonBody(req);
           const username = String(body.username || '');
@@ -173,11 +217,12 @@ function createApiRouter({ slotsService, newsletterService, cmsService, ordersSe
           value: token,
           maxAgeSeconds: env.adminSessionHours * 3600,
           httpOnly: true,
-          secure: false,
+          secure: req.headers['x-forwarded-proto'] === 'https',
           sameSite: 'Lax',
           path: '/'
         });
 
+          resetLoginAttempts(clientIp);
           return json(res, 200, { ok: true, username });
         } catch (error) {
           if (error.message === 'payload_too_large') return json(res, 413, { error: 'payload_too_large' });
@@ -326,7 +371,7 @@ function createApiRouter({ slotsService, newsletterService, cmsService, ordersSe
         const session = requireAdmin(req, res);
         if (!session) return;
         try {
-          const body = await parseJsonBody(req, 20_000_000);
+          const body = await parseJsonBody(req, 6_000_000);
           const result = await cmsService.uploadMedia(body);
           if (!result.ok) return json(res, result.code, { error: result.error });
           return json(res, result.code, result.data);

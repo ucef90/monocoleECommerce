@@ -20,6 +20,30 @@ function safeFilename(name) {
   return cleaned || `asset-${Date.now()}.bin`;
 }
 
+const ALLOWED_MIME = new Set([
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+  'application/pdf'
+]);
+
+const MAX_UPLOAD_BYTES = 5_000_000;
+
+const MAGIC_BYTES = {
+  'image/jpeg': [[0xFF, 0xD8, 0xFF]],
+  'image/png':  [[0x89, 0x50, 0x4E, 0x47]],
+  'image/gif':  [[0x47, 0x49, 0x46, 0x38]],
+  'image/webp': [[0x52, 0x49, 0x46, 0x46]],
+  'application/pdf': [[0x25, 0x50, 0x44, 0x46]]
+};
+
+function verifyMagicBytes(buffer, mimeType) {
+  const sigs = MAGIC_BYTES[mimeType];
+  if (!sigs || buffer.length < 4) return false;
+  return sigs.some((sig) => sig.every((b, i) => buffer[i] === b));
+}
+
 function parseJsonSafe(value, fallback) {
   try {
     return JSON.parse(value);
@@ -288,8 +312,17 @@ function buildCmsService(dbConn, env) {
       const mimeType = String(payload.mime_type || 'application/octet-stream');
       const dataBase64 = String(payload.data_base64 || '');
       if (!dataBase64) return { ok: false, code: 400, error: 'missing_data' };
+      if (!ALLOWED_MIME.has(mimeType)) {
+        return { ok: false, code: 400, error: 'mime_not_allowed', allowed: Array.from(ALLOWED_MIME) };
+      }
 
       const fileBuffer = Buffer.from(dataBase64, 'base64');
+      if (fileBuffer.length > MAX_UPLOAD_BYTES) {
+        return { ok: false, code: 413, error: 'file_too_large', max: MAX_UPLOAD_BYTES };
+      }
+      if (!verifyMagicBytes(fileBuffer, mimeType)) {
+        return { ok: false, code: 400, error: 'mime_mismatch' };
+      }
       const fullPath = path.join(env.uploadDir, filename);
       fs.writeFileSync(fullPath, fileBuffer);
       const url = `/uploads/${filename}`;
@@ -517,8 +550,17 @@ function buildCmsService(dbConn, env) {
       const mimeType = String(payload.mime_type || 'application/octet-stream');
       const dataBase64 = String(payload.data_base64 || '');
       if (!dataBase64) return { ok: false, code: 400, error: 'missing_data' };
+      if (!ALLOWED_MIME.has(mimeType)) {
+        return { ok: false, code: 400, error: 'mime_not_allowed', allowed: Array.from(ALLOWED_MIME) };
+      }
 
       const fileBuffer = Buffer.from(dataBase64, 'base64');
+      if (fileBuffer.length > MAX_UPLOAD_BYTES) {
+        return { ok: false, code: 413, error: 'file_too_large', max: MAX_UPLOAD_BYTES };
+      }
+      if (!verifyMagicBytes(fileBuffer, mimeType)) {
+        return { ok: false, code: 400, error: 'mime_mismatch' };
+      }
       const fullPath = path.join(env.uploadDir, filename);
       fs.writeFileSync(fullPath, fileBuffer);
       const url = `/uploads/${filename}`;

@@ -325,6 +325,48 @@ function systemPrompt(context) {
   ].join('\n');
 }
 
+async function callOllamaChat(context, message, history, env) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), env.ollamaTimeoutMs || 30000);
+  try {
+    const messages = [
+      { role: 'system', content: systemPrompt(context) },
+      ...safeArray(history)
+        .filter((item) => item && item.content)
+        .slice(-6)
+        .map((item) => ({
+          role: item.role === 'assistant' ? 'assistant' : 'user',
+          content: String(item.content || '').trim()
+        })),
+      { role: 'user', content: String(message || '').trim() }
+    ];
+
+    const res = await fetch(`${env.ollamaBaseUrl}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: env.ollamaModel,
+        messages,
+        stream: false,
+        options: { temperature: 0.4, num_predict: 400 }
+      }),
+      signal: controller.signal
+    });
+
+    if (!res.ok) {
+      const body = await res.text().catch(() => '');
+      throw new Error(`ollama_chat_failed:${res.status}:${body.slice(0, 180)}`);
+    }
+
+    const payload = await res.json();
+    const answer = String((payload && payload.message && payload.message.content) || '').trim();
+    if (!answer) throw new Error('ollama_chat_empty');
+    return answer;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function callOpenAIChat(context, message, history, env) {
   const res = await fetch('https://api.openai.com/v1/responses', {
     method: 'POST',
@@ -390,45 +432,45 @@ function buildChatService({ cmsService, env }) {
     }
 
     const context = await buildContext(trimmed);
+    const fallbackMeta = buildFallbackReply(trimmed, history, context);
 
-    if (env.openaiApiKey) {
+    async function tryProvider(name, callFn) {
       try {
-        const answer = await callOpenAIChat(context, trimmed, history, env);
-        const fallbackMeta = buildFallbackReply(trimmed, history, context);
+        const answer = await callFn(context, trimmed, history, env);
         return {
           ok: true,
           code: 200,
           data: {
             answer,
-            mode: 'ai',
+            mode: name,
             suggestions: fallbackMeta.suggestions,
             ctas: fallbackMeta.ctas
           }
         };
-      } catch (_error) {
-        const fallback = buildFallbackReply(trimmed, history, context);
-        return {
-          ok: true,
-          code: 200,
-          data: {
-            answer: fallback.answer,
-            mode: 'fallback',
-            suggestions: fallback.suggestions,
-            ctas: fallback.ctas
-          }
-        };
+      } catch (error) {
+        console.warn(`[chat] ${name} failed:`, error && error.message ? error.message.slice(0, 200) : 'unknown');
+        return null;
       }
     }
 
-    const fallback = buildFallbackReply(trimmed, history, context);
+    if (env.ollamaBaseUrl) {
+      const result = await tryProvider('ollama', callOllamaChat);
+      if (result) return result;
+    }
+
+    if (env.openaiApiKey) {
+      const result = await tryProvider('ai', callOpenAIChat);
+      if (result) return result;
+    }
+
     return {
       ok: true,
       code: 200,
       data: {
-        answer: fallback.answer,
+        answer: fallbackMeta.answer,
         mode: 'fallback',
-        suggestions: fallback.suggestions,
-        ctas: fallback.ctas
+        suggestions: fallbackMeta.suggestions,
+        ctas: fallbackMeta.ctas
       }
     };
   }

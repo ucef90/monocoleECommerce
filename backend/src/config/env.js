@@ -25,7 +25,10 @@ const env = {
   adminSessionSecret: process.env.ADMIN_SESSION_SECRET || 'change-me-in-production',
   adminSessionHours: toInt(process.env.ADMIN_SESSION_HOURS, 12),
   openaiApiKey: process.env.OPENAI_API_KEY || '',
-  openaiChatModel: process.env.OPENAI_CHAT_MODEL || 'gpt-4.1-mini'
+  openaiChatModel: process.env.OPENAI_CHAT_MODEL || 'gpt-4.1-mini',
+  ollamaBaseUrl: String(process.env.OLLAMA_BASE_URL || '').replace(/\/+$/, ''),
+  ollamaModel: process.env.OLLAMA_MODEL || 'llama3.2',
+  ollamaTimeoutMs: toInt(process.env.OLLAMA_TIMEOUT_MS, 30000)
 };
 
 module.exports = { env };

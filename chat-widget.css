@@ -136,6 +136,10 @@
   background: #f3f6fa;
 }
 
+.mc-chat-suggestions.is-hidden {
+  display: none;
+}
+
 .mc-chat-chip {
   border: 1px solid #d6dde7;
   background: #fff;

@@ -118,6 +118,8 @@
       if (!message || loading) return;
       loading = true;
       textarea.value = '';
+      suggestions.innerHTML = '';
+      suggestions.classList.add('is-hidden');
       const requestHistory = history.slice(-8);
       addMessage('user', message);
       addMessage('assistant', 'Je regarde cela pour vous...');
@@ -142,12 +144,10 @@
         history.pop();
         if (placeholder) placeholder.remove();
         addMessage('assistant', payload.answer || "Je n'ai pas pu formuler une reponse pour le moment.", payload.ctas);
-        setSuggestions(payload.suggestions);
       } catch (_error) {
         history.pop();
         if (placeholder) placeholder.remove();
         addMessage('assistant', "Je ne peux pas repondre completement pour le moment, mais je peux deja vous orienter vers le catalogue, le sur-mesure, ou la prise de rendez-vous.");
-        setSuggestions(defaultSuggestions);
       } finally {
         loading = false;
       }

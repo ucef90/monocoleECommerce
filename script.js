@@ -1436,7 +1436,7 @@ function cardTemplate(product) {
   const quickLabel = stock <= 0 ? "Indisponible" : "Vue rapide";
 
   return `
-    <article class="product-card">
+    <article class="product-card" data-quick-product="${product.id}" role="button" tabindex="0" aria-label="Voir ${product.name}">
       <div class="product-media">
         <img class="product-image" src="${product.image}" alt="${product.name}">
         <button class="quick-view" type="button" data-quick-product="${product.id}" ${stock <= 0 ? "disabled" : ""}>${quickLabel}</button>
@@ -1529,6 +1529,15 @@ if (grid) {
     const quickTarget = event.target.closest("[data-quick-product]");
     if (!quickTarget) return;
     const id = Number(quickTarget.getAttribute("data-quick-product"));
+    openQuickView(id);
+  });
+
+  grid.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const card = event.target.closest(".product-card[data-quick-product]");
+    if (!card || event.target.closest("button")) return;
+    event.preventDefault();
+    const id = Number(card.getAttribute("data-quick-product"));
     openQuickView(id);
   });
 }

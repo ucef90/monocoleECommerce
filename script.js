@@ -625,9 +625,48 @@ function renderQuickOptions(container, options, activeValue, dataKey) {
     .join("");
 }
 
+function parseGalleryEntries(rawGallery) {
+  if (!rawGallery) return [];
+  if (Array.isArray(rawGallery)) {
+    return rawGallery.map(function (item) {
+      if (typeof item === 'string') {
+        const parts = item.split('|').map(function (s) { return s.trim(); });
+        const url = parts[0];
+        const colors = parts.slice(1).join('|').split(',').map(function (c) { return c.trim(); }).filter(Boolean);
+        return url ? { url: url, colors: colors } : null;
+      }
+      if (item && typeof item === 'object') {
+        return {
+          url: String(item.url || '').trim(),
+          colors: Array.isArray(item.colors) ? item.colors
+                 : (item.color ? [String(item.color)] : [])
+        };
+      }
+      return null;
+    }).filter(function (e) { return e && e.url; });
+  }
+  return String(rawGallery).split(/\n+/).map(function (line) {
+    const parts = line.split('|').map(function (s) { return s.trim(); });
+    const url = parts[0];
+    const colors = parts.slice(1).join('|').split(',').map(function (c) { return c.trim(); }).filter(Boolean);
+    return url ? { url: url, colors: colors } : null;
+  }).filter(Boolean);
+}
+
+function getImagesForColor(product, color) {
+  if (!product) return [];
+  const entries = parseGalleryEntries(product.gallery);
+  const tagged = entries.filter(function (e) { return color && e.colors.includes(color); });
+  const universal = entries.filter(function (e) { return e.colors.length === 0; });
+  const ordered = tagged.length
+    ? tagged.concat(universal).map(function (e) { return e.url; })
+    : entries.map(function (e) { return e.url; });
+  const withMain = [product.image].concat(ordered).filter(Boolean);
+  return Array.from(new Set(withMain)).slice(0, 6);
+}
+
 function getQuickViewImages(product) {
-  const images = Array.isArray(product && product.gallery) ? product.gallery.filter(Boolean) : [];
-  return Array.from(new Set([product.image].concat(images).filter(Boolean))).slice(0, 3);
+  return getImagesForColor(product, (product && product.couleur) || '');
 }
 
 function renderQuickViewImage() {
@@ -922,10 +961,11 @@ function openQuickView(productId) {
 
   const colors = getVariantColors(product);
   const sizes = getVariantSizes(product);
-  const images = getQuickViewImages(product);
+  const initialColor = colors[0] || (product && product.couleur) || '';
+  const images = getImagesForColor(product, initialColor);
 
   quickViewState.productId = product.id;
-  quickViewState.color = colors[0];
+  quickViewState.color = initialColor;
   quickViewState.size = sizes[0];
   quickViewState.qty = 1;
   quickViewState.images = images;
@@ -1565,6 +1605,15 @@ if (quickViewModal) {
     if (!currentProduct) return;
     renderQuickOptions(qvColors, getVariantColors(currentProduct), quickViewState.color, "color");
     renderQuickOptions(qvSizes, getVariantSizes(currentProduct), quickViewState.size, "size");
+
+    if (key === "color") {
+      const newImages = getImagesForColor(currentProduct, quickViewState.color);
+      if (newImages.length) {
+        quickViewState.images = newImages;
+        quickViewState.imageIndex = 0;
+        renderQuickViewImage();
+      }
+    }
   });
 }
 

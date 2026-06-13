@@ -517,11 +517,16 @@
               <input id="productImageFile" type="file" accept="image/*" hidden>
             </label>
             <label>Photos supplémentaires
-              <textarea id="productGallery" placeholder="/uploads/angle-1.jpg&#10;/uploads/angle-2.jpg&#10;/uploads/angle-3.jpg"></textarea>
-              <span class="field-help">Vous pouvez coller <strong>une URL par ligne</strong> ou un tableau JSON. Recommandation catalogue: 2 à 4 photos maximum par article.</span>
+              <textarea id="productGallery" placeholder="/uploads/olive.jpg | Olive&#10;/uploads/vert-pin.jpg | Vert Pin&#10;/uploads/angle-cote.jpg"></textarea>
+              <span class="field-help">
+                <strong>1 URL par ligne.</strong> Pour lier une photo à une couleur précise, ajoute <code>| Nom de la couleur</code> à la fin de la ligne.<br>
+                Exemple : <code>/uploads/amalfi-olive.jpg | Olive</code><br>
+                Une ligne sans <code>|</code> = photo affichée pour <strong>toutes</strong> les couleurs.<br>
+                Plusieurs couleurs sur une seule photo : <code>/uploads/photo.jpg | Olive, Noir</code>
+              </span>
               <div class="field-inline-actions">
                 <button id="productGalleryUploadBtn" class="tiny" type="button">Ajouter des photos</button>
-                <span class="upload-note">Vous pouvez sélectionner plusieurs images d'un coup pour ajouter d'autres angles de la monture.</span>
+                <span class="upload-note">Sélectionne plusieurs images puis ajoute manuellement <code>| Couleur</code> à chaque ligne si nécessaire.</span>
               </div>
               <input id="productGalleryFiles" type="file" accept="image/*" multiple hidden>
             </label>
@@ -1218,15 +1223,27 @@
           .join('\n');
       }
 
+      function uniquePreserveOrder(values) {
+        const seen = new Set();
+        const out = [];
+        values.forEach(function (v) {
+          const s = String(v || '').trim();
+          if (!s || seen.has(s)) return;
+          seen.add(s);
+          out.push(s);
+        });
+        return out;
+      }
+
       function parseGalleryInput(value) {
         const raw = String(value || '').trim();
         if (!raw) return [];
         if (raw.startsWith('[')) {
           const parsed = JSON.parse(raw);
           if (!Array.isArray(parsed)) throw new Error('gallery_not_array');
-          return uniqueSorted(parsed.map(function (item) { return String(item || '').trim(); }).filter(Boolean));
+          return uniquePreserveOrder(parsed.map(function (item) { return String(item || '').trim(); }));
         }
-        return uniqueSorted(raw.split('\n').map(function (item) { return item.trim(); }).filter(Boolean));
+        return uniquePreserveOrder(raw.split('\n').map(function (item) { return item.trim(); }));
       }
 
       function makeUploadFilename(file, prefix) {
@@ -1271,7 +1288,7 @@
 
       function mergeGalleryUrls(existingValue, urls) {
         const current = parseGalleryInput(existingValue || '');
-        return uniqueSorted(current.concat(safeArray(urls || []))).join('\n');
+        return uniquePreserveOrder(current.concat(safeArray(urls || []))).join('\n');
       }
 
       function safeArray(value) {

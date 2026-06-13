@@ -1183,5 +1183,27 @@
   </script>
   <script src="./nav-active.js"></script>
   <script defer src="./chat-widget.js"></script>
+  <script>
+    // Cartes "Promotions du moment" cliquables (toute la carte)
+    (function () {
+      document.querySelectorAll(".home-promo-card").forEach(function (card) {
+        var link = card.querySelector(".home-promo-cta") || card.querySelector("a[href]");
+        if (!link) return;
+        card.setAttribute("role", "link");
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("aria-label", "Voir " + (card.querySelector(".product-name") || {}).textContent || "le produit");
+        card.addEventListener("click", function (event) {
+          if (event.target.closest("a, button")) return;
+          window.location.href = link.href;
+        });
+        card.addEventListener("keydown", function (event) {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          if (event.target.closest("a, button")) return;
+          event.preventDefault();
+          window.location.href = link.href;
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

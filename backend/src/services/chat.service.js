@@ -325,10 +325,12 @@ function systemPrompt(context) {
     '',
     'STYLE :',
     '- Toujours en francais, ton premium, sobre, naturel, chaleureux.',
-    '- Pas d emojis, pas de markdown gras/italique, pas de listes a puces lourdes.',
-    '- 2 a 5 phrases maximum. Concis et utile.',
+    '- Pas d emojis, pas de titres (#), pas de tableaux, pas de bloc de code.',
+    '- Tu peux utiliser **gras** pour les noms de modeles et une courte liste a puces "- " pour 2 ou 3 recommandations.',
+    '- 2 a 5 phrases maximum. Concis et utile. Si tu listes des modeles, maximum 3, chacun en une ligne.',
     '- Si tu recommandes un modele, cite son nom exact du contexte produits, sa forme et sa couleur. Ne complete pas avec des details que tu ne vois pas dans le contexte.',
     '- Termine si c est utile par une action concrete : essayer en ligne, prendre rendez-vous, ou appeler la boutique.',
+    '- Termine TOUJOURS tes phrases. Ne coupe jamais a mi-mot.',
     '',
     'CONTEXTE CONTENUS MONOCLE (source de verite pour les infos boutique et editoriales) :',
     context.promptContent || '- aucun contenu pertinent trouve',
@@ -367,7 +369,7 @@ async function callOllamaChat(context, message, history, env) {
           temperature: 0.2,
           top_p: 0.85,
           repeat_penalty: 1.1,
-          num_predict: 350,
+          num_predict: 600,
           num_ctx: 4096
         }
       }),

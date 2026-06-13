@@ -122,6 +122,31 @@
   border: 1px solid #dfe5ed;
 }
 
+.mc-chat-row.is-assistant .mc-chat-bubble p {
+  margin: 0 0 8px;
+}
+.mc-chat-row.is-assistant .mc-chat-bubble p:last-child {
+  margin-bottom: 0;
+}
+.mc-chat-row.is-assistant .mc-chat-bubble strong {
+  font-weight: 600;
+  color: #111214;
+}
+.mc-chat-row.is-assistant .mc-chat-bubble em {
+  font-style: italic;
+}
+.mc-chat-row.is-assistant .mc-chat-bubble ul {
+  margin: 6px 0 6px 0;
+  padding-left: 18px;
+}
+.mc-chat-row.is-assistant .mc-chat-bubble li {
+  margin: 3px 0;
+}
+.mc-chat-row.is-assistant .mc-chat-bubble a {
+  color: #2f6bff;
+  text-decoration: underline;
+}
+
 .mc-chat-row.is-user .mc-chat-bubble {
   background: #111214;
   color: #f8f9fb;

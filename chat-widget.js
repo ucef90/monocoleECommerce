@@ -67,10 +67,60 @@
       messages.scrollTop = messages.scrollHeight;
     }
 
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderMarkdown(text) {
+      const safe = escapeHtml(text);
+      const lines = safe.split(/\r?\n/);
+      const out = [];
+      let listOpen = false;
+      let paragraph = [];
+      function flushParagraph() {
+        if (!paragraph.length) return;
+        out.push('<p>' + paragraph.join(' ') + '</p>');
+        paragraph = [];
+      }
+      function closeList() {
+        if (listOpen) { out.push('</ul>'); listOpen = false; }
+      }
+      lines.forEach(function (line) {
+        const trimmed = line.trim();
+        if (!trimmed) { flushParagraph(); closeList(); return; }
+        const bullet = trimmed.match(/^[-*]\s+(.+)$/);
+        if (bullet) {
+          flushParagraph();
+          if (!listOpen) { out.push('<ul>'); listOpen = true; }
+          out.push('<li>' + bullet[1] + '</li>');
+          return;
+        }
+        closeList();
+        paragraph.push(trimmed);
+      });
+      flushParagraph();
+      closeList();
+      let html = out.join('');
+      html = html.replace(/\*\*([^*\n]+?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/(^|[\s(])\*([^*\n]+?)\*(?=[\s).,!?:;]|$)/g, '$1<em>$2</em>');
+      html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+      return html;
+    }
+
     function addMessage(role, content, ctas) {
       history.push({ role: role, content: content });
       const row = createNode('div', `mc-chat-row is-${role}`);
-      const bubble = createNode('div', 'mc-chat-bubble', content);
+      const bubble = createNode('div', 'mc-chat-bubble');
+      if (role === 'assistant') {
+        bubble.innerHTML = renderMarkdown(content);
+      } else {
+        bubble.textContent = content;
+      }
       if (role === 'assistant' && Array.isArray(ctas) && ctas.length) {
         const linksWrap = createNode('div', 'mc-chat-links');
         ctas.slice(0, 3).forEach(function (item) {
